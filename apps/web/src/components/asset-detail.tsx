@@ -1,0 +1,25 @@
+"use client";
+import Link from "next/link";
+import {useEffect,useState} from "react";
+import {useRouter,useSearchParams} from "next/navigation";
+import {api,MarketList,Market,money,compact,venues,clock,intervalLabel,qualityLabel,oiChangeLabel,oiRatioLabel} from "@/lib/api";
+import {ResearchPosition} from "./research-position";
+import type {DecisionSnapshot} from "@/lib/pd2-types";
+import {Chart,StructureOverlay} from "./chart";
+export function AssetDetail({asset}:{asset:string}){
+ const router=useRouter();const search=useSearchParams();const [rows,setRows]=useState<Market[]>([]);const [selected,setSelected]=useState(search.get("instrument")||"");const [error,setError]=useState("");
+ useEffect(()=>{let active=true;const load=()=>api<MarketList>("/markets").then(r=>{if(active){const next=r.rows.filter(x=>x.asset_id===asset);setRows(next);setSelected(s=>s||next[0]?.instrument_id||"")}}).catch(e=>{if(active)setError(e.message)});void load();const t=setInterval(()=>void load(),15000);return()=>{active=false;clearInterval(t)}},[asset]);
+ const episode=search.get("episode")||undefined;const [structure,setStructure]=useState<StructureOverlay>();
+ useEffect(()=>{let active=true;setStructure(undefined);if(episode)api<StructureOverlay>("/structure-signals/"+encodeURIComponent(episode)).then(r=>{if(active)setStructure(r)}).catch(e=>{if(active)setError(e.message)});return()=>{active=false}},[episode]);
+ const [snapshot,setSnapshot]=useState<(DecisionSnapshot&{market:Market})|null>(null);const historical=search.get("snapshot");
+ useEffect(()=>{setSnapshot(null)},[selected,episode,historical]);
+ const row=snapshot?snapshot.market:rows.find(r=>r.instrument_id===selected);const matched=snapshot?{id:snapshot.episode_id,phase_label:snapshot.phase_label,first_seen_at:snapshot.first_seen_at,first_seen_price:snapshot.first_seen_price,evidence:snapshot.evidence}:!historical&&structure?.evidence.instrument_id===selected?structure:undefined;
+ return <main><div className="detail-back"><Link href="/markets">← 市场数据</Link></div><div className="page-heading"><div><div className="eyebrow">CHART & EVIDENCE</div><h1>{row?.symbol||asset} <span className="title-price">{row?money(row.price):"—"} <small>{row?.quote_asset}</small></span></h1><p>真实行情 · 切换查看周期不改变信号原始周期</p></div><select aria-label="图表执行市场" value={selected} onChange={e=>{setSelected(e.target.value);router.replace("/assets/"+encodeURIComponent(asset)+"?instrument="+encodeURIComponent(e.target.value));}}>{rows.map(r=><option key={r.instrument_id} value={r.instrument_id}>{venues[r.venue]} · {r.native_symbol}</option>)}</select></div>
+ {error&&<div className="notice error">{error}</div>}
+ <div className="notice"><b>{matched?matched.phase_label:"真实行情图表"}</b><span>{matched?" 蓝色为已识别的4H箱体，绿线为收盘突破门槛。参与区、保护价仅在生成计划后显示；金线为对应周期的支撑阻力。":episode?" 正在核对信号；切换到其他交易平台时不套用原市场点位。":" 默认显示EMA、MACD与已确认支撑阻力；从阶段信号进入可定位对应参与区和目标。"}</span><Link href="/signals">返回阶段信号 →</Link></div>
+ {historical&&<div className="notice"><b>历史快照 · 仅展示当时结论</b><span>当前行情不会改写这一页的计划和指标。</span><Link href={"/assets/"+encodeURIComponent(asset)+"?instrument="+encodeURIComponent(selected)+(episode?"&episode="+encodeURIComponent(episode):"")}>切回实时跟踪 →</Link></div>}
+ {selected?<Chart instrument={selected} episode={episode} snapshotId={search.get("snapshot")||undefined} onSnapshot={setSnapshot}/>:<div className="panel empty">该资产行情尚未入库。</div>}
+ {selected&&!historical&&<ResearchPosition instrument={selected}/>}
+ {row&&<div className="evidence-grid"><section className="panel"><h3>合约持仓</h3><strong>{compact(row.oi_notional_quote)} <small>{row.oi_quote_asset}</small></strong><p>原始数量 {compact(row.oi_base)} {row.symbol}</p><p>来源 {venues[row.venue]||row.venue} · {row.native_symbol} · 单一市场</p><p>OI {qualityLabel(row.oi_quality.status)} · {clock(row.oi_as_of)}</p><p>占流通市值 {oiRatioLabel(row)}</p><div className="evidence-line">{row.oi_changes?.map(c=><span key={c.period}>{c.display_label} <b title={c.start_sample_time?clock(c.start_sample_time)+" → "+clock(c.end_sample_time):c.quality.reason||qualityLabel(c.quality.status)}>{oiChangeLabel(c)}</b></span>)}</div><small>1D 为滚动24小时；缺少历史端点时不生成变化值。</small></section><section className="panel"><h3>实际结算费率</h3><strong>{row.funding_rate!=null?(Number(row.funding_rate)*100).toFixed(4)+"%":"未知"}</strong><p>实际间隔 {intervalLabel(row.funding_interval_seconds)}</p><p>{venues[row.venue]||row.venue} · {qualityLabel(row.funding_quality.status)}</p><small>结算时间 {clock(row.funding_settled_at)}</small></section><section className="panel"><h3>本次参与决策</h3><strong>{snapshot?.action.label||(matched?matched.phase_label:"未选择结构事件")}</strong>{snapshot&&<p>{snapshot.trade_thesis.headline}。{snapshot.action.reason}</p>}{matched?<><p>首次发现 {money(matched.first_seen_price)} · {clock(matched.first_seen_at)}</p><p>收盘突破门槛 {money(matched.evidence.box.trigger_price)}；{matched.evidence.protection?"保护价 "+money(matched.evidence.protection):"4H 箱底失守线 "+money(matched.evidence.box.lower)}</p><small>点位来自真实闭合 K 线；参与建议仍需通过盘口和成本检查。</small></>:<p>前往阶段信号选择要查看的结构。</p>}</section></div>}
+ </main>
+}

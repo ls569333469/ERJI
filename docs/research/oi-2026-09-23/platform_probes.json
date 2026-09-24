@@ -1,0 +1,22 @@
+[
+  {
+    "url": "https://pro-api.coinmarketcap.com/public-api/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_symbol=RAVE&category=perpetual&center_type=all&convert=USD&limit=100",
+    "method": "GET",
+    "request": null,
+    "retrieved_utc": "2026-09-23T12:48:22.617133+00:00",
+    "status": 403,
+    "file": "raw/cmc_derivatives_keyless_probe.json",
+    "sha256": "fb8cad1c7cd8797573e8cc4a2ec8481ca91ee7b8e600c1913c4ccf1ad84eea83"
+  },
+  {
+    "url": "https://api.hyperliquid.xyz/info",
+    "method": "POST",
+    "request": {
+      "type": "allPerpMetas"
+    },
+    "retrieved_utc": "2026-09-23T12:48:23.207825+00:00",
+    "status": 200,
+    "file": "raw/hyperliquid_all_perp_metas.json",
+    "sha256": "4885a162b01ac821806de448202bb2cf438c62722382de71a8518f7fd65ad788"
+  }
+]

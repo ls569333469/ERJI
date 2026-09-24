@@ -1,0 +1,218 @@
+{
+  "method": "Age is computed against each containing response status.timestamp. Different requests are not an atomic snapshot. Duplicate identities with differing payloads remain conflicts, not auto-selected.",
+  "samples": {
+    "BTC": {
+      "files": [
+        "BTC-onepage"
+      ],
+      "reported_market_counts": [
+        193
+      ],
+      "returned_rows": 193,
+      "unique_vendor_identities": 192,
+      "duplicates": [
+        {
+          "exchange_id": 24,
+          "market_id": 47233,
+          "rows": 2,
+          "identical": false
+        }
+      ],
+      "age_seconds": {
+        "median": 166.745,
+        "max": 37426.745,
+        "rows_over_300_seconds": 21
+      },
+      "focus_platform_rows": [
+        {
+          "exchange": "Hyperliquid",
+          "exchange_id": 8112,
+          "market_id": 1351165,
+          "pair": "BTC/USDC",
+          "oi_usd_vendor": 1769687838.3648489,
+          "last_updated": "2026-09-23T15:30:25.000Z",
+          "exclusions": []
+        },
+        {
+          "exchange": "Aster",
+          "exchange_id": 1452,
+          "market_id": 181686,
+          "pair": "BTC/USDT",
+          "oi_usd_vendor": 511419191.61984134,
+          "last_updated": "2026-09-23T15:30:15.000Z",
+          "exclusions": []
+        },
+        {
+          "exchange": "Aster",
+          "exchange_id": 1452,
+          "market_id": 1690392,
+          "pair": "BTC/USD1",
+          "oi_usd_vendor": 9435644.08050398,
+          "last_updated": "2026-09-23T15:30:15.000Z",
+          "exclusions": []
+        },
+        {
+          "exchange": "Aster",
+          "exchange_id": 1452,
+          "market_id": 1690401,
+          "pair": "BTC/U",
+          "oi_usd_vendor": 647809.66041126,
+          "last_updated": "2026-09-23T15:30:15.000Z",
+          "exclusions": []
+        },
+        {
+          "exchange": "Hyperliquid",
+          "exchange_id": 8112,
+          "market_id": 1642393,
+          "pair": "hyna:BTC/USDE",
+          "oi_usd_vendor": 0.0,
+          "last_updated": "2026-09-23T15:30:25.000Z",
+          "exclusions": []
+        },
+        {
+          "exchange": "Aster",
+          "exchange_id": 1452,
+          "market_id": 1412656,
+          "pair": "BTC/USD",
+          "oi_usd_vendor": 0.0,
+          "last_updated": "2026-09-23T15:30:15.000Z",
+          "exclusions": [
+            "volume"
+          ]
+        }
+      ]
+    },
+    "HYPE": {
+      "files": [
+        "HYPE",
+        "HYPE-page2"
+      ],
+      "reported_market_counts": [
+        119,
+        119
+      ],
+      "returned_rows": 119,
+      "unique_vendor_identities": 119,
+      "duplicates": [],
+      "age_seconds": {
+        "median": 101.7,
+        "max": 37074.178,
+        "rows_over_300_seconds": 11
+      },
+      "focus_platform_rows": [
+        {
+          "exchange": "Hyperliquid",
+          "exchange_id": 8112,
+          "market_id": 1381035,
+          "pair": "HYPE/USDC",
+          "oi_usd_vendor": 1000864506.4128753,
+          "last_updated": "2026-09-23T15:24:26.000Z",
+          "exclusions": []
+        },
+        {
+          "exchange": "Aster",
+          "exchange_id": 1452,
+          "market_id": 1451091,
+          "pair": "HYPE/USDT",
+          "oi_usd_vendor": 7579236.69248545,
+          "last_updated": "2026-09-23T15:24:15.000Z",
+          "exclusions": []
+        },
+        {
+          "exchange": "Hyperliquid",
+          "exchange_id": 8112,
+          "market_id": 1642418,
+          "pair": "hyna:HYPE/USDE",
+          "oi_usd_vendor": 0.0,
+          "last_updated": "2026-09-23T15:24:26.000Z",
+          "exclusions": []
+        }
+      ]
+    },
+    "ASTER": {
+      "files": [
+        "ASTER"
+      ],
+      "reported_market_counts": [
+        95
+      ],
+      "returned_rows": 95,
+      "unique_vendor_identities": 95,
+      "duplicates": [],
+      "age_seconds": {
+        "median": 101.23,
+        "max": 37002.23,
+        "rows_over_300_seconds": 7
+      },
+      "focus_platform_rows": [
+        {
+          "exchange": "Aster",
+          "exchange_id": 1452,
+          "market_id": 1450099,
+          "pair": "ASTER/USDT",
+          "oi_usd_vendor": 45117148.89649376,
+          "last_updated": "2026-09-23T15:24:15.000Z",
+          "exclusions": []
+        },
+        {
+          "exchange": "Hyperliquid",
+          "exchange_id": 8112,
+          "market_id": 1450353,
+          "pair": "ASTER/USDC",
+          "oi_usd_vendor": 12227825.70732123,
+          "last_updated": "2026-09-23T15:24:26.000Z",
+          "exclusions": []
+        }
+      ]
+    },
+    "RAVE": {
+      "files": [
+        "RAVE"
+      ],
+      "reported_market_counts": [
+        52
+      ],
+      "returned_rows": 52,
+      "unique_vendor_identities": 52,
+      "duplicates": [],
+      "age_seconds": {
+        "median": 102.058,
+        "max": 1180.058,
+        "rows_over_300_seconds": 3
+      },
+      "focus_platform_rows": [
+        {
+          "exchange": "Aster",
+          "exchange_id": 1452,
+          "market_id": 1632449,
+          "pair": "RAVE/USDT",
+          "oi_usd_vendor": 16255.38882573,
+          "last_updated": "2026-09-23T15:24:15.000Z",
+          "exclusions": []
+        }
+      ]
+    }
+  },
+  "earlier_btc_pagination": {
+    "reported_counts": [
+      194,
+      194
+    ],
+    "returned_rows": 194,
+    "unique_vendor_identities": 193,
+    "note": "An earlier multi-request observation, not the same snapshot as BTC-onepage."
+  },
+  "requests": 8,
+  "http_200_count": 8,
+  "reported_credits": 8,
+  "liquidations": {
+    "assets": [
+      "BTC",
+      "HYPE",
+      "RAVE"
+    ],
+    "total_size": 3,
+    "has_more": false,
+    "timestamp": "2026-09-23T15:25:58.841Z"
+  }
+}

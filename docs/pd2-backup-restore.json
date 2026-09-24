@@ -1,0 +1,114 @@
+{
+  "database": "erji_pd2_restore_1790272110",
+  "backup": "C:\\Users\\ls569\\Documents\\Codex\\2026-09-22\\https-ow8888-org-https-ow8888-org\\work\\pd2-implementation\\.runtime\\backups\\erji_pd2_restore_1790272110.dump",
+  "sha256": "bc7e62f502b6ed310a49a26a8a2306dd6237a864b81f1a89ae05484dc1803c6d",
+  "table_counts": {
+    "source_health": [
+      8,
+      8
+    ],
+    "worker_heartbeats": [
+      5,
+      5
+    ],
+    "settings_versions": [
+      15,
+      15
+    ],
+    "tasks": [
+      0,
+      0
+    ],
+    "assets": [
+      1585,
+      1585
+    ],
+    "instruments": [
+      2277,
+      2277
+    ],
+    "stream_events": [
+      13697,
+      13697
+    ],
+    "outbox": [
+      0,
+      0
+    ],
+    "watchlists": [
+      0,
+      0
+    ],
+    "campaigns": [
+      26,
+      26
+    ],
+    "data_capabilities": [
+      129,
+      129
+    ],
+    "provider_budgets": [
+      2,
+      2
+    ],
+    "identity_links": [
+      6,
+      6
+    ],
+    "notification_targets": [
+      0,
+      0
+    ],
+    "candles": [
+      133467,
+      133467
+    ],
+    "plans": [
+      6,
+      6
+    ],
+    "plan_outcomes": [
+      0,
+      0
+    ],
+    "user_preferences": [
+      8,
+      8
+    ],
+    "alembic_version": [
+      1,
+      1
+    ],
+    "raw_events": [
+      191940,
+      191940
+    ],
+    "funding_points": [
+      1260,
+      1260
+    ],
+    "market_states": [
+      1122,
+      1122
+    ],
+    "oi_points": [
+      66870,
+      66870
+    ],
+    "episodes": [
+      32,
+      32
+    ],
+    "signal_snapshots": [
+      30,
+      30
+    ],
+    "snapshot_datasets": [
+      0,
+      0
+    ]
+  },
+  "counts_equal": true,
+  "first_seen_equal": true,
+  "destructive_operations": false
+}

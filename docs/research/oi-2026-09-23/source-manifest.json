@@ -1,0 +1,92 @@
+[
+  {
+    "file": "复盘报告.md",
+    "sha256": "d235ee74835873b08ffa8a9ccf6b39c23f255f07b85368dbde35102e9ee81078",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "platform_probes.json",
+    "sha256": "812000a95d90bb31e13d1ed9163ae89561fba2ee3f4a08e306a20bdb1f0a000b",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "quality_checks.json",
+    "sha256": "14097f01b11e8ea59577da14f37c58ccf55e493700db4e134a5e2fa0531300d2",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "analysis.json",
+    "sha256": "59c5b27d54965e6404b7375a3b78ecd8f0a74beccf74270200fe6e48f9ffe8a6",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "aster_summary.json",
+    "sha256": "17af2c6e6342396d12cbc6a43c001701b8d037d4d138971da1470d10f00cfd56",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "manifest.json",
+    "sha256": "c741045ab2e9ac998575284d71e4805eb78272a0c11a6d6d42279ad802933f8f",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_changelog.html",
+    "sha256": "f7bc536a06af3f798711fb772599a31f5c6d5ac36dfdb628dc8817bf43e9d1d9",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_changelog.json",
+    "sha256": "8b0d1b4561e9c70841d0bbc8623d87fefae2a29e20ed18f0235e94e7a1e03771",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_changelog.txt",
+    "sha256": "8e7fa00cc81d8f437ace4cf8a4071d00b5ab6e71b33af6ebf88cefda4803e777",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_derivatives_0.html",
+    "sha256": "1b2dccce8172626b96fca0745f6843a0102894b1bb625b7f0838ed49300be4b4",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_derivatives_0.json",
+    "sha256": "88498581822357c60c9b24a96e5644b22fb5d7ae3c754501c164f0f967d8af13",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_derivatives_0.txt",
+    "sha256": "0a79eeca618f6c18930545a95073b1a252ae1ca957418e17b4792f1c7a447492",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_endpoint_guide.html",
+    "sha256": "26da6365f4af86707d4293c0d9a827a26da8567caefd7cce55936247374cf820",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_endpoint_guide.json",
+    "sha256": "af5a5e6ce92845f04a93628fdbb8276bf8d13c530c987f436f3d4bd7e96f5ca7",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_endpoint_guide.txt",
+    "sha256": "7dd365c61b7b78d441f145df1a596b52320024c3e207db5ace650ea546c9e9a4",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_pricing.html",
+    "sha256": "99b524a2b187119c50b82824aaed54462127aa5da54ae8fe86ddeee8d430337b",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_pricing.json",
+    "sha256": "52e3c38f4c2494a10cca8ab557a0c53536bd0dca2be4aa7be4bac6a3c0bb00f4",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  },
+  {
+    "file": "sources/cmc_pricing.txt",
+    "sha256": "bc3a309e11d0ab4a65010cdead43efa55a8fa4388624ca2da7864b6bf5d6f2eb",
+    "provenance": "Copied from research capture 2026-09-23; original URL/time in source metadata"
+  }
+]

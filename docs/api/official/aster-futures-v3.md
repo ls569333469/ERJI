@@ -1,0 +1,6894 @@
+> > - [General Info](#general-info)
+
+- [General API Information](#general-api-information)
+  - [HTTP Return Codes](#http-return-codes)
+  - [Error Codes and Messages](#error-codes-and-messages)
+  - [General Information on Endpoints](#general-information-on-endpoints)
+  - [V3 Nonce Mechanism](#v3-nonce-mechanism)
+- [LIMITS](#limits)
+  - [IP Limits](#ip-limits)
+  - [Order Rate Limits](#order-rate-limits)
+- [API authentication type](#api-authentication-type)
+- [Authentication signature payload](#authentication-signature-payload)
+- [Endpoints requiring signature](#endpoints-requiring-signature)
+  - [POST /fapi/v3/order example](#example-of-post-fapiv3order)
+- [Public Endpoints Info](#public-endpoints-info)
+  - [Terminology](#terminology)
+  - [ENUM definitions](#enum-definitions)
+- [Filters](#filters)
+  - [Symbol filters](#symbol-filters)
+    - [PRICE_FILTER](#price_filter)
+    - [LOT_SIZE](#lot_size)
+    - [MARKET_LOT_SIZE](#market_lot_size)
+    - [MAX_NUM_ORDERS](#max_num_orders)
+    - [MAX_NUM_ALGO_ORDERS](#max_num_algo_orders)
+    - [PERCENT_PRICE](#percent_price)
+    - [MIN_NOTIONAL](#min_notional)
+- [Market Data Endpoints](#market-data-endpoints)
+  - [Noop](#noop)
+  - [Test Connectivity](#test-connectivity)
+  - [Check Server Time](#check-server-time)
+  - [Exchange Information](#exchange-information)
+  - [Order Book](#order-book)
+  - [Recent Trades List](#recent-trades-list)
+  - [Old Trades Lookup (MARKET_DATA)](#old-trades-lookup-market_data)
+  - [Compressed/Aggregate Trades List](#compressedaggregate-trades-list)
+  - [Kline/Candlestick Data](#klinecandlestick-data)
+  - [Index Price Kline/Candlestick Data](#index-price-klinecandlestick-data)
+  - [Mark Price Kline/Candlestick Data](#mark-price-klinecandlestick-data)
+  - [Mark Price](#mark-price)
+  - [Get Funding Rate History](#get-funding-rate-history)
+  - [24hr Ticker Price Change Statistics](#24hr-ticker-price-change-statistics)
+  - [Symbol Price Ticker](#symbol-price-ticker)
+  - [Symbol Order Book Ticker](#symbol-order-book-ticker)
+  - [Index Price References](#index-price-references)
+- [Websocket Market Streams](#websocket-market-streams)
+  - [Live Subscribing/Unsubscribing to streams](#live-subscribingunsubscribing-to-streams)
+    - [Subscribe to a stream](#subscribe-to-a-stream)
+    - [Unsubscribe to a stream](#unsubscribe-to-a-stream)
+    - [Listing Subscriptions](#listing-subscriptions)
+    - [Setting Properties](#setting-properties)
+    - [Retrieving Properties](#retrieving-properties)
+    - [Error Messages](#error-messages)
+  - [Aggregate Trade Streams](#aggregate-trade-streams)
+  - [Mark Price Stream](#mark-price-stream)
+  - [Mark Price Stream for All market](#mark-price-stream-for-all-market)
+  - [Kline/Candlestick Streams](#klinecandlestick-streams)
+  - [Individual Symbol Mini Ticker Stream](#individual-symbol-mini-ticker-stream)
+  - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
+  - [Individual Symbol Ticker Streams](#individual-symbol-ticker-streams)
+  - [All Market Tickers Streams](#all-market-tickers-streams)
+  - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
+  - [All Book Tickers Stream](#all-book-tickers-stream)
+  - [Liquidation Order Streams](#liquidation-order-streams)
+  - [All Market Liquidation Order Streams](#all-market-liquidation-order-streams)
+  - [Partial Book Depth Streams](#partial-book-depth-streams)
+  - [Diff. Book Depth Streams](#diff-book-depth-streams)
+  - [How to manage a local order book correctly](#how-to-manage-a-local-order-book-correctly)
+- [Account/Trades Endpoints](#accounttrades-endpoints)
+  - [Change Position Mode(TRADE)](#change-position-modetrade)
+  - [Get Current Position Mode(USER_DATA)](#get-current-position-modeuser_data)
+  - [Change STP Mode (TRADE)](#change-stp-modetrade)
+  - [Get Current STP Mode (USER_DATA)](#get-current-stp-modeuser_data)
+  - [Change Multi-Assets Mode (TRADE)](#change-multi-assets-mode-trade)
+  - [Get Current Multi-Assets Mode (USER_DATA)](#get-current-multi-assets-mode-user_data)
+  - [New Order  (TRADE)](#new-order--trade)
+  - [Modify Order (TRADE)](#modify-order-trade)
+  - [Place Chase Order (TRADE)](#place-chase-order-trade)
+  - [Place Multiple Orders  (TRADE)](#place-multiple-orders--trade)
+  - [Batch Modify Orders (TRADE)](#batch-modify-orders-trade)
+  - [Transfer Between Futures And Spot (USER_DATA)](#transfer-between-futures-and-spot-user_data)
+  - [Query Order (USER_DATA)](#query-order-user_data)
+  - [Cancel Order (TRADE)](#cancel-order-trade)
+  - [Cancel Order (Guarded) (TRADE)](#cancel-order-guarded-trade)
+  - [Cancel All Open Orders (TRADE)](#cancel-all-open-orders-trade)
+  - [Cancel Multiple Orders (TRADE)](#cancel-multiple-orders-trade)
+  - [Cancel Multiple Orders (Guarded) (TRADE)](#cancel-multiple-orders-guarded-trade)
+  - [Auto-Cancel All Open Orders (TRADE)](#auto-cancel-all-open-orders-trade)
+  - [Query Current Open Order (USER_DATA)](#query-current-open-order-user_data)
+  - [Current All Open Orders (USER_DATA)](#current-all-open-orders-user_data)
+  - [All Orders (USER_DATA)](#all-orders-user_data)
+  - [Futures Account Balance v3 (USER_DATA)](#futures-account-balance-v3-user_data)
+  - [Account Information v3 (USER_DATA)](#account-information-v3-user_data)
+  - [Change Initial Leverage (TRADE)](#change-initial-leverage-trade)
+  - [Change Margin Type (TRADE)](#change-margin-type-trade)
+  - [Modify Isolated Position Margin (TRADE)](#modify-isolated-position-margin-trade)
+  - [Get Position Margin Change History (TRADE)](#get-position-margin-change-history-trade)
+  - [Position Information v3 (USER_DATA)](#position-information-v3-user_data)
+  - [Account Trade List (USER_DATA)](#account-trade-list-user_data)
+  - [Get Income History(USER_DATA)](#get-income-historyuser_data)
+  - [Notional and Leverage Brackets (USER_DATA)](#notional-and-leverage-brackets-user_data)
+  - [Position ADL Quantile Estimation (USER_DATA)](#position-adl-quantile-estimation-user_data)
+  - [User's Force Orders (USER_DATA)](#users-force-orders-user_data)
+  - [User Commission Rate (USER_DATA)](#user-commission-rate-user_data)
+  - [Update User MMP (USER_DATA)](#update-user-mmp-user_data)
+  - [Get User MMP (USER_DATA)](#get-user-mmp-user_data)
+  - [Delete User MMP (USER_DATA)](#delete-user-mmp-user_data)
+  - [Reset User MMP (USER_DATA)](#reset-user-mmp-user_data)
+  - [Place Strategy Order (TRADE)](#place-strategy-order-trade)
+  - [Update Strategy Order (TRADE)](#update-strategy-order-trade)
+  - [Query Strategy Open Order (USER_DATA)](#query-strategy-open-order-user_data)
+  - [Query Strategy History Order (USER_DATA)](#query-strategy-history-order-user_data)
+  - [Bind Sub-Account (USER_DATA)](#bind-sub-account-user_data)
+  - [Create Sub-Account (TRADE)](#create-sub-account-trade)
+  - [Get Sub-Account List (USER_DATA)](#get-sub-account-list-user_data)
+  - [Update Sub-Account (TRADE)](#update-sub-account-trade)
+  - [Sub-Account Transfer (TRADE)](#sub-account-transfer-trade)
+  - [Migrate User Assets (WITHDRAW)](#migrate-user-assets-withdraw)
+  - [Migrate User Assets History (USER_DATA)](#migrate-user-assets-history-user_data)
+  - [Register and Approve Agent (PUBLIC)](#register-and-approve-agent-public)
+  - [Get Direct Announcements (USER_DATA)](#get-direct-announcements-user_data)
+  - [Get Direct Announcement By ID (USER_DATA)](#get-direct-announcement-by-id-user_data)
+  - [Get Builder User Accounts (USER_DATA)](#get-builder-user-accounts-user_data)
+  - [Get Builder User Open Orders (USER_DATA)](#get-builder-user-open-orders-user_data)
+  - [Get Builder User Balances (USER_DATA)](#get-builder-user-balances-user_data)
+  - [Get Builder User Position Risk (USER_DATA)](#get-builder-user-position-risk-user_data)
+  - [Get Builder User Commission Rates (USER_DATA)](#get-builder-user-commission-rates-user_data)
+  - [Get Builder Trades (USER_DATA)](#get-builder-trades-user_data)
+  - [Get Builder All Orders (USER_DATA)](#get-builder-all-orders-user_data)
+  - [Get Builder Approved User List (USER_DATA)](#get-builder-approved-user-list-user_data)
+  - [Get All Asset Logos](#get-all-asset-logos)
+- [User Data Streams](#user-data-streams)
+  - [Start User Data Stream (USER_STREAM)](#start-user-data-stream-user_stream)
+  - [Keepalive User Data Stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
+  - [Close User Data Stream (USER_STREAM)](#close-user-data-stream-user_stream)
+  - [Event: User Data Stream Expired](#event-user-data-stream-expired)
+  - [Event: Margin Call](#event-margin-call)
+  - [Event: Balance and Position Update](#event-balance-and-position-update)
+  - [Event: Order Update](#event-order-update)
+  - [Event: Account Configuration Update previous Leverage Update](#event-account-configuration-update-previous-leverage-update)
+  - [Event: TradePro](#event-tradepro)
+  - [Event: Public Announcement](#event-public-announcement)
+  - [Event: Direct Announcement](#event-direct-announcement)
+- [Error Codes](#error-codes)
+  - [10xx - General Server or Network issues](#10xx---general-server-or-network-issues)
+  - [11xx - Request issues](#11xx---request-issues)
+  - [20xx - Processing Issues](#20xx---processing-issues)
+  - [40xx - Filters and other Issues](#40xx---filters-and-other-issues)
+  - [50xx - Deposit and Withdrawal Issues](#50xx---deposit-and-withdrawal-issues)
+
+# General Info
+
+## General API Information
+
+* This API may require the user's AGENT. 
+* To create an AGENT please [click here](https://www.asterdex.com/en/api-wallet) and switch to `Pro API` at the top
+* The base endpoint is: **https://fapi.asterdex.com**
+* All endpoints return either a JSON object or array.
+* Data is returned in **ascending** order. Oldest first, newest last.
+* All data types adopt definition in JAVA.
+
+### HTTP Return Codes
+
+* HTTP `4XX` return codes are used for for malformed requests;
+  the issue is on the sender's side.
+* HTTP `403` return code is used when the WAF Limit (Web Application Firewall) has been violated.
+* HTTP `429` return code is used when breaking a request rate limit.
+* HTTP `418` return code is used when an IP has been auto-banned for continuing to send requests after receiving `429` codes.
+* HTTP `5XX` return codes are used for internal errors; the issue is on
+  Aster's side.
+* HTTP `503` return code is used when the API successfully sent the message but not get a response within the timeout period.
+  It is important to **NOT** treat this as a failure operation; the execution status is
+  **UNKNOWN** and could have been a success.
+
+### Error Codes and Messages
+
+* Any endpoint can return an ERROR
+
+> ***The error payload is as follows:***
+
+```javascript
+{
+  "code": -1121,
+  "msg": "Invalid symbol."
+}
+```
+
+* Specific error codes and messages defined in [Error Codes](#error-codes).
+
+### General Information on Endpoints
+
+* For `GET` endpoints, parameters must be sent as a `query string`.
+* For POST, PUT, and DELETE method APIs, send data in the request body (content type application/x-www-form-urlencoded)
+* Parameters may be sent in any order.
+
+### V3 Nonce Mechanism
+
+* **Nonce** is used to validate the **validity, uniqueness, and replay-protection** of requests. Clients should use the **current timestamp (microsecond precision)** as the nonce, and it is valid only within a window of **60 seconds before and after** server time.
+
+* Request processing flow:
+
+  1. If the nonce **has already been used** → rejected as a **duplicate request**
+  2. Otherwise, the system checks whether it is **too old**
+
+* Nonce state (the recent-nonce list and the checks above) is maintained at the **agent address level**, not the account/user level — each agent address under an account is tracked independently.
+
+* To improve performance, each agent address maintains only the **most recent 100 nonces**:
+
+  * If the list is full and the new nonce is **smaller than the current minimum** → rejected as **expired**
+  * Otherwise, the **oldest nonce is removed** and the new one is added
+
+* Overall effect: **prevents duplicates and stale requests, retaining only recent valid requests**
+
+## LIMITS
+
+* The `/fapi/v3/exchangeInfo` `rateLimits` array contains objects related to the exchange's `RAW_REQUEST`, `REQUEST_WEIGHT`, and `ORDER` rate limits. These are further defined in the `ENUM definitions` section under `Rate limiters (rateLimitType)`.
+* A `429` will be returned when either rate limit is violated.
+
+<aside class="notice">
+Aster Finance has the right to further tighten the rate limits on users with intent to attack.
+</aside>
+
+### IP Limits
+
+* Every request will contain `X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)` in the response headers which has the current used weight for the IP for all request rate limiters defined.
+* Each route has a `weight` which determines for the number of requests each endpoint counts for. Heavier endpoints and endpoints that do operations on multiple symbols will have a heavier `weight`.
+* When a 429 is received, it's your obligation as an API to back off and not spam the API.
+* **Repeatedly violating rate limits and/or failing to back off after receiving 429s will result in an automated IP ban (HTTP status 418).**
+* IP bans are tracked and **scale in duration** for repeat offenders, **from 2 minutes to 3 days**.
+* **The limits on the API are based on the IPs, not the API keys.**
+
+<aside class="notice">
+It is strongly recommended to use websocket stream for getting data as much as possible, which can not only ensure the timeliness of the message, but also reduce the access restriction pressure caused by the request.
+</aside>
+
+### Order Rate Limits
+
+* Every order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header which has the current order count for the account for all order rate limiters defined.
+* Rejected/unsuccessful orders are not guaranteed to have `X-MBX-ORDER-COUNT-**` headers in the response.
+* **The order rate limit is counted against each account**.
+
+## API authentication type
+
+* Each API has its own authentication type, which determines what kind of authentication is required when accessing it.
+* If API_WALLET authentication is required, a signer should be included in the request body.
+* If master account authentication is required, a user should be included in the request body.
+
+| Security Type | Description                               |
+| ------------- | ----------------------------------------- |
+| NONE          | API that does not require authentication  |
+| TRADE         | A valid signer and signature are required |
+| USER_DATA     | A valid signer and signature are required |
+| USER_STREAM   | A valid signer and signature are required |
+| MARKET_DATA   | API that does not require authentication |
+| TRANSFER      | A valid signer and signature are required |
+| WITHDRAW      | A valid signer and signature are required |
+
+## Authentication signature payload
+
+| Parameter | Description                        |
+| --------- | ---------------------------------- |
+| user      | Master account wallet address      |
+| signer    | API wallet address                 |
+| nonce     | Current timestamp, in microseconds |
+| signature | Signature                          |
+
+## Endpoints requiring signature 
+* Security Type: TRADE, USER_DATA, USER_STREAM
+
+## Example of POST /fapi/v3/order
+
+#### All parameters are passed through the request body (Python 3.9.6)
+
+#### The following parameters are API registration details. The values for user, signer, and privateKey are for demonstration purposes only (the privateKey corresponds to the signer).
+
+| Key        | Value          | Desc                                                    
+| ---------- | ------------------------------------------------------------------ |  ---------- |
+| user       | 0x63DD5aCC6b1aa0f563956C0e534DD30B6dcF7C4e                         |Login wallet address |
+| signer     | 0x21cF8Ae13Bb72632562c6Fff438652Ba1a151bb0                         |[Click Here](https://www.asterdex.com/en/api-wallet)         | 
+| privateKey | 0x4fd0a42218f3eae43a6ce26d22544e986139a01e5b34a62db53757ffca81bae1 |[Click Here](https://www.asterdex.com/en/api-wallet)        | 
+
+#### The nonce parameter is the current system time in microseconds. If it exceeds the system time or lags behind it by more than 60 seconds, the request is considered invalid.
+```python
+#python
+nonce = math.trunc(time.time()*1000000)
+print(nonce)
+#1748310859508867
+```
+```java
+#python
+//java
+Instant now = Instant.now();
+long microsecond = now.getEpochSecond() * 1000000 + now.getNano() / 1000;
+```
+
+#### Example: Post an order (using Python as an example).
+
+
+```python
+import time
+import urllib
+import threading
+
+import requests
+from eth_account.messages import  encode_structured_data
+from eth_account import Account
+
+typed_data = {
+  "types": {
+    "EIP712Domain": [
+      {"name": "name", "type": "string"},
+      {"name": "version", "type": "string"},
+      {"name": "chainId", "type": "uint256"},
+      {"name": "verifyingContract", "type": "address"}
+    ],
+    "Message": [
+      { "name": "msg", "type": "string" }
+    ]
+  },
+  "primaryType": "Message",
+  "domain": {
+    "name": "AsterSignTransaction",
+    "version": "1",
+    "chainId": 1666,
+    "verifyingContract": "0x0000000000000000000000000000000000000000"
+  },
+  "message": {
+    "msg": "$msg"
+  }
+}
+
+headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'User-Agent': 'PythonApp/1.0'
+}
+host = 'https://fapi3.asterdex.com'
+
+# config your user and agent info here
+user = '*'
+signer = '*'
+private_key = '*'
+
+place_order = {"url":"/fapi/v3/order","method":"POST","params":{"symbol": "ASTERUSDT", "type": "LIMIT", "side": "BUY",
+                  "timeInForce": "GTC", "quantity": "20", "price": "0.5"}}
+batch_orders = {"url":"/fapi/v3/batchOrders","method":"POST","params":{
+          "batchOrders":"[{'symbol':'ASTERUSDT','type':'LIMIT','side':'BUY','timeInForce':'GTC','quantity':'20','price':'0.5'},{'symbol':'ASTERUSDT','type':'LIMIT','side':'BUY','timeInForce':'GTC','quantity':'20','price':'0.5'}]" }}
+
+batch_orders_delete = {"url": "/fapi/v3/batchOrders", "method": "DELETE",
+                       "params": {"symbol": "BTCUSDT", "origClientOrderIdList": '["123aaaa","111ccc","321313"]'}}
+
+_last_ms = 0
+_i = 0
+_nonce_lock = threading.Lock()
+
+def get_nonce():
+    global _last_ms, _i
+    with _nonce_lock:
+        now_ms = int(time.time())
+
+        if now_ms == _last_ms:
+            _i += 1
+        else:
+            _last_ms = now_ms
+            _i = 0
+
+        return now_ms * 1_000_000 + _i
+
+def send_by_url(api) :
+    my_dict = api['params']
+    url = host + api['url']
+    method = api['method']
+
+    my_dict['nonce'] = str(get_nonce())
+    my_dict['signer'] = signer
+
+    param = urllib.parse.urlencode(my_dict)
+
+    print(param)
+    typed_data['message']['msg'] = param
+    message = encode_structured_data(typed_data)
+    signed = Account.sign_message(message, private_key=private_key)
+
+    url = url + '?' + param + '&signature=' + signed.signature.hex()
+    print(url)
+
+    if method == 'DELETE':
+        res = requests.delete(url, headers=headers)
+        print(res.text)
+    if method == 'POST':
+        res = requests.post(url, headers=headers)
+        print(res.text)
+
+def send_by_body(api) :
+       my_dict = api['params']
+       url = host +api['url']
+       method = api['method']
+
+       my_dict['nonce'] = str(get_nonce())
+       my_dict['signer'] = signer
+
+       param = urllib.parse.urlencode(my_dict)
+       typed_data['message']['msg'] = param
+       message = encode_structured_data(typed_data)
+
+       signed = Account.sign_message(message, private_key=private_key)
+       print(signed.signature.hex())
+
+       my_dict['signature'] = signed.signature.hex()
+
+       print(my_dict)
+       if method == 'DELETE':
+           res = requests.delete(url, data=my_dict, headers=headers)
+           print(res.text)
+       if method == 'POST':
+           res = requests.post(url, data=my_dict, headers=headers)
+           print(res.text)
+
+if __name__ == '__main__':
+    send_by_url(place_order)
+    # send_by_body(place_order)
+    # send_by_body(batch_orders)
+    # send_by_url(batch_orders_delete)
+    # send_by_body(batch_orders_delete)
+
+```
+
+## Public Endpoints Info
+
+### Terminology
+
+* `base asset` refers to the asset that is the `quantity` of a symbol.
+* `quote asset` refers to the asset that is the `price` of a symbol.
+
+### ENUM definitions
+
+**Symbol type:**
+
+* FUTURE
+
+**Contract type (contractType):**
+
+* PERPETUAL
+
+**Contract status(contractStatus，status):**
+
+* PENDING_TRADING
+* TRADING
+* PRE_SETTLE
+* SETTLING
+* CLOSE
+
+**Order status (status):**
+
+* NEW
+* PARTIALLY_FILLED
+* FILLED
+* CANCELED
+* REJECTED
+* EXPIRED
+
+**Order types (orderTypes, type):**
+
+* LIMIT
+* MARKET
+* STOP
+* STOP_MARKET
+* TAKE_PROFIT
+* TAKE_PROFIT_MARKET
+* TRAILING_STOP_MARKET
+
+**Order side (side):**
+
+* BUY
+* SELL
+
+**Position side (positionSide):**
+
+* BOTH
+* LONG
+* SHORT
+
+**Time in force (timeInForce):**
+
+* GTC - Good Till Cancel
+* IOC - Immediate or Cancel
+* GTX - Good Till Crossing	(Post Only)
+* HIDDEN - HIDDEN This type of order is not visible in the order book
+
+**Working Type (workingType)**
+
+* MARK_PRICE
+* CONTRACT_PRICE
+
+**Response Type (newOrderRespType)**
+
+* ACK
+* RESULT
+
+**STP Mode (stpMode)**
+
+* EXPIRE_TAKER
+* EXPIRE_MAKER
+* EXPIRE_BOTH
+
+**Kline/Candlestick chart intervals:**
+
+m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
+
+* 1m
+* 3m
+* 5m
+* 15m
+* 30m
+* 1h
+* 2h
+* 4h
+* 6h
+* 8h
+* 12h
+* 1d
+* 3d
+* 1w
+* 1M
+
+**Rate limiters (rateLimitType)**
+
+> REQUEST_WEIGHT
+
+```javascript
+{
+  	"rateLimitType": "REQUEST_WEIGHT",
+  	"interval": "MINUTE",
+  	"intervalNum": 1,
+  	"limit": 2400
+  }
+```
+
+> ORDERS
+
+```javascript
+{
+  	"rateLimitType": "ORDERS",
+  	"interval": "MINUTE",
+  	"intervalNum": 1,
+  	"limit": 1200
+   }
+```
+
+* REQUEST_WEIGHT
+* ORDERS
+
+**Rate limit intervals (interval)**
+
+* SECOND
+* TEN_SECONDS
+* MINUTE
+* DAY
+
+## Filters
+
+Filters define trading rules on a symbol or an exchange.
+
+### Symbol filters
+
+#### PRICE_FILTER
+
+> **/exchangeInfo format:**
+
+```javascript
+{
+    "filterType": "PRICE_FILTER",
+    "minPrice": "0.00000100",
+    "maxPrice": "100000.00000000",
+    "tickSize": "0.00000100"
+  }
+```
+
+The `PRICE_FILTER` defines the `price` rules for a symbol. There are 3 parts:
+
+* `minPrice` defines the minimum `price`/`stopPrice` allowed; disabled on `minPrice` == 0.
+* `maxPrice` defines the maximum `price`/`stopPrice` allowed; disabled on `maxPrice` == 0.
+* `tickSize` defines the intervals that a `price`/`stopPrice` can be increased/decreased by; disabled on `tickSize` == 0.
+
+Any of the above variables can be set to 0, which disables that rule in the `price filter`. In order to pass the `price filter`, the following must be true for `price`/`stopPrice` of the enabled rules:
+
+* `price` >= `minPrice`
+* `price` <= `maxPrice`
+* (`price`-`minPrice`) % `tickSize` == 0
+
+#### LOT_SIZE
+
+> **/exchangeInfo format:**
+
+```javascript
+{
+    "filterType": "LOT_SIZE",
+    "minQty": "0.00100000",
+    "maxQty": "100000.00000000",
+    "stepSize": "0.00100000"
+  }
+```
+
+The `LOT_SIZE` filter defines the `quantity` (aka "lots" in auction terms) rules for a symbol. There are 3 parts:
+
+* `minQty` defines the minimum `quantity` allowed.
+* `maxQty` defines the maximum `quantity` allowed.
+* `stepSize` defines the intervals that a `quantity` can be increased/decreased by.
+
+In order to pass the `lot size`, the following must be true for `quantity`:
+
+* `quantity` >= `minQty`
+* `quantity` <= `maxQty`
+* (`quantity`-`minQty`) % `stepSize` == 0
+
+#### MARKET_LOT_SIZE
+
+> **/exchangeInfo format:**
+
+```javascript
+{
+    "filterType": "MARKET_LOT_SIZE",
+    "minQty": "0.00100000",
+    "maxQty": "100000.00000000",
+    "stepSize": "0.00100000"
+  }
+```
+
+The `MARKET_LOT_SIZE` filter defines the `quantity` (aka "lots" in auction terms) rules for `MARKET` orders on a symbol. There are 3 parts:
+
+* `minQty` defines the minimum `quantity` allowed.
+* `maxQty` defines the maximum `quantity` allowed.
+* `stepSize` defines the intervals that a `quantity` can be increased/decreased by.
+
+In order to pass the `market lot size`, the following must be true for `quantity`:
+
+* `quantity` >= `minQty`
+* `quantity` <= `maxQty`
+* (`quantity`-`minQty`) % `stepSize` == 0
+
+#### MAX_NUM_ORDERS
+
+> **/exchangeInfo format:**
+
+```javascript
+{
+    "filterType": "MAX_NUM_ORDERS",
+    "limit": 200
+  }
+```
+
+The `MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on a symbol.
+
+Note that both "algo" orders and normal orders are counted for this filter.
+
+#### MAX_NUM_ALGO_ORDERS
+
+> **/exchangeInfo format:**
+
+```javascript
+{
+    "filterType": "MAX_NUM_ALGO_ORDERS",
+    "limit": 100
+  }
+```
+
+The `MAX_NUM_ALGO_ORDERS ` filter defines the maximum number of all kinds of algo orders an account is allowed to have open on a symbol.
+
+The algo orders include `STOP`, `STOP_MARKET`, `TAKE_PROFIT`, `TAKE_PROFIT_MARKET`, and `TRAILING_STOP_MARKET` orders.
+
+#### PERCENT_PRICE
+
+> **/exchangeInfo format:**
+
+```javascript
+{
+    "filterType": "PERCENT_PRICE",
+    "multiplierUp": "1.1500",
+    "multiplierDown": "0.8500",
+    "multiplierDecimal": 4
+  }
+```
+
+The `PERCENT_PRICE` filter defines valid range for a price based on the mark price.
+
+In order to pass the `percent price`, the following must be true for `price`:
+
+* BUY: `price` <= `markPrice` * `multiplierUp`
+* SELL: `price` >= `markPrice` * `multiplierDown`
+
+#### MIN_NOTIONAL
+
+> **/exchangeInfo format:**
+
+```javascript
+{
+    "filterType": "MIN_NOTIONAL",
+    "notional": "1"
+  }
+```
+
+The `MIN_NOTIONAL` filter defines the minimum notional value allowed for an order on a symbol.
+An order's notional value is the `price` * `quantity`.
+Since `MARKET` orders have no price, the mark price is used.
+
+---
+
+# Market Data Endpoints
+
+## Noop (TRADE)
+
+> **Response:**
+
+```javascript
+{
+	"code": 200,
+	"msg": "success"
+}
+```
+
+``POST /fapi/v3/noop``
+
+By using this request, it is possible to efficiently cancel previously sent transactions that are still in the queue and have not completed the on chain operation (Nonce should be equal to this request，no guarantee of success
+)
+
+**Weight:**
+1
+
+#### Demo : Noop (python)
+
+```python
+import time
+import urllib
+
+import aiohttp
+from eth_account.messages import  encode_structured_data
+from eth_account import Account
+import asyncio
+
+typed_data = {
+  "types": {
+    "EIP712Domain": [
+      {"name": "name", "type": "string"},
+      {"name": "version", "type": "string"},
+      {"name": "chainId", "type": "uint256"},
+      {"name": "verifyingContract", "type": "address"}
+    ],
+    "Message": [
+      { "name": "msg", "type": "string" }
+    ]
+  },
+  "primaryType": "Message",
+  "domain": {
+    "name": "AsterSignTransaction",
+    "version": "1",
+    "chainId": 1666,
+    "verifyingContract": "0x0000000000000000000000000000000000000000"
+  },
+  "message": {
+    "msg": "$msg"
+  }
+}
+
+headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'User-Agent': 'PythonApp/1.0'
+}
+host = 'https://fapi3.asterdex.com'
+
+# config your user and agent info here
+user = '*'
+signer = '*'
+private_key = "**"
+
+noop = {'url':'/fapi/v3/noop','method':'POST','params':{}}
+place_order = {"url":"/fapi/v3/order","method":"POST","params":{"symbol": "ASTERUSDT", "type": "LIMIT", "side": "BUY",
+                  "timeInForce": "GTC", "quantity": "20", "price": "0.5"}}
+_last_ms = 0
+_i = 0
+
+def get_nonce():
+    global _last_ms, _i
+    now_ms = int(time.time())
+
+    if now_ms == _last_ms:
+        _i += 1
+    else:
+        _last_ms = now_ms
+        _i = 0
+
+    return now_ms * 1_000_000 + _i
+
+async def send_by_url(api,nonce) :
+    my_dict = api['params']
+    url = host + api['url']
+
+    my_dict['nonce'] = nonce
+    my_dict['user'] = user
+    my_dict['signer'] = signer
+    param = urllib.parse.urlencode(my_dict)
+
+    typed_data['message']['msg'] = param
+    message = encode_structured_data(typed_data)
+    signed = Account.sign_message(message, private_key=private_key)
+
+    url = url + '?' + param + '&signature=' + signed.signature.hex()
+    print(url)
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, headers=headers) as resp:
+            text = await resp.text()
+            return {"status_code": resp.status, "text": text,'nonce': nonce}
+
+async def main():
+    _place_order_nonce = get_nonce()
+    task_place_order =asyncio.create_task( send_by_url(place_order, _place_order_nonce))
+    task_noop= asyncio.create_task( send_by_url(noop, _place_order_nonce))
+    place_order_result, noop_result = await asyncio.gather(task_place_order, task_noop)
+    print(f"place_order_result : {place_order_result['text']},nonce: {place_order_result['nonce']}")
+    print(f"noop_result : {noop_result['text']},nonce: {noop_result['nonce']}")
+
+if __name__ == '__main__':
+     asyncio.run(main())
+
+# This operation may not succeed every time. Please retry.
+# place_order_result : {"code":-4225,"msg":"Nonce Expired"},nonce: 1773321233000000
+# noop_result : {"code": 200,"msg": "success"},nonce: 1773321233000000
+
+```
+
+## Test Connectivity
+
+> **Response:**
+
+```javascript
+{}
+```
+
+``GET /fapi/v3/ping``
+
+Test connectivity to the Rest API.
+
+**Weight:**
+1
+
+**Parameters:**
+NONE
+
+## Check Server Time
+
+> **Response:**
+
+```javascript
+{
+  "serverTime": 1499827319559
+}
+```
+
+``GET /fapi/v3/time``
+
+Test connectivity to the Rest API and get the current server time.
+
+**Weight:**
+1
+
+**Parameters:**
+NONE
+
+## Exchange Information
+
+> **Response:**
+
+```javascript
+{
+	"futuresType": "U_MARGINED",
+	"exchangeFilters": [],
+ 	"rateLimits": [
+ 		{
+ 			"interval": "MINUTE",
+   			"intervalNum": 1,
+   			"limit": 2400,
+   			"rateLimitType": "REQUEST_WEIGHT" 
+   		},
+  		{
+  			"interval": "MINUTE",
+   			"intervalNum": 1,
+   			"limit": 1200,
+   			"rateLimitType": "ORDERS"
+   		}
+   	],
+ 	"serverTime": 1565613908500,    // Ignore please. If you want to check current server time, please check via "GET /fapi/v3/time"
+ 	"assets": [ // assets information
+ 		{
+ 			"asset": "BUSD",
+   			"marginAvailable": true, // whether the asset can be used as margin in Multi-Assets mode
+   			"autoAssetExchange": 0 // auto-exchange threshold in Multi-Assets margin mode
+   		},
+ 		{
+ 			"asset": "USDT",
+   			"marginAvailable": true,
+   			"autoAssetExchange": 0
+   		},
+ 		{
+ 			"asset": "BTC",
+   			"marginAvailable": false,
+   			"autoAssetExchange": null
+   		}
+   	],
+ 	"symbols": [
+ 		{
+ 			"symbol": "DOGEUSDT",
+ 			"pair": "DOGEUSDT",
+ 			"contractType": "PERPETUAL",
+ 			"deliveryDate": 4133404800000,
+ 			"onboardDate": 1598252400000,
+ 			"status": "TRADING",
+ 			"maintMarginPercent": "2.5000",   // ignore
+ 			"requiredMarginPercent": "5.0000",  // ignore
+ 			"baseAsset": "BLZ", 
+ 			"quoteAsset": "USDT",
+ 			"marginAsset": "USDT",
+ 			"pricePrecision": 5,	// please do not use it as tickSize
+ 			"quantityPrecision": 0, // please do not use it as stepSize
+ 			"baseAssetPrecision": 8,
+ 			"quotePrecision": 8, 
+ 			"underlyingType": "COIN",
+ 			"underlyingSubType": ["STORAGE"],
+ 			"settlePlan": 0,
+ 			"triggerProtect": "0.15", // threshold for algo order with "priceProtect"
+ 			"filters": [
+ 				{
+ 					"filterType": "PRICE_FILTER",
+     				"maxPrice": "300",
+     				"minPrice": "0.0001", 
+     				"tickSize": "0.0001"
+     			},
+    			{
+    				"filterType": "LOT_SIZE", 
+     				"maxQty": "10000000",
+     				"minQty": "1",
+     				"stepSize": "1"
+     			},
+    			{
+    				"filterType": "MARKET_LOT_SIZE",
+     				"maxQty": "590119",
+     				"minQty": "1",
+     				"stepSize": "1"
+     			},
+     			{
+    				"filterType": "MAX_NUM_ORDERS",
+    				"limit": 200
+  				},
+  				{
+    				"filterType": "MAX_NUM_ALGO_ORDERS",
+    				"limit": 100
+  				},
+  				{
+  					"filterType": "MIN_NOTIONAL",
+  					"notional": "1", 
+  				},
+  				{
+    				"filterType": "PERCENT_PRICE",
+    				"multiplierUp": "1.1500",
+    				"multiplierDown": "0.8500",
+    				"multiplierDecimal": 4
+    			}
+   			],
+ 			"orderTypes": [
+   				"LIMIT",
+   				"MARKET",
+   				"STOP",
+   				"STOP_MARKET",
+   				"TAKE_PROFIT",
+   				"TAKE_PROFIT_MARKET",
+   				"TRAILING_STOP_MARKET" 
+   			],
+   			"timeInForce": [
+   				"GTC", 
+   				"IOC", 
+   				"GTX",
+          "HIDDEN" 
+ 			],
+ 			"liquidationFee": "0.010000",	// liquidation fee rate
+   			"marketTakeBound": "0.30",	// the max price difference rate( from mark price) a market order can make
+ 		}
+   	],
+	"timezone": "UTC" 
+}
+```
+
+``GET /fapi/v3/exchangeInfo``
+
+Current exchange trading rules and symbol information
+
+**Weight:**
+1
+
+**Parameters:**
+NONE
+
+## Order Book
+
+> **Response:**
+
+```javascript
+{
+  "lastUpdateId": 1027024,
+  "E": 1589436922972,   // Message output time
+  "T": 1589436922959,   // Transaction time
+  "bids": [
+    [
+      "4.00000000",     // PRICE
+      "431.00000000"    // QTY
+    ]
+  ],
+  "asks": [
+    [
+      "4.00000200",
+      "12.00000000"
+    ]
+  ]
+}
+```
+
+``GET /fapi/v3/depth``
+
+**Weight:**
+
+Adjusted based on the limit:
+
+| Limit         | Weight |
+| ------------- | ------ |
+| 5, 10, 20, 50 | 2      |
+| 100           | 5      |
+| 500           | 10     |
+| 1000          | 20     |
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description                                               |
+| ------ | ------ | --------- | --------------------------------------------------------- |
+| symbol | STRING | YES       |                                                           |
+| limit  | INT    | NO        | Default 500; Valid limits:[5, 10, 20, 50, 100, 500, 1000] |
+
+## Recent Trades List
+
+> **Response:**
+
+```javascript
+[
+  {
+    "id": 28457,
+    "price": "4.00000100",
+    "qty": "12.00000000",
+    "quoteQty": "48.00",
+    "time": 1499865549590,
+    "isBuyerMaker": true,
+  }
+]
+```
+
+``GET /fapi/v3/trades``
+
+Get recent market trades
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description            |
+| ------ | ------ | --------- | ---------------------- |
+| symbol | STRING | YES       |                        |
+| limit  | INT    | NO        | Default 500; max 1000. |
+
+* Market trades means trades filled in the order book. Only market trades will be returned, which means the insurance fund trades and ADL trades won't be returned.
+
+## Old Trades Lookup
+
+> **Response:**
+
+```javascript
+[
+  {
+    "id": 28457,
+    "price": "4.00000100",
+    "qty": "12.00000000",
+    "quoteQty": "8000.00",
+    "time": 1499865549590,
+    "isBuyerMaker": true,
+  }
+]
+```
+
+``GET /fapi/v3/historicalTrades``
+
+Get older market historical trades.
+
+**Weight:**
+20
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description                                             |
+| ------ | ------ | --------- | ------------------------------------------------------- |
+| symbol | STRING | YES       |                                                         |
+| limit  | INT    | NO        | Default 500; max 1000.                                  |
+| fromId | LONG   | NO        | TradeId to fetch from. Default gets most recent trades. |
+
+* Market trades means trades filled in the order book. Only market trades will be returned, which means the insurance fund trades and ADL trades won't be returned.
+
+## Compressed/Aggregate Trades List
+
+> **Response:**
+
+```javascript
+[
+  {
+    "a": 26129,         // Aggregate tradeId
+    "p": "0.01633102",  // Price
+    "q": "4.70443515",  // Quantity
+    "f": 27781,         // First tradeId
+    "l": 27781,         // Last tradeId
+    "T": 1498793709153, // Timestamp
+    "m": true,          // Was the buyer the maker?
+  }
+]
+```
+
+``GET /fapi/v3/aggTrades``
+
+Get compressed, aggregate market trades. Market trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
+
+**Weight:**
+20
+
+**Parameters:**
+
+| Name      | Type   | Mandatory | Description                                              |
+| --------- | ------ | --------- | -------------------------------------------------------- |
+| symbol    | STRING | YES       |                                                          |
+| fromId    | LONG   | NO        | ID to get aggregate trades from INCLUSIVE.               |
+| startTime | LONG   | NO        | Timestamp in ms to get aggregate trades from INCLUSIVE.  |
+| endTime   | LONG   | NO        | Timestamp in ms to get aggregate trades until INCLUSIVE. |
+| limit     | INT    | NO        | Default 500; max 1000.                                   |
+
+* If fromId, startTime, and endTime are not sent, the most recent aggregate trades will be returned.
+* Only market trades will be aggregated and returned, which means the insurance fund trades and ADL trades won't be aggregated.
+
+## Kline/Candlestick Data
+
+> **Response:**
+
+```javascript
+[
+  [
+    1499040000000,      // Open time
+    "0.01634790",       // Open
+    "0.80000000",       // High
+    "0.01575800",       // Low
+    "0.01577100",       // Close
+    "148976.11427815",  // Volume
+    1499644799999,      // Close time
+    "2434.19055334",    // Quote asset volume
+    308,                // Number of trades
+    "1756.87402397",    // Taker buy base asset volume
+    "28.46694368",      // Taker buy quote asset volume
+    "17928899.62484339" // Ignore.
+  ]
+]
+```
+
+``GET /fapi/v3/klines``
+
+Kline/candlestick bars for a symbol.
+Klines are uniquely identified by their open time.
+
+**Weight:** based on parameter `LIMIT`
+
+| LIMIT       | weight |
+| ----------- | ------ |
+| [1,100)     | 1      |
+| [100, 500)  | 2      |
+| [500, 1000] | 5      |
+
+> 1000 | 10
+
+**Parameters:**
+
+| Name      | Type   | Mandatory | Description            |
+| --------- | ------ | --------- | ---------------------- |
+| symbol    | STRING | YES       |                        |
+| interval  | ENUM   | YES       |                        |
+| startTime | LONG   | NO        |                        |
+| endTime   | LONG   | NO        |                        |
+| limit     | INT    | NO        | Default 500; max 1500. |
+
+* If startTime and endTime are not sent, the most recent klines are returned.
+
+## Index Price Kline/Candlestick Data
+
+**Note: this endpoint could not be verified against the current server implementation — the live server only exposes `GET /fapi/v3/marketKlines` (keyed by `symbol`). Please confirm the correct path with the API team before relying on this section.**
+
+> **Response:**
+
+```javascript
+[
+  [
+    1591256400000,      	// Open time
+    "9653.69440000",    	// Open
+    "9653.69640000",     	// High
+    "9651.38600000",     	// Low
+    "9651.55200000",     	// Close (or latest price)
+    "0	", 					// Ignore
+    1591256459999,      	// Close time
+    "0",    				// Ignore
+    60,                		// Number of Data Points
+    "0",    				// Ignore
+    "0",      				// Ignore
+    "0" 					// Ignore
+  ]
+]
+```
+
+``GET /fapi/v3/indexPriceKlines``
+
+Kline/candlestick bars for the index price of a pair.
+
+Klines are uniquely identified by their open time.
+
+**Weight:** based on parameter `LIMIT`
+
+| LIMIT       | weight |
+| ----------- | ------ |
+| [1,100)     | 1      |
+| [100, 500)  | 2      |
+| [500, 1000] | 5      |
+
+> 1000 | 10
+
+**Parameters:**
+
+| Name      | Type   | Mandatory | Description            |
+| --------- | ------ | --------- | ---------------------- |
+| pair      | STRING | YES       |                        |
+| interval  | ENUM   | YES       |                        |
+| startTime | LONG   | NO        |                        |
+| endTime   | LONG   | NO        |                        |
+| limit     | INT    | NO        | Default 500; max 1500. |
+
+* If startTime and endTime are not sent, the most recent klines are returned.
+
+## Mark Price Kline/Candlestick Data
+
+**Note: this endpoint could not be verified against the current server implementation — the live server only exposes `GET /fapi/v3/marketKlines` (keyed by `symbol`). Please confirm the correct path with the API team before relying on this section.**
+
+> **Response:**
+
+```javascript
+[
+  [
+    1591256460000,     		// Open time
+    "9653.29201333",    	// Open
+    "9654.56401333",     	// High
+    "9653.07367333",     	// Low
+    "9653.07367333",     	// Close (or latest price)
+    "0	", 					// Ignore
+    1591256519999,      	// Close time
+    "0",    				// Ignore
+    60,                	 	// Number of Data Points
+    "0",    				// Ignore
+    "0",      			 	// Ignore
+    "0" 					// Ignore
+  ]
+]
+```
+
+``GET /fapi/v3/markPriceKlines``
+
+Kline/candlestick bars for the mark price of a symbol.
+
+Klines are uniquely identified by their open time.
+
+**Weight:** based on parameter `LIMIT`
+
+| LIMIT       | weight |
+| ----------- | ------ |
+| [1,100)     | 1      |
+| [100, 500)  | 2      |
+| [500, 1000] | 5      |
+
+> 1000 | 10
+
+**Parameters:**
+
+| Name      | Type   | Mandatory | Description            |
+| --------- | ------ | --------- | ---------------------- |
+| symbol    | STRING | YES       |                        |
+| interval  | ENUM   | YES       |                        |
+| startTime | LONG   | NO        |                        |
+| endTime   | LONG   | NO        |                        |
+| limit     | INT    | NO        | Default 500; max 1500. |
+
+* If startTime and endTime are not sent, the most recent klines are returned.
+
+## Mark Price
+
+> **Response:**
+
+```javascript
+{
+	"symbol": "BTCUSDT",
+	"markPrice": "11793.63104562",	// mark price
+	"indexPrice": "11781.80495970",	// index price
+	"estimatedSettlePrice": "11781.16138815", // Estimated Settle Price, only useful in the last hour before the settlement starts.
+	"lastFundingRate": "0.00038246",  // This is the lasted funding rate
+	"nextFundingTime": 1597392000000,
+	"interestRate": "0.00010000",
+	"time": 1597370495002
+}
+```
+
+> **OR (when symbol not sent)**
+
+```javascript
+[
+	{
+	    "symbol": "BTCUSDT",
+	    "markPrice": "11793.63104562",	// mark price
+	    "indexPrice": "11781.80495970",	// index price
+	    "estimatedSettlePrice": "11781.16138815", // Estimated Settle Price, only useful in the last hour before the settlement starts.
+	    "lastFundingRate": "0.00038246",  // This is the lasted funding rate
+	    "nextFundingTime": 1597392000000,
+	    "interestRate": "0.00010000",
+	    "time": 1597370495002
+	}
+]
+```
+
+``GET /fapi/v3/premiumIndex``
+
+Mark Price and Funding Rate
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description |
+| ------ | ------ | --------- | ----------- |
+| symbol | STRING | NO        |             |
+
+## Get Funding Rate History
+
+> **Response:**
+
+```javascript
+[
+	{
+    	"symbol": "BTCUSDT",
+    	"fundingRate": "-0.03750000",
+    	"fundingTime": 1570608000000,
+	},
+	{
+   		"symbol": "BTCUSDT",
+    	"fundingRate": "0.00010000",
+    	"fundingTime": 1570636800000,
+	}
+]
+```
+
+``GET /fapi/v3/fundingRate``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name      | Type   | Mandatory | Description                                           |
+| --------- | ------ | --------- | ----------------------------------------------------- |
+| symbol    | STRING | NO        |                                                       |
+| startTime | LONG   | NO        | Timestamp in ms to get funding rate from INCLUSIVE.   |
+| endTime   | LONG   | NO        | Timestamp in ms to get funding rate  until INCLUSIVE. |
+| limit     | INT    | NO        | Default 100; max 1000                                 |
+
+* If `startTime` and `endTime` are not sent, the most recent `limit` datas are returned.
+* If the number of data between `startTime` and `endTime` is larger than `limit`, return as `startTime` + `limit`.
+* In ascending order.
+
+
+## Get Funding Rate Config
+
+> **Response:**
+
+```javascript
+[
+	{
+		"symbol": "INJUSDT",
+		"interestRate": "0.00010000",
+		"time": 1756197479000,
+		"fundingIntervalHours": 8,
+		"fundingFeeCap": 0.03,
+		"fundingFeeFloor": -0.03
+	},
+	{
+		"symbol": "ZORAUSDT",
+		"interestRate": "0.00005000",
+		"time": 1756197479000,
+		"fundingIntervalHours": 4,
+		"fundingFeeCap": 0.02,
+		"fundingFeeFloor": -0.02
+	}
+]
+```
+
+``
+GET /fapi/v3/fundingInfo
+``
+
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+symbol | STRING | NO |
+
+
+## 24hr Ticker Price Change Statistics
+
+> **Response:**
+
+```javascript
+{
+  "symbol": "BTCUSDT",
+  "priceChange": "-94.99999800",
+  "priceChangePercent": "-95.960",
+  "weightedAvgPrice": "0.29628482",
+  "prevClosePrice": "0.10002000",
+  "lastPrice": "4.00000200",
+  "lastQty": "200.00000000",
+  "openPrice": "99.00000000",
+  "highPrice": "100.00000000",
+  "lowPrice": "0.10000000",
+  "volume": "8913.30000000",
+  "quoteVolume": "15.30000000",
+  "openTime": 1499783499040,
+  "closeTime": 1499869899040,
+  "firstId": 28385,   // First tradeId
+  "lastId": 28460,    // Last tradeId
+  "count": 76         // Trade count
+}
+```
+
+> OR
+
+```javascript
+[
+	{
+  		"symbol": "BTCUSDT",
+  		"priceChange": "-94.99999800",
+  		"priceChangePercent": "-95.960",
+  		"weightedAvgPrice": "0.29628482",
+  		"prevClosePrice": "0.10002000",
+  		"lastPrice": "4.00000200",
+  		"lastQty": "200.00000000",
+  		"openPrice": "99.00000000",
+  		"highPrice": "100.00000000",
+  		"lowPrice": "0.10000000",
+  		"volume": "8913.30000000",
+  		"quoteVolume": "15.30000000",
+  		"openTime": 1499783499040,
+  		"closeTime": 1499869899040,
+  		"firstId": 28385,   // First tradeId
+  		"lastId": 28460,    // Last tradeId
+  		"count": 76         // Trade count
+	}
+]
+```
+
+``GET /fapi/v3/ticker/24hr``
+
+24 hour rolling window price change statistics.
+**Careful** when accessing this with no symbol.
+
+**Weight:**
+1 for a single symbol;
+**40** when the symbol parameter is omitted
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description |
+| ------ | ------ | --------- | ----------- |
+| symbol | STRING | NO        |             |
+
+* If the symbol is not sent, tickers for all symbols will be returned in an array.
+
+## Symbol Price Ticker
+
+> **Response:**
+
+```javascript
+{
+  "symbol": "BTCUSDT",
+  "price": "6000.01",
+  "time": 1589437530011   // Transaction time
+}
+```
+
+> OR
+
+```javascript
+[
+	{
+  		"symbol": "BTCUSDT",
+  		"price": "6000.01",
+  		"time": 1589437530011
+	}
+]
+```
+
+``GET /fapi/v3/ticker/price``
+
+Latest price for a symbol or symbols.
+
+**Weight:**
+1 for a single symbol;
+**2** when the symbol parameter is omitted
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description |
+| ------ | ------ | --------- | ----------- |
+| symbol | STRING | NO        |             |
+
+* If the symbol is not sent, prices for all symbols will be returned in an array.
+
+## Symbol Order Book Ticker
+
+> **Response:**
+
+```javascript
+{
+  "symbol": "BTCUSDT",
+  "bidPrice": "4.00000000",
+  "bidQty": "431.00000000",
+  "askPrice": "4.00000200",
+  "askQty": "9.00000000",
+  "time": 1589437530011   // Transaction time
+}
+```
+
+> OR
+
+```javascript
+[
+	{
+  		"symbol": "BTCUSDT",
+  		"bidPrice": "4.00000000",
+  		"bidQty": "431.00000000",
+  		"askPrice": "4.00000200",
+  		"askQty": "9.00000000",
+  		"time": 1589437530011
+	}
+]
+```
+
+``GET /fapi/v3/ticker/bookTicker``
+
+Best price/qty on the order book for a symbol or symbols.
+
+**Weight:**
+1 for a single symbol;
+**2** when the symbol parameter is omitted
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description |
+| ------ | ------ | --------- | ----------- |
+| symbol | STRING | NO        |             |
+
+* If the symbol is not sent, bookTickers for all symbols will be returned in an array.
+
+
+## Index Price References
+
+> **Response:**
+
+```javascript
+{
+  "symbol": "BTCUSDT",       // Trading pair
+  "time": 1774077572319,     // Data timestamp
+  "references": [
+    {
+      "exchange": "binance", // Source exchange
+      "symbol": "BTCUSDT",   // Symbol on source exchange
+      "weight": "0.41441441" // Weight
+    },
+    {
+      "exchange": "okex",
+      "symbol": "BTC-USDT",
+      "weight": "0.13513513"
+    },
+    {
+      "exchange": "coinbase",
+      "symbol": "BTC-USDT",
+      "weight": "0.13513513"
+    },
+    {
+      "exchange": "gateio",
+      "symbol": "BTC_USDT",
+      "weight": "0.04504504"
+    },
+    {
+      "exchange": "kucoin",
+      "symbol": "BTC-USDT",
+      "weight": "0.06756756"
+    },
+    {
+      "exchange": "mxc",
+      "symbol": "BTCUSDT",
+      "weight": "0.06756756"
+    },
+    {
+      "exchange": "bybit",
+      "symbol": "BTCUSDT",
+      "weight": "0.06756756"
+    },
+    {
+      "exchange": "bitget",
+      "symbol": "BTCUSDT",
+      "weight": "0.06756756"
+    }
+  ]
+}
+```
+
+> **Error response (invalid symbol):**
+
+```javascript
+{
+  "code": -1000,
+  "msg": "Invalid symbol."
+}
+```
+
+``GET /fapi/v3/indexreferences``
+
+Get the component exchanges and their weights for the index price of a symbol.
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description  |
+| ------ | ------ | --------- | ------------ |
+| symbol | STRING | YES       | Trading pair |
+
+
+# Websocket Market Streams
+
+* The baseurl for websocket is **wss://fstream.asterdex.com**
+* Streams can be access either in a single raw stream or a combined stream
+* Raw streams are accessed at **/ws/\<streamName\>**
+* Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
+* Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
+* All symbols for streams are **lowercase**
+* A single connection is only valid for 24 hours; expect to be disconnected at the 24 hour mark
+* The websocket server will send a `ping frame` every 5 minutes. If the websocket server does not receive a `pong frame` back from the connection within a 15 minute period, the connection will be disconnected. Unsolicited `pong frames` are allowed.
+* WebSocket connections have a limit of 10 incoming messages per second.
+* A connection that goes beyond the limit will be disconnected; IPs that are repeatedly disconnected may be banned.
+* A single connection can listen to a maximum of **200** streams.
+* Considering the possible data latency from RESTful endpoints during an extremely volatile market, it is highly recommended to get the order status, position, etc from the Websocket user data stream.
+
+## Live Subscribing/Unsubscribing to streams
+
+* The following data can be sent through the websocket instance in order to subscribe/unsubscribe from streams. Examples can be seen below.
+* The `id` used in the JSON payloads is an unsigned INT used as an identifier to uniquely identify the messages going back and forth.
+
+### Subscribe to a stream
+
+> **Response**
+
+```javascript
+{
+  "result": null,
+  "id": 1
+}
+```
+
+* **Request**
+  
+  {
+  "method": "SUBSCRIBE",
+  "params":
+  [
+  "btcusdt@aggTrade",
+  "btcusdt@depth"
+  ],
+  "id": 1
+  }
+
+### Unsubscribe to a stream
+
+> **Response**
+
+```javascript
+{
+  "result": null,
+  "id": 312
+}
+```
+
+* **Request**
+  
+  {
+  "method": "UNSUBSCRIBE",
+  "params":
+  [
+  "btcusdt@depth"
+  ],
+  "id": 312
+  }
+
+### Listing Subscriptions
+
+> **Response**
+
+```javascript
+{
+  "result": [
+    "btcusdt@aggTrade"
+  ],
+  "id": 3
+}
+```
+
+* **Request**
+  
+  {
+  "method": "LIST_SUBSCRIPTIONS",
+  "id": 3
+  }
+
+### Setting Properties
+
+Currently, the only property can be set is to set whether `combined` stream payloads are enabled are not.
+The combined property is set to `false` when connecting using `/ws/` ("raw streams") and `true` when connecting using `/stream/`.
+
+> **Response**
+
+```javascript
+{
+  "result": null,
+  "id": 5
+}
+```
+
+* **Request**
+  
+  {
+  "method": "SET_PROPERTY",
+  "params":
+  [
+  "combined",
+  true
+  ],
+  "id": 5
+  }
+
+### Retrieving Properties
+
+> **Response**
+
+```javascript
+{
+  "result": true, // Indicates that combined is set to true.
+  "id": 2
+}
+```
+
+* **Request**
+  
+  {
+  "method": "GET_PROPERTY",
+  "params":
+  [
+  "combined"
+  ],
+  "id": 2
+  }
+
+### Error Messages
+
+| Error Message                                                                                                                                                                  | Description                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| {"code": 0, "msg": "Unknown property"}                                                                                                                                         | Parameter used in the`SET_PROPERTY` or `GET_PROPERTY` was invalid                                   |
+| {"code": 1, "msg": "Invalid value type: expected Boolean"}                                                                                                                     | Value should only be`true` or `false`                                                               |
+| {"code": 2, "msg": "Invalid request: property name must be a string"}                                                                                                          | Property name provided was invalid                                                                  |
+| {"code": 2, "msg": "Invalid request: request ID must be an unsigned integer"}                                                                                                  | Parameter`id` had to be provided or the value provided in the `id` parameter is an unsupported type |
+| {"code": 2, "msg": "Invalid request: unknown variant %s, expected one of`SUBSCRIBE`, `UNSUBSCRIBE`, `LIST_SUBSCRIPTIONS`, `SET_PROPERTY`, `GET_PROPERTY` at line 1 column 28"} | Possible typo in the provided method or provided method was neither of the expected values          |
+| {"code": 2, "msg": "Invalid request: too many parameters"}                                                                                                                     | Unnecessary parameters provided in the data                                                         |
+| {"code": 2, "msg": "Invalid request: property name must be a string"}                                                                                                          | Property name was not provided                                                                      |
+| {"code": 2, "msg": "Invalid request: missing field`method` at line 1 column 73"}                                                                                               | `method` was not provided in the data                                                               |
+| {"code":3,"msg":"Invalid JSON: expected value at line %s column %s"}                                                                                                           | JSON data sent has incorrect syntax.                                                                |
+
+## Aggregate Trade Streams
+
+> **Payload:**
+
+```javascript
+{
+  "e": "aggTrade",  // Event type
+  "E": 123456789,   // Event time
+  "s": "BTCUSDT",    // Symbol
+  "a": 5933014,		// Aggregate trade ID
+  "p": "0.001",     // Price
+  "q": "100",       // Quantity
+  "f": 100,         // First trade ID
+  "l": 105,         // Last trade ID
+  "T": 123456785,   // Trade time
+  "m": true,        // Is the buyer the market maker?
+}
+```
+
+The Aggregate Trade Streams push market trade information that is aggregated for a single taker order every 100 milliseconds.
+
+**Stream Name:**
+``<symbol>@aggTrade``
+
+**Update Speed:** 100ms
+
+* Only market trades will be aggregated, which means the insurance fund trades and ADL trades won't be aggregated.
+
+## Mark Price Stream
+
+> **Payload:**
+
+```javascript
+{
+    "e": "markPriceUpdate",  	// Event type
+    "E": 1562305380000,      	// Event time
+    "s": "BTCUSDT",          	// Symbol
+    "p": "11794.15000000",   	// Mark price
+    "i": "11784.62659091",		// Index price
+    "P": "11784.25641265",		// Estimated Settle Price, only useful in the last hour before the settlement starts
+    "r": "0.00038167",       	// Funding rate
+    "T": 1562306400000       	// Next funding time
+  }
+```
+
+Mark price and funding rate for a single symbol pushed every 3 seconds or every second.
+
+**Stream Name:**
+``<symbol>@markPrice`` or ``<symbol>@markPrice@1s``
+
+**Update Speed:** 3000ms or 1000ms
+
+## Mark Price Stream for All market
+
+> **Payload:**
+
+```javascript
+[ 
+  {
+    "e": "markPriceUpdate",  	// Event type
+    "E": 1562305380000,      	// Event time
+    "s": "BTCUSDT",          	// Symbol
+    "p": "11185.87786614",   	// Mark price
+    "i": "11784.62659091"		// Index price
+    "P": "11784.25641265",		// Estimated Settle Price, only useful in the last hour before the settlement starts
+    "r": "0.00030000",       	// Funding rate
+    "T": 1562306400000       	// Next funding time
+  }
+]
+```
+
+Mark price and funding rate for all symbols pushed every 3 seconds or every second.
+
+**Stream Name:**
+``!markPrice@arr`` or ``!markPrice@arr@1s``
+
+**Update Speed:** 3000ms or 1000ms
+
+## Kline/Candlestick Streams
+
+> **Payload:**
+
+```javascript
+{
+  "e": "kline",     // Event type
+  "E": 123456789,   // Event time
+  "s": "BTCUSDT",    // Symbol
+  "k": {
+    "t": 123400000, // Kline start time
+    "T": 123460000, // Kline close time
+    "s": "BTCUSDT",  // Symbol
+    "i": "1m",      // Interval
+    "f": 100,       // First trade ID
+    "L": 200,       // Last trade ID
+    "o": "0.0010",  // Open price
+    "c": "0.0020",  // Close price
+    "h": "0.0025",  // High price
+    "l": "0.0015",  // Low price
+    "v": "1000",    // Base asset volume
+    "n": 100,       // Number of trades
+    "x": false,     // Is this kline closed?
+    "q": "1.0000",  // Quote asset volume
+    "V": "500",     // Taker buy base asset volume
+    "Q": "0.500",   // Taker buy quote asset volume
+    "B": "123456"   // Ignore
+  }
+}
+```
+
+The Kline/Candlestick Stream push updates to the current klines/candlestick every 250 milliseconds (if existing).
+
+**Kline/Candlestick chart intervals:**
+
+m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
+
+* 1m
+* 3m
+* 5m
+* 15m
+* 30m
+* 1h
+* 2h
+* 4h
+* 6h
+* 8h
+* 12h
+* 1d
+* 3d
+* 1w
+* 1M
+
+**Stream Name:**
+``<symbol>@kline_<interval>``
+
+**Update Speed:** 250ms
+
+## Individual Symbol Mini Ticker Stream
+
+> **Payload:**
+
+```javascript
+{
+    "e": "24hrMiniTicker",  // Event type
+    "E": 123456789,         // Event time
+    "s": "BTCUSDT",         // Symbol
+    "c": "0.0025",          // Close price
+    "o": "0.0010",          // Open price
+    "h": "0.0025",          // High price
+    "l": "0.0010",          // Low price
+    "v": "10000",           // Total traded base asset volume
+    "q": "18"               // Total traded quote asset volume
+  }
+```
+
+24hr rolling window mini-ticker statistics for a single symbol. These are NOT the statistics of the UTC day, but a 24hr rolling window from requestTime to 24hrs before.
+
+**Stream Name:**
+``<symbol>@miniTicker``
+
+**Update Speed:** 500ms
+
+## All Market Mini Tickers Stream
+
+> **Payload:**
+
+```javascript
+[  
+  {
+    "e": "24hrMiniTicker",  // Event type
+    "E": 123456789,         // Event time
+    "s": "BTCUSDT",         // Symbol
+    "c": "0.0025",          // Close price
+    "o": "0.0010",          // Open price
+    "h": "0.0025",          // High price
+    "l": "0.0010",          // Low price
+    "v": "10000",           // Total traded base asset volume
+    "q": "18"               // Total traded quote asset volume
+  }
+]
+```
+
+24hr rolling window mini-ticker statistics for all symbols. These are NOT the statistics of the UTC day, but a 24hr rolling window from requestTime to 24hrs before. Note that only tickers that have changed will be present in the array.
+
+**Stream Name:**
+``!miniTicker@arr``
+
+**Update Speed:** 1000ms
+
+## Individual Symbol Ticker Streams
+
+> **Payload:**
+
+```javascript
+{
+  "e": "24hrTicker",  // Event type
+  "E": 123456789,     // Event time
+  "s": "BTCUSDT",     // Symbol
+  "p": "0.0015",      // Price change
+  "P": "250.00",      // Price change percent
+  "w": "0.0018",      // Weighted average price
+  "c": "0.0025",      // Last price
+  "Q": "10",          // Last quantity
+  "o": "0.0010",      // Open price
+  "h": "0.0025",      // High price
+  "l": "0.0010",      // Low price
+  "v": "10000",       // Total traded base asset volume
+  "q": "18",          // Total traded quote asset volume
+  "O": 0,             // Statistics open time
+  "C": 86400000,      // Statistics close time
+  "F": 0,             // First trade ID
+  "L": 18150,         // Last trade Id
+  "n": 18151          // Total number of trades
+}
+```
+
+24hr rollwing window ticker statistics for a single symbol. These are NOT the statistics of the UTC day, but a 24hr rolling window from requestTime to 24hrs before.
+
+**Stream Name:**
+``<symbol>@ticker``
+
+**Update Speed:** 500ms
+
+## All Market Tickers Streams
+
+> **Payload:**
+
+```javascript
+[
+	{
+	  "e": "24hrTicker",  // Event type
+	  "E": 123456789,     // Event time
+	  "s": "BTCUSDT",     // Symbol
+	  "p": "0.0015",      // Price change
+	  "P": "250.00",      // Price change percent
+	  "w": "0.0018",      // Weighted average price
+	  "c": "0.0025",      // Last price
+	  "Q": "10",          // Last quantity
+	  "o": "0.0010",      // Open price
+	  "h": "0.0025",      // High price
+	  "l": "0.0010",      // Low price
+	  "v": "10000",       // Total traded base asset volume
+	  "q": "18",          // Total traded quote asset volume
+	  "O": 0,             // Statistics open time
+	  "C": 86400000,      // Statistics close time
+	  "F": 0,             // First trade ID
+	  "L": 18150,         // Last trade Id
+	  "n": 18151          // Total number of trades
+	}
+]
+```
+
+24hr rollwing window ticker statistics for all symbols. These are NOT the statistics of the UTC day, but a 24hr rolling window from requestTime to 24hrs before. Note that only tickers that have changed will be present in the array.
+
+**Stream Name:**
+``!ticker@arr``
+
+**Update Speed:** 1000ms
+
+## Individual Symbol Book Ticker Streams
+
+> **Payload:**
+
+```javascript
+{
+  "e":"bookTicker",			// event type
+  "u":400900217,     		// order book updateId
+  "E": 1568014460893,  		// event time
+  "T": 1568014460891,  		// transaction time
+  "s":"BNBUSDT",     		// symbol
+  "b":"25.35190000", 		// best bid price
+  "B":"31.21000000", 		// best bid qty
+  "a":"25.36520000", 		// best ask price
+  "A":"40.66000000"  		// best ask qty
+}
+```
+
+Pushes any update to the best bid or ask's price or quantity in real-time for a specified symbol.
+
+**Stream Name:** `<symbol>@bookTicker`
+
+**Update Speed:** Real-time
+
+## All Book Tickers Stream
+
+> **Payload:**
+
+```javascript
+{
+  // Same as <symbol>@bookTicker payload
+}
+```
+
+Pushes any update to the best bid or ask's price or quantity in real-time for all symbols.
+
+**Stream Name:** `!bookTicker`
+
+**Update Speed:** Real-time
+
+## Liquidation Order Streams
+
+> **Payload:**
+
+```javascript
+{
+
+	"e":"forceOrder",                   // Event Type
+	"E":1568014460893,                  // Event Time
+	"o":{
+
+		"s":"BTCUSDT",                   // Symbol
+		"S":"SELL",                      // Side
+		"o":"LIMIT",                     // Order Type
+		"f":"IOC",                       // Time in Force
+		"q":"0.014",                     // Original Quantity
+		"p":"9910",                      // Price
+		"ap":"9910",                     // Average Price
+		"X":"FILLED",                    // Order Status
+		"l":"0.014",                     // Order Last Filled Quantity
+		"z":"0.014",                     // Order Filled Accumulated Quantity
+		"T":1568014460893,          	 // Order Trade Time
+
+	}
+
+}
+```
+
+The Liquidation Order Snapshot Streams push force liquidation order information for specific symbol.
+
+For each symbol，only the latest one liquidation order within 1000ms will be pushed as the snapshot. If no liquidation happens in the interval of 1000ms, no stream will be pushed.
+
+**Stream Name:**  ``<symbol>@forceOrder``
+
+**Update Speed:** 1000ms
+
+## All Market Liquidation Order Streams
+
+> **Payload:**
+
+```javascript
+{
+
+	"e":"forceOrder",                   // Event Type
+	"E":1568014460893,                  // Event Time
+	"o":{
+
+		"s":"BTCUSDT",                   // Symbol
+		"S":"SELL",                      // Side
+		"o":"LIMIT",                     // Order Type
+		"f":"IOC",                       // Time in Force
+		"q":"0.014",                     // Original Quantity
+		"p":"9910",                      // Price
+		"ap":"9910",                     // Average Price
+		"X":"FILLED",                    // Order Status
+		"l":"0.014",                     // Order Last Filled Quantity
+		"z":"0.014",                     // Order Filled Accumulated Quantity
+		"T":1568014460893,          	 // Order Trade Time
+
+	}
+
+}
+```
+
+The All Liquidation Order Snapshot Streams push force liquidation order information for all symbols in the market.
+
+For each symbol，only the latest one liquidation order within 1000ms will be pushed as the snapshot. If no liquidation happens in the interval of 1000ms, no stream will be pushed.
+
+**Stream Name:** ``!forceOrder@arr``
+
+**Update Speed:** 1000ms
+
+## Partial Book Depth Streams
+
+> **Payload:**
+
+```javascript
+{
+  "e": "depthUpdate", // Event type
+  "E": 1571889248277, // Event time
+  "T": 1571889248276, // Transaction time
+  "s": "BTCUSDT",
+  "U": 390497796,
+  "u": 390497878,
+  "pu": 390497794,
+  "b": [          // Bids to be updated
+    [
+      "7403.89",  // Price Level to be
+      "0.002"     // Quantity
+    ],
+    [
+      "7403.90",
+      "3.906"
+    ],
+    [
+      "7404.00",
+      "1.428"
+    ],
+    [
+      "7404.85",
+      "5.239"
+    ],
+    [
+      "7405.43",
+      "2.562"
+    ]
+  ],
+  "a": [          // Asks to be updated
+    [
+      "7405.96",  // Price level to be
+      "3.340"     // Quantity
+    ],
+    [
+      "7406.63",
+      "4.525"
+    ],
+    [
+      "7407.08",
+      "2.475"
+    ],
+    [
+      "7407.15",
+      "4.800"
+    ],
+    [
+      "7407.20",
+      "0.175"
+    ]
+  ]
+}
+```
+
+Top **<levels\>** bids and asks, Valid **<levels\>** are 5, 10, or 20.
+
+**Stream Names:** `<symbol>@depth<levels>` OR `<symbol>@depth<levels>@500ms` OR `<symbol>@depth<levels>@100ms`.
+
+**Update Speed:** 250ms, 500ms or 100ms
+
+## Diff. Book Depth Streams
+
+> **Payload:**
+
+```javascript
+{
+  "e": "depthUpdate", // Event type
+  "E": 123456789,     // Event time
+  "T": 123456788,     // Transaction time 
+  "s": "BTCUSDT",     // Symbol
+  "U": 157,           // First update ID in event
+  "u": 160,           // Final update ID in event
+  "pu": 149,          // Final update Id in last stream(ie `u` in last stream)
+  "b": [              // Bids to be updated
+    [
+      "0.0024",       // Price level to be updated
+      "10"            // Quantity
+    ]
+  ],
+  "a": [              // Asks to be updated
+    [
+      "0.0026",       // Price level to be updated
+      "100"          // Quantity
+    ]
+  ]
+}
+```
+
+Bids and asks, pushed every 250 milliseconds, 500 milliseconds, 100 milliseconds (if existing)
+
+**Stream Name:**
+``<symbol>@depth`` OR ``<symbol>@depth@500ms``  OR ``<symbol>@depth@100ms``
+
+**Update Speed:** 250ms, 500ms, 100ms
+
+## How to manage a local order book correctly
+
+1. Open a stream to **wss://fstream.asterdex.com/stream?streams=btcusdt@depth**.
+2. Buffer the events you receive from the stream. For same price, latest received update covers the previous one.
+3. Get a depth snapshot from **https://fapi.asterdex.com/fapi/v3/depth?symbol=BTCUSDT&limit=1000** .
+4. Drop any event where `u` is < `lastUpdateId` in the snapshot.
+5. The first processed event should have `U` <= `lastUpdateId` **AND** `u` >= `lastUpdateId`
+6. While listening to the stream, each new event's `pu` should be equal to the previous event's `u`, otherwise initialize the process from step 3.
+7. The data in each event is the **absolute** quantity for a price level.
+8. If the quantity is 0, **remove** the price level.
+9. Receiving an event that removes a price level that is not in your local order book can happen and is normal.
+
+# Account/Trades Endpoints
+
+<aside class="warning">
+Considering the possible data latency from RESTful endpoints during an extremely volatile market, it is highly recommended to get the order status, position, etc from the Websocket user data stream.
+</aside>
+
+## Change Position Mode(TRADE)
+
+> **Response:**
+
+```javascript
+{
+	"code": 200,
+	"msg": "success"
+}
+```
+
+``POST /fapi/v3/positionSide/dual``
+
+Change user's position mode (Hedge Mode or One-way Mode ) on ***EVERY symbol***
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name             | Type   | Mandatory | Description                               |
+| ---------------- | ------ | --------- | ----------------------------------------- |
+| dualSidePosition | STRING | YES       | "true": Hedge Mode; "false": One-way Mode |
+
+## Get Current Position Mode(USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+	"dualSidePosition": true // "true": Hedge Mode; "false": One-way Mode
+}
+```
+
+``GET /fapi/v3/positionSide/dual``
+
+Get user's position mode (Hedge Mode or One-way Mode ) on ***EVERY symbol***
+
+**Weight:**
+30
+
+**Parameters:**
+
+| Name       | Type | Mandatory | Description |
+| ---------- | ---- | --------- | ----------- |
+
+## Change STP Mode (TRADE)
+
+> **Response:**
+
+```javascript
+{
+	"code": 200,
+	"msg": "success"
+}
+```
+
+``POST /fapi/v3/stpMode``
+
+Change user's Self-Trade Prevention (STP) mode on ***EVERY symbol***
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+|------|------|-----------|-------------|
+| stpMode | ENUM | YES | `EXPIRE_TAKER`: expire taker order; `EXPIRE_MAKER`: expire maker order; `EXPIRE_BOTH`: expire both maker and taker orders |
+| nonce | LONG | YES | Microsecond-level timestamp |
+| signer | STRING | YES | API wallet address |
+| signature | STRING | YES | Signature |
+
+## Get Current STP Mode (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+	"stpMode": "EXPIRE_TAKER" // Current STP mode
+}
+```
+
+``GET /fapi/v3/stpMode``
+
+Get user's current Self-Trade Prevention (STP) mode on ***EVERY symbol***
+
+**Weight:**
+30
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+|------|------|-----------|-------------|
+| nonce | LONG | YES | Microsecond-level timestamp |
+| signer | STRING | YES | API wallet address |
+| signature | STRING | YES | Signature |
+
+## Change Multi-Assets Mode (TRADE)
+
+> **Response:**
+
+```javascript
+{
+	"code": 200,
+	"msg": "success"
+}
+```
+
+``POST /fapi/v3/multiAssetsMargin``
+
+Change user's Multi-Assets mode (Multi-Assets Mode or Single-Asset Mode) on ***Every symbol***
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name              | Type   | Mandatory | Description                                           |
+| ----------------- | ------ | --------- | ----------------------------------------------------- |
+| multiAssetsMargin | STRING | YES       | "true": Multi-Assets Mode; "false": Single-Asset Mode |
+
+## Get Current Multi-Assets Mode (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+	"multiAssetsMargin": true // "true": Multi-Assets Mode; "false": Single-Asset Mode
+}
+```
+
+``GET /fapi/v3/multiAssetsMargin``
+
+Get user's Multi-Assets mode (Multi-Assets Mode or Single-Asset Mode) on ***Every symbol***
+
+**Weight:**
+30
+
+**Parameters:**
+
+| Name       | Type | Mandatory | Description |
+| ---------- | ---- | --------- | ----------- |
+
+## New Order  (TRADE)
+
+> **Response:**
+
+```javascript
+{
+ 	"clientOrderId": "testOrder",
+ 	"cumQty": "0",
+ 	"cumQuote": "0",
+ 	"executedQty": "0",
+ 	"orderId": 22542179,
+ 	"avgPrice": "0.00000",
+ 	"origQty": "10",
+ 	"price": "0",
+  	"reduceOnly": false,
+  	"side": "BUY",
+  	"positionSide": "SHORT",
+  	"status": "NEW",
+  	"stopPrice": "9300",		// please ignore when order type is TRAILING_STOP_MARKET
+  	"closePosition": false,   // if Close-All
+  	"symbol": "BTCUSDT",
+  	"timeInForce": "GTC",
+  	"type": "TRAILING_STOP_MARKET",
+  	"origType": "TRAILING_STOP_MARKET",
+  	"activatePrice": "9020",	// activation price, only return with TRAILING_STOP_MARKET order
+  	"priceRate": "0.3",			// callback rate, only return with TRAILING_STOP_MARKET order
+ 	"updateTime": 1566818724722,
+ 	"workingType": "CONTRACT_PRICE",
+ 	"priceProtect": false,           // if conditional order trigger is protected
+ 	"pegPriceType": "",              // BBO peg mode, only present for pegged orders
+ 	"stpMode": ""                    // Self-Trade Prevention mode, only present when set on the order
+}
+```
+
+``POST /fapi/v3/order ``
+
+Send in a new order.
+
+**Weight:**
+0
+
+**Parameters:**
+
+| Name             | Type    | Mandatory | Description                                                                                                                            |
+| ---------------- | ------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| symbol           | STRING  | YES       |                                                                                                                                        |
+| side             | ENUM    | YES       |                                                                                                                                        |
+| positionSide     | ENUM    | NO        | Default`BOTH` for One-way Mode ; `LONG` or `SHORT` for Hedge Mode. It must be sent in Hedge Mode.                                      |
+| type             | ENUM    | YES       |                                                                                                                                        |
+| timeInForce      | ENUM    | NO        | See [ENUM definitions: Time in force](#enum-definitions)                                                                             |
+| quantity         | DECIMAL | NO        | Cannot be sent with`closePosition`=`true`(Close-All)                                                                                   |
+| reduceOnly       | STRING  | NO        | "true" or "false". default "false". Cannot be sent in Hedge Mode; cannot be sent with`closePosition`=`true`                            |
+| price            | DECIMAL | NO        |                                                                                                                                        |
+| newClientOrderId | STRING  | NO        | A unique id among open orders. Automatically generated if not sent. Can only be string following the rule:`^[\.A-Z\:/a-z0-9_-]{1,36}$` |
+| stopPrice        | DECIMAL | NO        | Used with`STOP/STOP_MARKET` or `TAKE_PROFIT/TAKE_PROFIT_MARKET` orders.                                                                |
+| closePosition    | STRING  | NO        | `true`, `false`；Close-All，used with `STOP_MARKET` or `TAKE_PROFIT_MARKET`.                                                           |
+| activationPrice  | DECIMAL | NO        | Used with`TRAILING_STOP_MARKET` orders, default as the latest price(supporting different `workingType`)                                |
+| callbackRate     | DECIMAL | NO        | Used with`TRAILING_STOP_MARKET` orders, min 0.1, max 5 where 1 for 1%                                                                  |
+| workingType      | ENUM    | NO        | stopPrice triggered by: "MARK_PRICE", "CONTRACT_PRICE". Default "CONTRACT_PRICE"                                                       |
+| priceProtect     | STRING  | NO        | "TRUE" or "FALSE", default "FALSE". Used with`STOP/STOP_MARKET` or `TAKE_PROFIT/TAKE_PROFIT_MARKET` orders.                            |
+| newOrderRespType | ENUM    | NO        | "ACK", "RESULT", default "ACK"                                                                                                         |
+| pegPriceType     | ENUM    | NO        | BBO peg mode: `COUNTERPARTY_1` or `QUEUE_1`. When set on a `LIMIT` order, the engine resolves the actual price from the order book at trigger time using the BBO + `pegOffset`. Defaults to no peg. |
+| pegOffset        | DECIMAL | NO        | Signed offset from BBO when `pegPriceType` is set. BUY orders should use a non-positive value (e.g. `-0.5`); SELL non-negative. Units: same scale as `price` (must be a `tickSize` multiple).        |
+| stpMode          | ENUM    | NO        | Self-Trade Prevention mode for this order. Overrides the account-level default. `EXPIRE_TAKER`: cancel the taker side; `EXPIRE_MAKER`: cancel the maker side; `EXPIRE_BOTH`: cancel both sides.      |
+
+Additional mandatory parameters based on `type`:
+
+| Type                             | Additional mandatory parameters    |
+| -------------------------------- | ---------------------------------- |
+| `LIMIT`                          | `timeInForce`, `quantity`, `price` |
+| `MARKET`                         | `quantity`                         |
+| `STOP/TAKE_PROFIT`               | `quantity`,  `price`, `stopPrice`  |
+| `STOP_MARKET/TAKE_PROFIT_MARKET` | `stopPrice`                        |
+| `TRAILING_STOP_MARKET`           | `callbackRate`                     |
+
+* Order with type `STOP`,  parameter `timeInForce` can be sent ( default `GTC`).
+* Order with type `TAKE_PROFIT`,  parameter `timeInForce` can be sent ( default `GTC`).
+* For `STOP_MARKET`, `TAKE_PROFIT_MARKET`, `TRAILING_STOP_MARKET`: if `timeInForce` is sent, only `GTC` is accepted; any other value is rejected.
+* Sending a parameter that does not apply to the selected `type` (e.g. `stopPrice` with `LIMIT`; `timeInForce`, `price`, or `stopPrice` with `MARKET`; `price` with `STOP_MARKET`/`TAKE_PROFIT_MARKET`) returns an error (`PARAM_NOT_REQUIRED`) rather than being silently ignored.
+* Condition orders will be triggered when:
+  
+  * If parameter`priceProtect`is sent as true:
+    
+    * when price reaches the `stopPrice` ，the difference rate between "MARK_PRICE" and "CONTRACT_PRICE" cannot be larger than the "triggerProtect" of the symbol
+    * "triggerProtect" of a symbol can be got from `GET /fapi/v3/exchangeInfo`
+  * `STOP`, `STOP_MARKET`:
+    
+    * BUY: latest price ("MARK_PRICE" or "CONTRACT_PRICE") >= `stopPrice`
+    * SELL: latest price ("MARK_PRICE" or "CONTRACT_PRICE") <= `stopPrice`
+  * `TAKE_PROFIT`, `TAKE_PROFIT_MARKET`:
+    
+    * BUY: latest price ("MARK_PRICE" or "CONTRACT_PRICE") <= `stopPrice`
+    * SELL: latest price ("MARK_PRICE" or "CONTRACT_PRICE") >= `stopPrice`
+  * `TRAILING_STOP_MARKET`:
+    
+    * BUY: the lowest price after order placed <= `activationPrice`, and the latest price >= the lowest price * (1 + `callbackRate`)
+    * SELL: the highest price after order placed >= `activationPrice`, and the latest price <= the highest price * (1 - `callbackRate`)
+* For `TRAILING_STOP_MARKET`, if you got such error code.``{"code": -2021, "msg": "Order would immediately trigger."}``means that the parameters you send do not meet the following requirements:
+  
+  * BUY: `activationPrice` should be smaller than latest price.
+  * SELL: `activationPrice` should be larger than latest price.
+* If `newOrderRespType ` is sent as `RESULT` :
+  
+  * `MARKET` order: the final FILLED result of the order will be return directly.
+  * `LIMIT` order with special `timeInForce`: the final status result of the order(FILLED or EXPIRED) will be returned directly.
+* `STOP_MARKET`, `TAKE_PROFIT_MARKET` with `closePosition`=`true`:
+  
+  * Follow the same rules for condition orders.
+  * If triggered，**close all** current long position( if `SELL`) or current short position( if `BUY`).
+  * Cannot be used with `quantity` paremeter
+  * Cannot be used with `reduceOnly` parameter
+  * In Hedge Mode,cannot be used with `BUY` orders in `LONG` position side. and cannot be used with `SELL` orders in `SHORT` position side
+
+## Modify Order (TRADE)
+
+> **Response:**
+
+```javascript
+{ 
+	'orderId': 405,  // Order ID
+	'symbol': 'GOOGLUSDT', // Trading pair
+	'status': 'NEW', // Order status
+	'clientOrderId': 'uOLCC3aiCou3z2YL0sxWIX',  // User-defined order ID
+	'price': '295.50',  // Order price
+	'avgPrice': '0.00000', // Average fill price
+	'origQty': '0.150',  // Original order quantity
+	'executedQty': '0', // Filled quantity
+	'cumQty': '0', 
+	'cumQuote': '0',  // Filled amount
+	'timeInForce': 'GTC',  // Time in force
+	'type': 'LIMIT',  // Order type
+	'reduceOnly': False,  // Reduce only
+	'closePosition': False,  // Close all positions on trigger
+	'side': 'BUY',   // Order side
+	'positionSide': 'BOTH',   // Position side
+	'stopPrice': '0',  // Trigger price, invalid for `TRAILING_STOP_MARKET`
+	'workingType': 'CONTRACT_PRICE',  // Condition price trigger type
+	'priceProtect': False,  // Conditional order trigger protection enabled
+	'origType': 'LIMIT',  // Original order type before trigger
+	'updateTime': 1776311274450, // Update time
+	'pegPriceType': '',  // BBO peg mode, only present for pegged orders
+	'stpMode': ''  // Self-Trade Prevention mode, only present when set on the order
+}
+```
+
+``
+PUT /fapi/v3/order  ``
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name              |  Type   | Mandatory   | Description
+---------------- | ------- | -------- | ----
+orderId | LONG  |  NO  | Order ID
+origClientOrderId  |  STRING |  NO |  User-defined order ID
+symbol |  STRING |  YES|  Trading pair
+side | ENUM | NO | Optional order side; if provided it is validated against the order's actual side.
+quantity  |   DECIMAL|  YES | Order quantity
+price  |  DECIMAL | YES | Order price
+
+
+* Either `orderId` or `origClientOrderId` must be sent. If both are sent, `orderId` takes precedence.
+* Both `quantity` and `price` must be sent.
+* If the new `quantity` or `price` does not meet `PRICE_FILTER` / `PERCENT_FILTER` / `LOT_SIZE` restrictions, the modification will be rejected and the original order will remain.
+* Only `LIMIT` order type is supported.
+* Maximum 10000 modifications per order.
+* **BBO-pegged orders** (those placed with `pegPriceType` = `COUNTERPARTY_1` / `QUEUE_1`): the engine resolves the actual price from the order book at trigger time. To auto-track the BBO with a continuously re-pegged limit order, use a **Chase order** (see `POST /fapi/v3/chase` below) which the strategy service amends in real time as the BBO moves.
+
+## Place Chase Order (TRADE)
+
+> **Response:**
+
+```javascript
+{
+    "strategyId": 12345,
+    "clientStrategyId": "my_chase_1",
+    "symbol": "BTCUSDT",
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "quantity": "0.1",
+    "quantityUnit": "BASE",
+    "reduceOnly": false,
+    "chaseOffset": "0.5",
+    "chaseOffsetType": "ABSOLUTE",
+    "maxChaseOffset": "10.0",
+    "maxChaseOffsetType": "ABSOLUTE",
+    "timeInForce": "GTX",
+    "strategyStatus": "NEW",
+    "bookTime": 1747728000000,
+    "updateTime": 1747728000000
+}
+```
+
+``POST /fapi/v3/chase``
+
+Place a **Chase strategy order** — a BBO-pegged GTX limit order that automatically re-pegs to the best bid/ask as the market moves. The strategy service polls the order book each tick and amends the order price in real time to keep the order near the top of the book until it fills or until the market moves beyond `maxChaseOffset` from the original BBO.
+
+**Weight:** 1
+
+**Parameters:**
+
+| Name               | Type    | Mandatory | Description                                                                                                                                                                                |
+| ------------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| symbol             | STRING  | YES       | Trading pair.                                                                                                                                                                              |
+| side               | ENUM    | YES       | `BUY` or `SELL`. Missing/blank returns `"Mandatory parameter 'side' was not sent, was empty/null, or malformed."`                                                                          |
+| positionSide       | ENUM    | NO        | Default `BOTH` for One-way Mode; `LONG` or `SHORT` for Hedge Mode.                                                                                                                         |
+| quantityUnit       | STRING  | YES       | `BASE` (qty in base asset, e.g. BTC) or `QUOTE` (qty in quote asset, e.g. USDT). For `QUOTE` orders the system converts to BASE using mark price.                                          |
+| quantity           | DECIMAL | YES       | Order quantity in the unit specified by `quantityUnit`.                                                                                                                                    |
+| reduceOnly         | STRING  | NO        | `"true"` or `"false"` (case-insensitive). Any other value is rejected. Default `"false"`.                                                                                                  |
+| chaseOffset        | DECIMAL | NO        | Distance from BBO to peg the order. Default `"0"` (exact BBO peg). Must be ≥ 0 and a multiple of `tickSize`. BUY price = `bid1 − chaseOffset`; SELL price = `ask1 + chaseOffset`.           |
+| chaseOffsetType    | STRING  | NO        | `ABSOLUTE` (default). only supports `ABSOLUTE` for now. Will support or `PERCENTAGE` latter later.                                                                                                                         |
+| maxChaseOffset     | DECIMAL | NO        | Maximum tolerated distance from the original BBO before the chase auto-cancels. Must be `> 0`. If omitted, no distance-based auto-cancel is applied and any `maxChaseOffsetType` sent is ignored.        |
+| maxChaseOffsetType | STRING  | NO        | `ABSOLUTE` or `PERCENTAGE` (default `ABSOLUTE` when `maxChaseOffset` is sent). `ABSOLUTE`: same unit as price, must be a multiple of `tickSize`. `PERCENTAGE`: ≤ 2 decimal places.          |
+| timeInForce        | ENUM    | NO        | Default `GTX` (post-only). See [ENUM definitions: Time in force](#enum-definitions).                                     |
+| clientStrategyId   | STRING  | NO        | User-defined strategy id. Auto-generated if not sent. **Length ≤ 28 characters** (DB column is `varchar(28)`). Must match `^[\.A-Z\:/a-z0-9_-]{1,28}$`.                                    |
+
+**Validation rules:**
+
+* `side` is mandatory.
+* `reduceOnly` accepts only `"true"` / `"false"` (case-insensitive). Any other string returns `INVALID_PARAMETER` with `reduceOnly` as the offending param name.
+* `chaseOffset` must be ≥ 0 and a multiple of `tickSize`.
+* `chaseOffsetType` / `maxChaseOffsetType` must be `ABSOLUTE` or `PERCENTAGE`; an invalid value returns `INVALID_PARAMETER` (not `INVALID_CHASE_OFFSET`).
+* `chaseOffsetType` currently supports only `ABSOLUTE`. `PERCENTAGE` is a valid value but is not yet implemented for `chaseOffset` and returns `UNSUPPORTED_OPERATION`. (`maxChaseOffsetType` supports both.)
+* Quantity / notional floor (entry orders only; `reduceOnly` orders are exempt from the notional minimum): for `quantityUnit = BASE`, `quantity` must be ≥ the symbol's `marketMinQty` (else `QTY_LESS_THAN_MIN_QTY`) and `quantity × markPrice` must be ≥ the symbol's `minNotional` (else `MIN_NOTIONAL`); for `quantityUnit = QUOTE`, the quote amount must be ≥ `minNotional` (else `MIN_NOTIONAL`) and `quoteQty / markPrice` must be ≥ `marketMinQty` (else `QTY_LESS_THAN_MIN_QTY`).
+* When `maxChaseOffsetType = PERCENTAGE`, the input value must have ≤ 2 decimal places (it is stored at scale 2 on the wire, e.g. `"1"` → 1.00%, `"100"` → 100.00%).
+* When `maxChaseOffsetType = ABSOLUTE`, `maxChaseOffset` must be a multiple of `tickSize`.
+* `clientStrategyId` length must be ≤ 28 characters.
+* OI cap check: for `quantityUnit = QUOTE`, the gateway converts to BASE quantity for the symbol-leverage OI bracket check using `qtyBase = qtyQuote × 10^quantityDecimal / markPrice`.
+
+**Behavior:**
+
+* The initial order is placed as a GTX (post-only) limit with `pegPriceType = QUEUE_1` and signed `pegOffset` (negative for BUY, positive for SELL).
+* The strategy service polls every second and amends the order price as the BBO moves, keeping the order at `bid1 − chaseOffset` (BUY) or `ask1 + chaseOffset` (SELL).
+* If the market moves beyond `maxChaseOffset` from the original BBO, the chase **auto-cancels** with reason `OFFSET_CANCELLED`.
+* The chase terminates on FILL, user cancel (via standard `DELETE /fapi/v3/order`), or `maxChaseOffset` breach.
+
+## Place Multiple Orders  (TRADE)
+
+> **Response:**
+
+```javascript
+[
+	{
+	 	"clientOrderId": "testOrder",
+	 	"cumQty": "0",
+	 	"cumQuote": "0",
+	 	"executedQty": "0",
+	 	"orderId": 22542179,
+	 	"avgPrice": "0.00000",
+	 	"origQty": "10",
+	 	"price": "0",
+	  	"reduceOnly": false,
+	  	"side": "BUY",
+	  	"positionSide": "SHORT",
+	  	"status": "NEW",
+	  	"stopPrice": "9300",		// please ignore when order type is TRAILING_STOP_MARKET
+	  	"symbol": "BTCUSDT",
+	  	"timeInForce": "GTC",
+	  	"type": "TRAILING_STOP_MARKET",
+	  	"origType": "TRAILING_STOP_MARKET",
+	  	"activatePrice": "9020",	// activation price, only return with TRAILING_STOP_MARKET order
+	  	"priceRate": "0.3",			// callback rate, only return with TRAILING_STOP_MARKET order
+	 	"updateTime": 1566818724722,
+	 	"workingType": "CONTRACT_PRICE",
+	 	"priceProtect": false,           // if conditional order trigger is protected
+	 	"pegPriceType": "",              // BBO peg mode, only present for pegged orders
+	 	"stpMode": ""                    // Self-Trade Prevention mode, only present when set on the order
+	},
+	{
+		"code": -2022, 
+		"msg": "ReduceOnly Order is rejected."
+	}
+]
+```
+
+``POST /fapi/v3/batchOrders ``
+
+**Weight:**
+5
+
+**Parameters:**
+
+| Name        | Type       | Mandatory | Description              |
+| ----------- | ---------- | --------- | ------------------------ |
+| batchOrders | LIST | YES       | order list. Max 5 orders |
+
+**Where ``batchOrders`` is the list of order parameters in JSON**
+
+| Name             | Type    | Mandatory | Description                                                                                                                            |
+| ---------------- | ------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| symbol           | STRING  | YES       |                                                                                                                                        |
+| side             | ENUM    | YES       |                                                                                                                                        |
+| positionSide     | ENUM    | NO        | Default`BOTH` for One-way Mode ; `LONG` or `SHORT` for Hedge Mode. It must be sent with Hedge Mode.                                    |
+| type             | ENUM    | YES       |                                                                                                                                        |
+| timeInForce      | ENUM    | NO        | See [ENUM definitions: Time in force](#enum-definitions)                                                                             |
+| quantity         | DECIMAL | YES       |                                                                                                                                        |
+| reduceOnly       | STRING  | NO        | "true" or "false". default "false".                                                                                                    |
+| price            | DECIMAL | NO        |                                                                                                                                        |
+| newClientOrderId | STRING  | NO        | A unique id among open orders. Automatically generated if not sent. Can only be string following the rule:`^[\.A-Z\:/a-z0-9_-]{1,36}$` |
+| stopPrice        | DECIMAL | NO        | Used with`STOP/STOP_MARKET` or `TAKE_PROFIT/TAKE_PROFIT_MARKET` orders.                                                                |
+| activationPrice  | DECIMAL | NO        | Used with`TRAILING_STOP_MARKET` orders, default as the latest price(supporting different `workingType`)                                |
+| callbackRate     | DECIMAL | NO        | Used with`TRAILING_STOP_MARKET` orders, min 0.1, max 4 where 1 for 1%                                                                  |
+| workingType      | ENUM    | NO        | stopPrice triggered by: "MARK_PRICE", "CONTRACT_PRICE". Default "CONTRACT_PRICE"                                                       |
+| priceProtect     | STRING  | NO        | "TRUE" or "FALSE", default "FALSE". Used with`STOP/STOP_MARKET` or `TAKE_PROFIT/TAKE_PROFIT_MARKET` orders.                            |
+| newOrderRespType | ENUM    | NO        | "ACK", "RESULT", default "ACK"                                                                                                         |
+
+* Paremeter rules are same with `New Order`
+* Batch orders are processed concurrently, and the order of matching is not guaranteed.
+* The order of returned contents for batch orders is the same as the order of the order list.
+
+## Batch Modify Orders (TRADE)
+
+> **Response:**
+
+```javascript
+[
+	{
+		"orderId": 20072994001,
+		"symbol": "BTCUSDT",
+		"status": "NEW",
+		"clientOrderId": "myBuyOrder001",
+		"price": "65000.0",
+		"avgPrice": "0.00000",
+		"origQty": "0.010",
+		"executedQty": "0",
+		"cumQty": "0",
+		"cumQuote": "0",
+		"timeInForce": "GTC",
+		"type": "LIMIT",
+		"reduceOnly": false,
+		"closePosition": false,
+		"side": "BUY",
+		"positionSide": "BOTH",
+		"stopPrice": "0",
+		"workingType": "CONTRACT_PRICE",
+		"priceProtect": false,
+		"origType": "LIMIT",
+		"updateTime": 1700000001100,
+		"pegPriceType": "",
+		"stpMode": ""
+	},
+	{
+		"code": -2013,
+		"msg": "Order does not exist."
+	},
+	{
+		"orderId": 20072994099,
+		"symbol": "ETHUSDT",
+		"status": "NEW",
+		"clientOrderId": "autoGenerated_xyz",
+		"price": "3500.0",
+		"avgPrice": "0.00000",
+		"origQty": "0.200",
+		"executedQty": "0",
+		"cumQty": "0",
+		"cumQuote": "0",
+		"timeInForce": "GTC",
+		"type": "LIMIT",
+		"reduceOnly": false,
+		"closePosition": false,
+		"side": "SELL",
+		"positionSide": "BOTH",
+		"stopPrice": "0",
+		"workingType": "CONTRACT_PRICE",
+		"priceProtect": false,
+		"origType": "LIMIT",
+		"updateTime": 1700000001234,
+		"pegPriceType": "",
+		"stpMode": ""
+	}
+]
+```
+
+``PUT /fapi/v3/batchOrders ``
+
+**Weight:**
+5
+
+**Parameters:**
+
+| Name        | Type | Mandatory | Description                                                     |
+| ----------- | ---- | --------- | ----------------------------------------------------------------|
+| batchOrders | LIST | YES       | order list. Max 5 orders (max 10 for MM-whitelisted accounts)   |
+
+**Where ``batchOrders`` is the list of order parameters in JSON**
+
+| Name              | Type    | Mandatory | Description            |
+| ----------------- | ------- | --------- | ----------------------- |
+| symbol            | STRING  | YES       | Trading pair |
+| orderId           | STRING  | NO        | Order ID |
+| origClientOrderId | STRING  | NO        | User-defined order ID |
+| side              | ENUM    | NO        | Optional order side; if provided it is validated against the order's actual side. |
+| quantity          | STRING  | YES       | Order quantity |
+| price             | STRING  | YES       | Order price |
+
+* Either `orderId` or `origClientOrderId` must be sent for each order. If both are sent, `orderId` takes precedence.
+* Both `quantity` and `price` must be sent for each order.
+* Parameter rules for each element are the same as `Modify Order` above — `LIMIT` orders only, subject to `PRICE_FILTER` / `PERCENT_FILTER` / `LOT_SIZE` restrictions, and a maximum of 10000 modifications per order.
+* Batch orders are processed concurrently; the processing order is not guaranteed, but the response order always matches the request order.
+* Not atomic — each order in the batch succeeds or fails independently. A failed modification leaves the original order untouched and does not affect the other orders in the batch.
+* Exceeding the batch size limit returns: `"Illegal characters found in parameter 'batchOrders'; legal range is '1 to 5'."` (or `'1 to 10'` for MM-whitelisted accounts).
+
+
+## Transfer Between Futures And Spot (TRANSFER)
+
+> **Response:**
+
+```javascript
+{
+    "tranId": 21841, //transaction id
+    "status": "SUCCESS" //status
+}
+```
+
+``
+POST /fapi/v3/asset/wallet/transfer  (TRANSFER)
+``
+
+**Weight:**
+50
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+---------------- | ------- | -------- | ----
+amount |	DECIMAL | 	YES |	amount
+asset |	STRING | 	YES |	asset
+clientTranId |	STRING | 	YES |	transaction id 
+kindType |	STRING | 	YES |	kindType
+
+Notes:
+
+* kindType can take the following values:
+     FUTURE_SPOT  (futures converted to spot)
+	 SPOT_FUTURE  (spot converted to futures)
+
+
+## Query Order (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  	"avgPrice": "0.00000",
+  	"clientOrderId": "abc",
+  	"cumQuote": "0",
+  	"executedQty": "0",
+  	"orderId": 1917641,
+  	"origQty": "0.40",
+  	"origType": "TRAILING_STOP_MARKET",
+  	"price": "0",
+  	"reduceOnly": false,
+  	"side": "BUY",
+  	"positionSide": "SHORT",
+  	"status": "NEW",
+  	"stopPrice": "9300",				// please ignore when order type is TRAILING_STOP_MARKET
+  	"closePosition": false,   // if Close-All
+  	"symbol": "BTCUSDT",
+  	"time": 1579276756075,				// order time
+  	"timeInForce": "GTC",
+  	"type": "TRAILING_STOP_MARKET",
+  	"activatePrice": "9020",			// activation price, only return with TRAILING_STOP_MARKET order
+  	"priceRate": "0.3",					// callback rate, only return with TRAILING_STOP_MARKET order
+  	"updateTime": 1579276756075,		// update time
+  	"workingType": "CONTRACT_PRICE",
+  	"priceProtect": false            // if conditional order trigger is protected
+}
+```
+
+``GET /fapi/v3/order``
+
+Check an order's status.
+
+**Weight:**
+1
+
+* These orders will not be found:
+  * order status is `CANCELED` or `EXPIRED`, **AND**
+  * order has NO filled trade, **AND**
+  * created time + 7 days < current time
+
+**Parameters:**
+
+| Name              | Type   | Mandatory | Description |
+| ----------------- | ------ | --------- | ----------- |
+| symbol            | STRING | YES       |             |
+| orderId           | LONG   | NO        |             |
+| origClientOrderId | STRING | NO        |             |
+
+Notes:
+
+* Either `orderId` or `origClientOrderId` must be sent.
+
+## Cancel Order (TRADE)
+
+> **Response:**
+
+```javascript
+{
+ 	"clientOrderId": "myOrder1",
+ 	"cumQty": "0",
+ 	"cumQuote": "0",
+ 	"executedQty": "0",
+ 	"orderId": 283194212,
+ 	"origQty": "11",
+ 	"origType": "TRAILING_STOP_MARKET",
+  	"price": "0",
+  	"reduceOnly": false,
+  	"side": "BUY",
+  	"positionSide": "SHORT",
+  	"status": "CANCELED",
+  	"stopPrice": "9300",				// please ignore when order type is TRAILING_STOP_MARKET
+  	"closePosition": false,   // if Close-All
+  	"symbol": "BTCUSDT",
+  	"timeInForce": "GTC",
+  	"type": "TRAILING_STOP_MARKET",
+  	"activatePrice": "9020",			// activation price, only return with TRAILING_STOP_MARKET order
+  	"priceRate": "0.3",					// callback rate, only return with TRAILING_STOP_MARKET order
+ 	"updateTime": 1571110484038,
+ 	"workingType": "CONTRACT_PRICE",
+ 	"priceProtect": false,           // if conditional order trigger is protected
+ 	"pegPriceType": "",              // BBO peg mode, only present for pegged orders
+ 	"stpMode": ""                    // Self-Trade Prevention mode, only present when set on the order
+}
+```
+
+``DELETE /fapi/v3/order ``
+
+Cancel an active order.
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name              | Type   | Mandatory | Description |
+| ----------------- | ------ | --------- | ----------- |
+| symbol            | STRING | YES       |             |
+| orderId           | LONG   | NO        |             |
+| origClientOrderId | STRING | NO        |             |
+
+Either `orderId` or `origClientOrderId` must be sent.
+
+## Cancel Order (Guarded) (TRADE)
+
+> **Response:**
+
+```javascript
+{
+ 	"clientOrderId": "myOrder1",
+ 	"cumQty": "0",
+ 	"cumQuote": "0",
+ 	"executedQty": "0",
+ 	"orderId": 283194212,
+ 	"origQty": "11",
+ 	"origType": "TRAILING_STOP_MARKET",
+  	"price": "0",
+  	"reduceOnly": false,
+  	"side": "BUY",
+  	"positionSide": "SHORT",
+  	"status": "CANCELED",
+  	"stopPrice": "9300",				// please ignore when order type is TRAILING_STOP_MARKET
+  	"closePosition": false,   // if Close-All
+  	"symbol": "BTCUSDT",
+  	"timeInForce": "GTC",
+  	"type": "TRAILING_STOP_MARKET",
+  	"activatePrice": "9020",			// activation price, only return with TRAILING_STOP_MARKET order
+  	"priceRate": "0.3",					// callback rate, only return with TRAILING_STOP_MARKET order
+ 	"updateTime": 1571110484038,
+ 	"workingType": "CONTRACT_PRICE",
+ 	"priceProtect": false,           // if conditional order trigger is protected
+ 	"pegPriceType": "",              // BBO peg mode, only present for pegged orders
+ 	"stpMode": ""                    // Self-Trade Prevention mode, only present when set on the order
+}
+```
+
+``DELETE /fapi/v3/guardedCancelOrder ``
+
+Cancel an active order. Guarded variant of `DELETE /fapi/v3/order`, intended for orders placed/authorized on-chain: the on-chain nonce associated with the order is used to guard against duplicate or out-of-order cancellation. `signer`, `nonce`, and `signature` are required. Other request parameters and the response are identical to `DELETE /fapi/v3/order`.
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name              | Type   | Mandatory | Description |
+| ----------------- | ------ | --------- | ----------- |
+| symbol            | STRING | YES       |             |
+| orderId           | LONG   | NO        |             |
+| origClientOrderId | STRING | NO        |             |
+| signer            | STRING | YES       | API wallet address |
+| nonce             | LONG   | YES       | The `nonce` that was used to place this order (i.e. the `nonce` submitted with `POST /fapi/v3/order`), not a new/current timestamp |
+| signature         | STRING | YES       | EIP-712 signature signed with the `signer` wallet private key |
+
+Either `orderId` or `origClientOrderId` must be sent.
+
+## Cancel All Open Orders (TRADE)
+
+> **Response:**
+
+```javascript
+{
+	"code": "200", 
+	"msg": "The operation of cancel all open order is done."
+}
+```
+
+``DELETE /fapi/v3/allOpenOrders ``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description |
+| ---------- | ------ | --------- | ----------- |
+| symbol     | STRING | YES       |             |
+
+## Cancel Multiple Orders (TRADE)
+
+> **Response:**
+
+```javascript
+[
+	{
+	 	"clientOrderId": "myOrder1",
+	 	"cumQty": "0",
+	 	"cumQuote": "0",
+	 	"executedQty": "0",
+	 	"orderId": 283194212,
+	 	"origQty": "11",
+	 	"origType": "TRAILING_STOP_MARKET",
+  		"price": "0",
+  		"reduceOnly": false,
+  		"side": "BUY",
+  		"positionSide": "SHORT",
+  		"status": "CANCELED",
+  		"stopPrice": "9300",				// please ignore when order type is TRAILING_STOP_MARKET
+  		"closePosition": false,   // if Close-All
+  		"symbol": "BTCUSDT",
+  		"timeInForce": "GTC",
+  		"type": "TRAILING_STOP_MARKET",
+  		"activatePrice": "9020",			// activation price, only return with TRAILING_STOP_MARKET order
+  		"priceRate": "0.3",					// callback rate, only return with TRAILING_STOP_MARKET order
+	 	"updateTime": 1571110484038,
+	 	"workingType": "CONTRACT_PRICE",
+	 	"priceProtect": false,           // if conditional order trigger is protected
+	 	"pegPriceType": "",              // BBO peg mode, only present for pegged orders
+	 	"stpMode": ""                    // Self-Trade Prevention mode, only present when set on the order
+	},
+	{
+		"code": -2011,
+		"msg": "Unknown order sent."
+	}
+]
+```
+
+``DELETE /fapi/v3/batchOrders ``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name                  | Type           | Mandatory | Description                                                                                     |
+| --------------------- | -------------- | --------- | ----------------------------------------------------------------------------------------------- |
+| symbol                | STRING         | YES       |                                                                                                 |
+| orderIdList           | LIST\   | NO        | max length 10 e.g. [1234567,2345678]                                                      |
+| origClientOrderIdList | LIST\ | NO        | max length 10 e.g. ["my_id_1","my_id_2"], encode the double quotes. No space after comma. |
+
+Either `orderIdList` or `origClientOrderIdList ` must be sent.
+
+## Cancel Multiple Orders (Guarded) (TRADE)
+
+> **Response:**
+
+```javascript
+[
+	{
+	 	"clientOrderId": "myOrder1",
+	 	"cumQty": "0",
+	 	"cumQuote": "0",
+	 	"executedQty": "0",
+	 	"orderId": 283194212,
+	 	"origQty": "11",
+	 	"origType": "TRAILING_STOP_MARKET",
+  		"price": "0",
+  		"reduceOnly": false,
+  		"side": "BUY",
+  		"positionSide": "SHORT",
+  		"status": "CANCELED",
+  		"stopPrice": "9300",				// please ignore when order type is TRAILING_STOP_MARKET
+  		"closePosition": false,   // if Close-All
+  		"symbol": "BTCUSDT",
+  		"timeInForce": "GTC",
+  		"type": "TRAILING_STOP_MARKET",
+  		"activatePrice": "9020",			// activation price, only return with TRAILING_STOP_MARKET order
+  		"priceRate": "0.3",					// callback rate, only return with TRAILING_STOP_MARKET order
+	 	"updateTime": 1571110484038,
+	 	"workingType": "CONTRACT_PRICE",
+	 	"priceProtect": false,           // if conditional order trigger is protected
+	 	"pegPriceType": "",              // BBO peg mode, only present for pegged orders
+	 	"stpMode": ""                    // Self-Trade Prevention mode, only present when set on the order
+	},
+	{
+		"code": -2011,
+		"msg": "Unknown order sent."
+	}
+]
+```
+
+``DELETE /fapi/v3/guardedBatchOrders ``
+
+Cancel multiple active orders. Guarded variant of `DELETE /fapi/v3/batchOrders`, intended for orders placed/authorized on-chain: the on-chain nonce associated with each order is used to guard against duplicate or out-of-order cancellation. `signer`, `nonce`, and `signature` are required. Other request parameters and the response are identical to `DELETE /fapi/v3/batchOrders`.
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name                  | Type           | Mandatory | Description                                                                                     |
+| --------------------- | -------------- | --------- | ----------------------------------------------------------------------------------------------- |
+| symbol                | STRING         | YES       |                                                                                                 |
+| orderIdList           | LIST\   | NO        | max length 10 e.g. [1234567,2345678]                                                      |
+| origClientOrderIdList | LIST\ | NO        | max length 10 e.g. ["my_id_1","my_id_2"], encode the double quotes. No space after comma. |
+| signer                | STRING         | YES       | API wallet address |
+| nonce                 | LONG           | YES       | The `nonce` that was used to place these orders (i.e. the `nonce` submitted with `POST /fapi/v3/batchOrders`), not a new/current timestamp |
+| signature             | STRING         | YES       | EIP-712 signature signed with the `signer` wallet private key |
+
+Either `orderIdList` or `origClientOrderIdList` must be sent.
+
+## Auto-Cancel All Open Orders (TRADE)
+
+> **Response:**
+
+```javascript
+{
+	"symbol": "BTCUSDT", 
+	"countdownTime": "100000"
+}
+```
+
+Cancel all open orders of the specified symbol at the end of the specified countdown.
+
+``POST /fapi/v3/countdownCancelAll ``
+
+**Weight:**
+10
+
+**Parameters:**
+
+| Name          | Type   | Mandatory | Description                                              |
+| ------------- | ------ | --------- | -------------------------------------------------------- |
+| symbol        | STRING | YES       |                                                          |
+| countdownTime | LONG   | YES       | countdown time, 1000 for 1 second. 0 to cancel the timer |
+
+* The endpoint should be called repeatedly as heartbeats so that the existing countdown time can be canceled and replaced by a new one.
+* Example usage:
+  Call this endpoint at 30s intervals with an countdownTime of 120000 (120s).
+  If this endpoint is not called within 120 seconds, all your orders of the specified symbol will be automatically canceled.
+  If this endpoint is called with an countdownTime of 0, the countdown timer will be stopped.
+* The system will check all countdowns **approximately every 10 milliseconds**, so please note that sufficient redundancy should be considered when using this function. We do not recommend setting the countdown time to be too precise or too small.
+
+## Query Current Open Order (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  	"avgPrice": "0.00000",
+  	"clientOrderId": "abc",
+  	"cumQuote": "0",	
+  	"executedQty": "0",
+  	"orderId": 1917641,
+  	"origQty": "0.40",	
+  	"origType": "TRAILING_STOP_MARKET",
+  	"price": "0",
+  	"reduceOnly": false,
+  	"side": "BUY",
+  	"positionSide": "SHORT",
+  	"status": "NEW",
+  	"stopPrice": "9300",				// please ignore when order type is TRAILING_STOP_MARKET
+  	"closePosition": false,   			// if Close-All
+  	"symbol": "BTCUSDT",
+  	"time": 1579276756075,				// order time
+  	"timeInForce": "GTC",
+  	"type": "TRAILING_STOP_MARKET",
+  	"activatePrice": "9020",			// activation price, only return with TRAILING_STOP_MARKET order
+  	"priceRate": "0.3",					// callback rate, only return with TRAILING_STOP_MARKET order	
+  	"updateTime": 1579276756075,
+  	"workingType": "CONTRACT_PRICE",
+  	"priceProtect": false            // if conditional order trigger is protected
+}
+```
+
+``GET /fapi/v3/openOrder ``
+
+**Weight:** 1
+
+**Parameters:**
+
+| Name              | Type   | Mandatory | Description |
+| ----------------- | ------ | --------- | ----------- |
+| symbol            | STRING | YES       |             |
+| orderId           | LONG   | NO        |             |
+| origClientOrderId | STRING | NO        |             |
+
+* Either`orderId` or `origClientOrderId` must be sent
+* If the queried order has been filled or cancelled, the error message "Order does not exist" will be returned.
+
+## Current All Open Orders (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+  {
+  	"avgPrice": "0.00000",
+  	"clientOrderId": "abc",
+  	"cumQuote": "0",
+  	"executedQty": "0",
+  	"orderId": 1917641,
+  	"origQty": "0.40",
+  	"origType": "TRAILING_STOP_MARKET",
+  	"price": "0",
+  	"reduceOnly": false,
+  	"side": "BUY",
+  	"positionSide": "SHORT",
+  	"status": "NEW",
+  	"stopPrice": "9300",				// please ignore when order type is TRAILING_STOP_MARKET
+  	"closePosition": false,   // if Close-All
+  	"symbol": "BTCUSDT",
+  	"time": 1579276756075,				// order time
+  	"timeInForce": "GTC",
+  	"type": "TRAILING_STOP_MARKET",
+  	"activatePrice": "9020",			// activation price, only return with TRAILING_STOP_MARKET order
+  	"priceRate": "0.3",					// callback rate, only return with TRAILING_STOP_MARKET order
+  	"updateTime": 1579276756075,		// update time
+  	"workingType": "CONTRACT_PRICE",
+  	"priceProtect": false            // if conditional order trigger is protected
+  }
+]
+```
+
+``GET /fapi/v3/openOrders ``
+
+Get all open orders on a symbol. **Careful** when accessing this with no symbol.
+
+**Weight:**
+1 for a single symbol; **40** when the symbol parameter is omitted
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description |
+| ---------- | ------ | --------- | ----------- |
+| symbol     | STRING | NO        |             |
+
+* If the symbol is not sent, orders for all symbols will be returned in an array.
+
+## All Orders (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+  {
+   	"avgPrice": "0.00000",
+  	"clientOrderId": "abc",
+  	"cumQuote": "0",
+  	"executedQty": "0",
+  	"orderId": 1917641,
+  	"origQty": "0.40",
+  	"origType": "TRAILING_STOP_MARKET",
+  	"price": "0",
+  	"reduceOnly": false,
+  	"side": "BUY",
+  	"positionSide": "SHORT",
+  	"status": "NEW",
+  	"stopPrice": "9300",				// please ignore when order type is TRAILING_STOP_MARKET
+  	"closePosition": false,   // if Close-All
+  	"symbol": "BTCUSDT",
+  	"time": 1579276756075,				// order time
+  	"timeInForce": "GTC",
+  	"type": "TRAILING_STOP_MARKET",
+  	"activatePrice": "9020",			// activation price, only return with TRAILING_STOP_MARKET order
+  	"priceRate": "0.3",					// callback rate, only return with TRAILING_STOP_MARKET order
+  	"updateTime": 1579276756075,		// update time
+  	"workingType": "CONTRACT_PRICE",
+  	"priceProtect": false            // if conditional order trigger is protected
+  }
+]
+```
+
+``GET /fapi/v3/allOrders``
+
+Get all account orders; active, canceled, or filled.
+
+* These orders will not be found:
+  * order status is `CANCELED` or `EXPIRED`, **AND**
+  * order has NO filled trade, **AND**
+  * created time + 7 days < current time
+
+**Weight:**
+5
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description            |
+| ---------- | ------ | --------- | ---------------------- |
+| symbol     | STRING | NO        | If omitted, orders across all symbols are returned. |
+| orderId    | LONG   | NO        |                        |
+| startTime  | LONG   | NO        |                        |
+| endTime    | LONG   | NO        |                        |
+| limit      | INT    | NO        | Default 500; max 1000. |
+
+**Notes:**
+
+* If `orderId` is set, it will get orders >= that `orderId`. Otherwise most recent orders are returned.
+* The query time period must be less then 7 days( default as the recent 7 days).
+
+## Futures Account Balance v3 (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+ 	{
+ 		"accountAlias": "SgsR",    // unique account code
+ 		"asset": "USDT",  	// asset name
+ 		"balance": "122607.35137903", // wallet balance
+ 		"crossWalletBalance": "23.72469206", // crossed wallet balance
+  		"crossUnPnl": "0.00000000"  // unrealized profit of crossed positions
+  		"availableBalance": "23.72469206",       // available balance
+  		"maxWithdrawAmount": "23.72469206",     // maximum amount for transfer out
+  		"marginAvailable": true,    // whether the asset can be used as margin in Multi-Assets mode
+  		"updateTime": 1617939110373
+	}
+]
+```
+
+``GET /fapi/v3/balance``
+
+**Weight:**
+5
+
+**Parameters:**
+
+| Name       | Type | Mandatory | Description |
+| ---------- | ---- | --------- | ----------- |
+
+## Account Information v3 (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+	"feeTier": 0,  		// account commisssion tier 
+ 	"canTrade": true,  	// if can trade
+ 	"canDeposit": true,  	// if can transfer in asset
+ 	"canWithdraw": true, 	// if can transfer out asset
+ 	"updateTime": 0,
+ 	"totalInitialMargin": "0.00000000",    // total initial margin required with current mark price (useless with isolated positions), only for USDT asset
+ 	"totalMaintMargin": "0.00000000",  	  // total maintenance margin required, only for USDT asset
+ 	"totalWalletBalance": "23.72469206",     // total wallet balance, only for USDT asset
+ 	"totalUnrealizedProfit": "0.00000000",   // total unrealized profit, only for USDT asset
+ 	"totalMarginBalance": "23.72469206",     // total margin balance, only for USDT asset
+ 	"totalPositionInitialMargin": "0.00000000",    // initial margin required for positions with current mark price, only for USDT asset
+ 	"totalOpenOrderInitialMargin": "0.00000000",   // initial margin required for open orders with current mark price, only for USDT asset
+ 	"totalCrossWalletBalance": "23.72469206",      // crossed wallet balance, only for USDT asset
+ 	"totalCrossUnPnl": "0.00000000",	  // unrealized profit of crossed positions, only for USDT asset
+ 	"availableBalance": "23.72469206",       // available balance, only for USDT asset
+ 	"maxWithdrawAmount": "23.72469206"     // maximum amount for transfer out, only for USDT asset
+ 	"assets": [
+ 		{
+ 			"asset": "USDT",			// asset name
+		   	"walletBalance": "23.72469206",      // wallet balance
+		   	"unrealizedProfit": "0.00000000",    // unrealized profit
+		   	"marginBalance": "23.72469206",      // margin balance
+		   	"maintMargin": "0.00000000",	    // maintenance margin required
+		   	"initialMargin": "0.00000000",    // total initial margin required with current mark price 
+		   	"positionInitialMargin": "0.00000000",    //initial margin required for positions with current mark price
+		   	"openOrderInitialMargin": "0.00000000",   // initial margin required for open orders with current mark price
+		   	"crossWalletBalance": "23.72469206",      // crossed wallet balance
+		   	"crossUnPnl": "0.00000000"       // unrealized profit of crossed positions
+		   	"availableBalance": "23.72469206",       // available balance
+		   	"maxWithdrawAmount": "23.72469206",     // maximum amount for transfer out
+		   	"marginAvailable": true,    // whether the asset can be used as margin in Multi-Assets mode
+		   	"updateTime": 1625474304765 // last update time 
+		},
+		{
+ 			"asset": "BUSD",			// asset name
+		   	"walletBalance": "103.12345678",      // wallet balance
+		   	"unrealizedProfit": "0.00000000",    // unrealized profit
+		   	"marginBalance": "103.12345678",      // margin balance
+		   	"maintMargin": "0.00000000",	    // maintenance margin required
+		   	"initialMargin": "0.00000000",    // total initial margin required with current mark price 
+		   	"positionInitialMargin": "0.00000000",    //initial margin required for positions with current mark price
+		   	"openOrderInitialMargin": "0.00000000",   // initial margin required for open orders with current mark price
+		   	"crossWalletBalance": "103.12345678",      // crossed wallet balance
+		   	"crossUnPnl": "0.00000000"       // unrealized profit of crossed positions
+		   	"availableBalance": "103.12345678",       // available balance
+		   	"maxWithdrawAmount": "103.12345678",     // maximum amount for transfer out
+		   	"marginAvailable": true,    // whether the asset can be used as margin in Multi-Assets mode
+		   	"updateTime": 1625474304765 // last update time
+		}
+	],
+ 	"positions": [  // positions of all symbols in the market are returned
+ 		// only "BOTH" positions will be returned with One-way mode
+ 		// only "LONG" and "SHORT" positions will be returned with Hedge mode
+ 		{
+		 	"symbol": "BTCUSDT",  	// symbol name
+		   	"initialMargin": "0",	// initial margin required with current mark price 
+		   	"maintMargin": "0",		// maintenance margin required
+		   	"unrealizedProfit": "0.00000000",  // unrealized profit
+		   	"positionInitialMargin": "0",      // initial margin required for positions with current mark price
+		   	"openOrderInitialMargin": "0",     // initial margin required for open orders with current mark price
+		   	"leverage": "100",		// current initial leverage
+		   	"isolated": true,  		// if the position is isolated
+		   	"entryPrice": "0.00000",  	// average entry price
+		   	"maxNotional": "250000",  	// maximum available notional with current leverage
+		   	"positionSide": "BOTH",  	// position side
+		   	"positionAmt": "0",			// position amount
+		   	"notional": "0",			// position notional value
+		   	"isolatedWallet": "0",		// isolated wallet balance
+		   	"updateTime": 0           // last update time
+		}
+  	]
+}
+```
+
+``GET /fapi/v3/accountWithJoinMargin``
+
+Get current account information.
+
+* A separate, non-join-margin endpoint `GET /fapi/v3/account` also exists (same response shape and weight, joinMargin=false); use `accountWithJoinMargin` for the join-margin view described here.
+
+**Weight:**
+5
+
+**Parameters:**
+
+| Name       | Type | Mandatory | Description |
+| ---------- | ---- | --------- | ----------- |
+
+## Change Initial Leverage (TRADE)
+
+> **Response:**
+
+```javascript
+{
+ 	"leverage": 21,
+ 	"maxNotionalValue": "1000000",
+ 	"symbol": "BTCUSDT"
+}
+```
+
+``POST /fapi/v3/leverage``
+
+Change user's initial leverage of specific symbol market.
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description                                |
+| ---------- | ------ | --------- | ------------------------------------------ |
+| symbol     | STRING | YES       |                                            |
+| leverage   | INT    | YES       | target initial leverage: int from 1 to 125 |
+
+## Change Margin Type (TRADE)
+
+> **Response:**
+
+```javascript
+{
+	"code": 200,
+	"msg": "success"
+}
+```
+
+``POST /fapi/v3/marginType``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description       |
+| ---------- | ------ | --------- | ----------------- |
+| symbol     | STRING | YES       |                   |
+| marginType | ENUM   | YES       | ISOLATED, CROSSED |
+
+## Modify Isolated Position Margin (TRADE)
+
+> **Response:**
+
+```javascript
+{
+	"amount": 100.0,
+  	"code": 200,
+  	"msg": "Successfully modify position margin.",
+  	"type": 1
+}
+```
+
+``POST /fapi/v3/positionMargin``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name         | Type    | Mandatory | Description                                                                                         |
+| ------------ | ------- | --------- | --------------------------------------------------------------------------------------------------- |
+| symbol       | STRING  | YES       |                                                                                                     |
+| positionSide | ENUM    | NO        | Default`BOTH` for One-way Mode ; `LONG` or `SHORT` for Hedge Mode. It must be sent with Hedge Mode. |
+| amount       | DECIMAL | YES       |                                                                                                     |
+| type         | INT     | YES       | 1: Add position margin，2: Reduce position margin                                                   |
+| clientTranId | STRING  | NO        | Idempotency key, max length 64 chars; requests with the same clientTranId within 7 days for the same account/symbol are rejected as duplicates |
+
+* Only for isolated symbol
+
+## Get Position Margin Change History (TRADE)
+
+> **Response:**
+
+```javascript
+[
+	{
+		"amount": "23.36332311",
+	  	"asset": "USDT",
+	  	"symbol": "BTCUSDT",
+	  	"time": 1578047897183,
+	  	"type": 1,
+	  	"positionSide": "BOTH",
+	  	"deltaType": "TRADE",
+	  	"clientTranId": ""
+	},
+	{
+		"amount": "100",
+	  	"asset": "USDT",
+	  	"symbol": "BTCUSDT",
+	  	"time": 1578047900425,
+	  	"type": 1,
+	  	"positionSide": "LONG",
+	  	"deltaType": "USER_ADJUST",
+	  	"clientTranId": ""
+	}
+]
+```
+
+``GET /fapi/v3/positionMargin/history``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description                                       |
+| ---------- | ------ | --------- | ------------------------------------------------- |
+| symbol     | STRING | YES       |                                                   |
+| type       | INT    | NO        | 1: Add position margin，2: Reduce position margin |
+| startTime  | LONG   | NO        |                                                   |
+| endTime    | LONG   | NO        |                                                   |
+| limit      | INT    | NO        | Default: 500                                      |
+
+## Position Information v3 (USER_DATA)
+
+> **Response:**
+
+> For One-way position mode:
+
+```javascript
+[
+  	{
+  		"entryPrice": "0.00000",
+  		"marginType": "isolated", 
+  		"isAutoAddMargin": "false",
+  		"isolatedMargin": "0.00000000",
+  		"leverage": "10", 
+  		"liquidationPrice": "0", 
+  		"markPrice": "6679.50671178",
+  		"maxNotionalValue": "20000000", 
+  		"positionAmt": "0.000", 
+  		"symbol": "BTCUSDT", 
+  		"unRealizedProfit": "0.00000000", 
+  		"positionSide": "BOTH",
+  		"notional": "0.00000000",
+  		"isolatedWallet": "0.00000000",
+  		"updateTime": 0
+  	}
+]
+```
+
+> For Hedge position mode:
+
+```javascript
+[
+  	{
+  		"entryPrice": "6563.66500", 
+  		"marginType": "isolated", 
+  		"isAutoAddMargin": "false",
+  		"isolatedMargin": "15517.54150468",
+  		"leverage": "10",
+  		"liquidationPrice": "5930.78",
+  		"markPrice": "6679.50671178",
+  		"maxNotionalValue": "20000000", 
+  		"positionAmt": "20.000", 
+  		"symbol": "BTCUSDT", 
+  		"unRealizedProfit": "2316.83423560"
+  		"positionSide": "LONG", 
+  		"notional": "133590.13423560",
+  		"isolatedWallet": "15517.54150468",
+  		"updateTime": 1625474304765
+  	},
+  	{
+  		"entryPrice": "0.00000",
+  		"marginType": "isolated", 
+  		"isAutoAddMargin": "false",
+  		"isolatedMargin": "5413.95799991", 
+  		"leverage": "10", 
+  		"liquidationPrice": "7189.95", 
+  		"markPrice": "6679.50671178",
+  		"maxNotionalValue": "20000000", 
+  		"positionAmt": "-10.000", 
+  		"symbol": "BTCUSDT",
+  		"unRealizedProfit": "-1156.46711780" 
+  		"positionSide": "SHORT",
+  		"notional": "-66795.0671178",
+  		"isolatedWallet": "5413.95799991",
+  		"updateTime": 0
+  	}
+]
+```
+
+``GET /fapi/v3/positionRisk``
+
+Get current position information.
+
+**Weight:**
+5
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description |
+| ---------- | ------ | --------- | ----------- |
+| symbol     | STRING | NO        |             |
+
+**Note**
+Please use with user data stream `ACCOUNT_UPDATE` to meet your timeliness and accuracy needs.
+
+## Account Trade List (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+  {
+  	"buyer": false,
+  	"commission": "-0.07819010",
+  	"commissionAsset": "USDT",
+  	"id": 698759,
+  	"maker": false,
+  	"orderId": 25851813,
+  	"price": "7819.01",
+  	"qty": "0.002",
+  	"quoteQty": "15.63802",
+  	"realizedPnl": "-0.91539999",
+  	"side": "SELL",
+  	"positionSide": "SHORT",
+  	"symbol": "BTCUSDT",
+  	"time": 1569514978020
+  }
+]
+```
+
+``GET /fapi/v3/userTrades ``
+
+Get trades for a specific account and symbol.
+
+**Weight:**
+5
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description                                              |
+| ---------- | ------ | --------- | -------------------------------------------------------- |
+| symbol     | STRING | YES       |                                                          |
+| orderId    | LONG   | NO        | Filter trades belonging to this order id.                |
+| startTime  | LONG   | NO        |                                                          |
+| endTime    | LONG   | NO        |                                                          |
+| fromId     | LONG   | NO        | Trade id to fetch from. Default gets most recent trades. |
+| limit      | INT    | NO        | Default 500; max 1000.                                   |
+
+* If `startTime` and `endTime` are both not sent, then the last 7 days' data will be returned.
+* The time between `startTime` and `endTime` cannot be longer than 7 days.
+* The parameter `fromId` cannot be sent with `startTime` or `endTime`.
+* `orderId` is an additional optional filter and takes precedence over the other search modes when sent.
+
+## Get Income History(USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+	{
+    	"symbol": "",					// trade symbol, if existing
+    	"incomeType": "TRANSFER",	// income type
+    	"income": "-0.37500000",  // income amount
+    	"asset": "USDT",				// income asset
+    	"info":"TRANSFER",			// extra information
+    	"time": 1570608000000,
+    	"tranId":"9689322392",		// transaction id
+    	"tradeId":""					// trade id, if existing
+	},
+	{
+   		"symbol": "BTCUSDT",
+    	"incomeType": "COMMISSION", 
+    	"income": "-0.01000000",
+    	"asset": "USDT",
+    	"info":"COMMISSION",
+    	"time": 1570636800000,
+    	"tranId":"9689322392",
+    	"tradeId":"2059192"
+	}
+]
+```
+
+``GET /fapi/v3/income``
+
+**Weight:**
+30
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description                                                                                                                      |
+| ---------- | ------ | --------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| symbol     | STRING | NO        |                                                                                                                                  |
+| incomeType | STRING | NO        | "TRANSFER"，"WELCOME_BONUS", "REALIZED_PNL"，"FUNDING_FEE", "COMMISSION", "INSURANCE_CLEAR", "MARKET_MERCHANT_RETURN_REWARD", "REFERRAL_KICKBACK", "COMMISSION_REBATE", "MARKET_MAKER_REBATE", "API_REBATE", "CONTEST_REWARD", "CROSS_COLLATERAL_TRANSFER", "INTERNAL_TRANSFER", and "AUTO_EXCHANGE" |
+| startTime  | LONG   | NO        | Timestamp in ms to get funding from INCLUSIVE.                                                                                   |
+| endTime    | LONG   | NO        | Timestamp in ms to get funding until INCLUSIVE.                                                                                  |
+| limit      | INT    | NO        | Default 100; max 1000                                                                                                            |
+
+* If neither `startTime` nor `endTime` is sent, the recent 7-day data will be returned.
+* If `incomeType ` is not sent, all kinds of flow will be returned
+* "trandId" is unique in the same incomeType for a user
+
+## Notional and Leverage Brackets (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+    {
+        "symbol": "ETHUSDT",
+        "brackets": [
+            {
+                "bracket": 1,   // Notional bracket
+                "initialLeverage": 75,  // Max initial leverage for this bracket
+                "notionalCap": 10000,  // Cap notional of this bracket
+                "notionalFloor": 0,  // Notional threshold of this bracket 
+                "maintMarginRatio": 0.0065, // Maintenance ratio for this bracket
+                "cum":0 // Auxiliary number for quick calculation 
+     
+            },
+        ]
+    }
+]
+```
+
+> **OR** (if symbol sent)
+
+```javascript
+{
+    "symbol": "ETHUSDT",
+    "brackets": [
+        {
+            "bracket": 1,
+            "initialLeverage": 75,
+            "notionalCap": 10000,
+            "notionalFloor": 0,
+            "maintMarginRatio": 0.0065,
+            "cum":0
+        },
+    ]
+}
+```
+
+``GET /fapi/v3/leverageBrackets``
+
+*Note: `GET /fapi/v3/leverageBracket` (singular) is deprecated but still functions identically; `GET /fapi/v3/leverageBrackets` (plural) is the recommended, actively maintained path.*
+
+**Weight:** 1
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description |
+| ---------- | ------ | --------- | ----------- |
+| symbol     | STRING | NO        |             |
+
+## Position ADL Quantile Estimation (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+	{
+		"symbol": "ETHUSDT", 
+		"adlQuantile": 
+			{
+				// if the positions of the symbol are crossed margined in Hedge Mode, "LONG" and "SHORT" will be returned a same quantile value, and "HEDGE" will be returned instead of "BOTH".
+				"LONG": 3,  
+				"SHORT": 3, 
+				"HEDGE": 0   // only a sign, ignore the value
+			}
+		},
+ 	{
+ 		"symbol": "BTCUSDT", 
+ 		"adlQuantile": 
+ 			{
+ 				// for positions of the symbol are in One-way Mode or isolated margined in Hedge Mode
+ 				"LONG": 1, 	// adl quantile for "LONG" position in hedge mode
+ 				"SHORT": 2, 	// adl qauntile for "SHORT" position in hedge mode
+ 				"BOTH": 0		// adl qunatile for position in one-way mode
+ 			}
+ 	}
+ ]
+```
+
+``GET /fapi/v3/adlQuantile``
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description |
+| ---------- | ------ | --------- | ----------- |
+| symbol     | STRING | NO        |             |
+
+* Values update every 30s.
+* Values 0, 1, 2, 3, 4 shows the queue position and possibility of ADL from low to high.
+* For positions of the symbol are in One-way Mode or isolated margined in Hedge Mode, "LONG", "SHORT", and "BOTH" will be returned to show the positions' adl quantiles of different position sides.
+* If the positions of the symbol are crossed margined in Hedge Mode:
+  
+  * "HEDGE" as a sign will be returned instead of "BOTH";
+  * A same value caculated on unrealized pnls on long and short sides' positions will be shown for "LONG" and "SHORT" when there are positions in both of long and short sides.
+
+## User's Force Orders (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+  {
+  	"orderId": 6071832819, 
+  	"symbol": "BTCUSDT", 
+  	"status": "FILLED", 
+  	"clientOrderId": "autoclose-1596107620040000020", 
+  	"price": "10871.09", 
+  	"avgPrice": "10913.21000", 
+  	"origQty": "0.001", 
+  	"executedQty": "0.001", 
+  	"cumQuote": "10.91321", 
+  	"timeInForce": "IOC", 
+  	"type": "LIMIT", 
+  	"reduceOnly": false, 
+  	"closePosition": false, 
+  	"side": "SELL", 
+  	"positionSide": "BOTH", 
+  	"stopPrice": "0", 
+  	"workingType": "CONTRACT_PRICE", 
+  	"origType": "LIMIT", 
+  	"time": 1596107620044, 
+  	"updateTime": 1596107620087
+  }
+  {
+   	"orderId": 6072734303, 
+   	"symbol": "BTCUSDT", 
+   	"status": "FILLED", 
+   	"clientOrderId": "adl_autoclose", 
+   	"price": "11023.14", 
+   	"avgPrice": "10979.82000", 
+   	"origQty": "0.001", 
+   	"executedQty": "0.001", 
+   	"cumQuote": "10.97982", 
+   	"timeInForce": "GTC", 
+   	"type": "LIMIT", 
+   	"reduceOnly": false, 
+   	"closePosition": false, 
+   	"side": "BUY", 
+   	"positionSide": "SHORT", 
+   	"stopPrice": "0", 
+   	"workingType": "CONTRACT_PRICE", 
+   	"origType": "LIMIT", 
+   	"time": 1596110725059, 
+   	"updateTime": 1596110725071
+  }
+]
+```
+
+``GET /fapi/v3/forceOrders``
+
+**Weight:** 20 with symbol, 50 without symbol
+
+**Parameters:**
+
+| Name          | Type   | Mandatory | Description                                                 |
+| ------------- | ------ | --------- | ----------------------------------------------------------- |
+| symbol        | STRING | NO        |                                                             |
+| autoCloseType | ENUM   | NO        | "LIQUIDATION" for liquidation orders, "ADL" for ADL orders. |
+| startTime     | LONG   | NO        |                                                             |
+| endTime       | LONG   | NO        |                                                             |
+| limit         | INT    | NO        | Default 50; max 100.                                        |
+
+* If "autoCloseType" is not sent, orders with both of the types will be returned
+* If "startTime" is not sent, data within 7 days before "endTime" can be queried
+
+## User Commission Rate (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+	"symbol": "BTCUSDT",
+  	"makerCommissionRate": "0.0002",  // 0.02%
+  	"takerCommissionRate": "0.0004"   // 0.04%
+}
+```
+
+``GET /fapi/v3/commissionRate``
+
+**Weight:**
+20
+
+**Parameters:**
+
+| Name       | Type   | Mandatory | Description |
+| ---------- | ------ | --------- | ----------- |
+| symbol     | STRING | YES       |             |
+
+
+## Update User MMP (USER_DATA)
+
+> **Response:**
+
+```javascript
+true
+```
+
+``POST /fapi/v3/mmp``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name                       | Type   | Mandatory | Description |
+| -------------------------- | ------ | --------- | ----------- |
+| symbol                     | STRING | YES       |             |
+| windowTimeInMilliseconds   | LONG   | YES       | Time window (in ms) for calculating qtyLimit, valueLimit, and deltaLimit |
+| frozenTimeInMilliseconds   | LONG   | YES       | Duration (in ms) during which MMP orders are prohibited after a limit is triggered |
+| qtyLimit                   | LONG   | FALSE     | Maximum cumulative filled quantity (both buy and sell) within the window. If reached, triggers the frozen period |
+| valueLimit                 | LONG   | FALSE     | Maximum cumulative notional value within the window. If reached, triggers the frozen period |
+| deltaLimit                 | LONG   | FALSE     | Maximum cumulative net position change (buys minus sells) within the window. If reached, triggers the frozen period |
+
+
+## Get User MMP (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+	{
+		"symbol":"BTCUSDT",
+		"windowTimeInMilliseconds":5000,
+		"frozenTimeInMilliseconds":10000,
+		"qtyLimit":10,
+		"valueLimit":200000000,
+		"deltaLimit":100000000
+	}
+]
+```
+
+``GET /fapi/v3/mmp``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description |
+| ------ | ------ | --------- | ----------- |
+| symbol | STRING | FALSE     |             |
+
+
+## Delete User MMP (USER_DATA)
+
+> **Response:**
+
+```javascript
+true
+```
+
+``DELETE /fapi/v3/mmp``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description |
+| ------ | ------ | --------- | ----------- |
+| symbol | STRING | YES       |             |
+
+
+## Reset User MMP (USER_DATA)
+
+> **Response:**
+
+```javascript
+true
+```
+
+``POST /fapi/v3/mmpReset``
+
+**Weight:**
+1
+
+**Parameters:**
+
+| Name   | Type   | Mandatory | Description |
+| ------ | ------ | --------- | ----------- |
+| symbol | STRING | YES       |             |
+
+
+## Place Strategy Order (TRADE)
+
+> **Response:**
+
+```javascript
+{
+    "strategyId": 123456789,
+    "clientStrategyId": "myStrategy1",
+    "strategyType": "OTO",
+    "strategyStatus": "WORKING",
+    "updateTime": 1699900000000,
+    "failureCode": 0,
+    "failureReason": ""
+}
+```
+
+`POST /fapi/v3/placeStrategyOrder`
+
+Place a new strategy order. Supports OTO (One-Triggers-the-Other), OCO (One-Cancels-the-Other), and OTOCO (One-Triggers-One-Cancels-the-Other) strategy types.
+
+**Weight:** 50
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+|------|------|-----------|-------------|
+| clientStrategyId | STRING | NO | Client-assigned unique strategy ID |
+| strategyType | ENUM | YES | Strategy type: `OTO`, `OCO`, `OTOCO` |
+| subOrderList | JSON Array | YES | List of sub-orders. `OTO` and `OCO` require exactly 2; `OTOCO` requires exactly 3 |
+| builder | STRING | NO | Builder address |
+| feeRate | DECIMAL | NO | Custom fee rate |
+
+**Sub-order fields (each element in `subOrderList`):**
+
+| Name | Type | Mandatory | Description |
+|------|------|-----------|-------------|
+| strategySubId | STRING | YES | Sub-order sequence number starting from 1, must be sequential and match position in array |
+| securityType | STRING | YES | Security type of the order: `USDT_FUTURES`, `COIN_FUTURES`, `OPTIONS` |
+| symbol | STRING | YES | Trading pair |
+| side | STRING | YES | `BUY` or `SELL` |
+| positionSide | STRING | NO | `BOTH`, `LONG`, `SHORT`. Default `BOTH` in one-way mode |
+| type | STRING | YES | `LIMIT`, `MARKET`, `STOP`, `STOP_MARKET`, `TAKE_PROFIT`, `TAKE_PROFIT_MARKET`, `TRAILING_STOP_MARKET` |
+| quantity | STRING | YES* | Order quantity. Not required when `closePosition=true` |
+| price | STRING | YES* | Required for `LIMIT`, `STOP`, `TAKE_PROFIT` |
+| stopPrice | STRING | YES* | Required for `STOP`, `STOP_MARKET`, `TAKE_PROFIT`, `TAKE_PROFIT_MARKET` |
+| timeInForce | STRING | YES* | Required for `LIMIT`; optional for stop orders (default `GTC`). `IOC` and `FOK` are not supported. See [ENUM definitions: Time in force](#enum-definitions) |
+| workingType | STRING | NO | `CONTRACT_PRICE` or `MARK_PRICE`. Default `CONTRACT_PRICE` |
+| reduceOnly | STRING | NO | Reduce-only flag |
+| closePosition | STRING | NO | Close-position flag |
+| priceProtect | STRING | NO | Price protection flag |
+| clientOrderId | STRING | NO | Client-assigned order ID |
+| activationPrice | STRING | NO | Activation price for `TRAILING_STOP_MARKET` |
+| callbackRate | STRING | NO | Callback rate for `TRAILING_STOP_MARKET` |
+| firstDrivenId | STRING | NO | `strategySubId` of the driving sub-order for the first trigger condition |
+| firstDrivenOn | STRING | NO | Event type that activates the first trigger: `NEW`, `PARTIALLY_FILLED_OR_FILLED`, `FILLED`, `CANCELED`, `REPLACED`, `STOPPED`, `REJECTED`, `EXPIRED` |
+| firstTrigger | STRING | NO | First trigger action: `PLACE_ORDER`, `CANCEL_ORDER` |
+| secondDrivenId | STRING | NO | `strategySubId` of the driving sub-order for the second trigger condition |
+| secondDrivenOn | STRING | NO | Event type that activates the second trigger |
+| secondTrigger | STRING | NO | Second trigger action |
+
+---
+
+## Update Strategy Order (TRADE)
+
+> **Response:**
+
+```javascript
+[
+    {
+        "strategyId": 123456789,
+        "clientStrategyId": "myStrategy1",
+        "strategyType": "OTO",
+        "strategyStatus": "WORKING",
+        "updatedSubOrder": 1,
+        "updateStatus": "SUCCESS",
+        "updateTime": 1699900000000,
+        "failureCode": 0,
+        "failureReason": ""
+    }
+]
+```
+
+`POST /fapi/v3/updateStrategyOrder`
+
+Update one or more sub-orders of an existing strategy order. Returns an array with one result per updated sub-order.
+
+**Weight:** 50
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+|------|------|-----------|-------------|
+| strategyId | LONG | YES | Strategy order ID to update |
+| strategyType | ENUM | YES | Strategy type: `OTO`, `OCO`, `OTOCO` |
+| subOrderList | JSON Array | YES | Sub-orders to update. Max 2 items for `OTO`/`OCO`, max 3 for `OTOCO` |
+
+**Sub-order fields (each element in `subOrderList`):**
+
+| Name | Type | Mandatory | Description |
+|------|------|-----------|-------------|
+| strategySubId | STRING | YES | Sequence number of the sub-order to update |
+| securityType | STRING | YES | Security type |
+| symbol | STRING | YES | Trading pair |
+| side | STRING | YES | `BUY` or `SELL` |
+| positionSide | STRING | NO | `BOTH`, `LONG`, `SHORT` |
+| type | STRING | YES | Order type |
+| quantity | STRING | NO | New order quantity |
+| price | STRING | NO | New price (applicable for `LIMIT`, `STOP`, `TAKE_PROFIT`) |
+| stopPrice | STRING | NO | New stop price |
+| timeInForce | STRING | NO | New [time in force](#enum-definitions) |
+| workingType | STRING | NO | New working type |
+| reduceOnly | STRING | NO | |
+| closePosition | STRING | NO | |
+| priceProtect | STRING | NO | |
+| activationPrice | STRING | NO | For `TRAILING_STOP_MARKET` only |
+| callbackRate | STRING | NO | For `TRAILING_STOP_MARKET` only |
+
+---
+
+## Query Strategy Open Order (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+    "strategyId": 123456789,
+    "clientStrategyId": "myStrategy1",
+    "strategyType": "OTO",
+    "strategyStatus": "WORKING",
+    "bookTime": 1699900000000,
+    "updateTime": 1699900001000,
+    "subOrders": [
+        {
+            "strategyId": 123456789,
+            "orderId": 987654321,
+            "clientOrderId": "myOrder1",
+            "status": "NEW",
+            "strategySubId": 1,
+            "firstDrivenId": 0,
+            "firstDrivenOn": "",
+            "firstTrigger": "",
+            "secondDrivenId": 0,
+            "secondDrivenOn": "",
+            "secondTrigger": "",
+            "securityType": "FUTURE",
+            "symbol": "BTCUSDT",
+            "side": "BUY",
+            "positionSide": "LONG",
+            "type": "LIMIT",
+            "timeInForce": "GTC",
+            "quantity": "0.001",
+            "reduceOnly": false,
+            "closePosition": false,
+            "price": "50000",
+            "avgPrice": "0",
+            "priceProtect": false,
+            "stopPrice": "0",
+            "activatePrice": null,
+            "callbackRate": null,
+            "workingType": "CONTRACT_PRICE",
+            "triggerTime": 0
+        }
+    ]
+}
+```
+
+`GET /fapi/v3/strategyOpenOrder`
+
+Query a current open strategy order. Either `strategyId` or `clientStrategyId` must be provided, but not both.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+|------|------|-----------|-------------|
+| strategyId | LONG | NO* | Strategy order ID |
+| clientStrategyId | STRING | NO* | Client-assigned strategy ID |
+| strategyType | STRING | YES | Strategy type: `OTO`, `OCO`, `OTOCO` |
+
+*Either `strategyId` or `clientStrategyId` must be provided (mutually exclusive).
+
+---
+
+## Query Strategy History Order (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+    "strategyId": 123456789,
+    "clientStrategyId": "myStrategy1",
+    "strategyType": "OTO",
+    "strategyStatus": "EXPIRED",
+    "bookTime": 1699800000000,
+    "updateTime": 1699800060000,
+    "subOrders": [
+        {
+            "strategyId": 123456789,
+            "orderId": 987654321,
+            "clientOrderId": "myOrder1",
+            "status": "FILLED",
+            "strategySubId": 1,
+            "firstDrivenId": 0,
+            "firstDrivenOn": "",
+            "firstTrigger": "",
+            "secondDrivenId": 0,
+            "secondDrivenOn": "",
+            "secondTrigger": "",
+            "securityType": "FUTURE",
+            "symbol": "BTCUSDT",
+            "side": "BUY",
+            "positionSide": "LONG",
+            "type": "LIMIT",
+            "timeInForce": "GTC",
+            "quantity": "0.001",
+            "reduceOnly": false,
+            "closePosition": false,
+            "price": "50000",
+            "avgPrice": "50000",
+            "priceProtect": false,
+            "stopPrice": "0",
+            "activatePrice": null,
+            "callbackRate": null,
+            "workingType": "CONTRACT_PRICE",
+            "triggerTime": 1699800030000
+        }
+    ]
+}
+```
+
+`GET /fapi/v3/strategyHistoryOrder`
+
+Query historical strategy orders. Either `strategyId` or `clientStrategyId` must be provided, but not both. Maximum lookback window is 90 days.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+|------|------|-----------|-------------|
+| strategyId | LONG | NO* | Strategy order ID |
+| clientStrategyId | STRING | NO* | Client-assigned strategy ID |
+| strategyType | STRING | YES | Strategy type: `OTO`, `OCO`, `OTOCO` |
+| startTime | LONG | NO | Start time in milliseconds. Data older than 90 days cannot be queried |
+| endTime | LONG | NO | End time in milliseconds |
+| limit | INT | NO | Number of results returned. Default 500; max 1000 |
+
+*Either `strategyId` or `clientStrategyId` must be provided (mutually exclusive).
+
+---
+
+# Bind Sub-Account (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+    "code": 200,
+    "msg": "success"
+}
+```
+
+`POST /fapi/v3/sub-accounts/bind`
+
+**Weight:** 5
+
+**Parameters:**
+
+Name               | Type    | Required | Description
+------------------ | ------- | -------- | ---
+childAddress       | STRING  | YES      | Sub-account wallet address
+name               | STRING  | YES      | Sub-account name
+nonce              | LONG    | YES      | Microsecond-level timestamp, used for replay attack prevention
+user               | STRING  | YES      | Master account wallet address
+childSignature     | STRING  | YES      | Sub-account's signature over the message body (see Signature Instructions below)
+signature          | STRING  | YES      | Master account's signature over the message body,**must be signed using the master account's wallet private key**(see Signature Instructions below)
+
+---
+
+### Signature Instructions
+
+This endpoint requires**two independent signatures**，The message body differs between the two：
+
+#### Step 1：Sub-Account Signature（childSignature）
+
+The sub-account signs the following message body using**its own wallet private key:**：
+
+```
+childAddress={childAddress}&name={name}&nonce={nonce}&user={user}
+```
+
+#### Step 2：Master Account Signature（signature）
+
+The master account signs the following message body using**its own wallet private key**(not the API Key)，The message body**appends `childSignature`** to the one used in Step 1：
+
+```
+childAddress={childAddress}&name={name}&nonce={nonce}&user={user}&childSignature={childSignature}
+```
+
+> The key difference between the two message bodies: the master account's message body**includes** `childSignature`， while the sub-account's does not.
+
+#### Supported Signing Algorithms
+
+| Account Type | Signing Algorithm | Encoding Format |
+|---------|---------|---------|
+| EVM Address | EIP-712 Typed Data（chainId=1666，message.msg=message body） | Hex |
+| Solana Address | Ed25519 | Base58 |
+
+> The address types of the master account and sub-account must match (EVM with EVM, Solana with Solana).
+
+---
+
+### Important Notes
+
+* `signature` must be signed using the**master account's wallet private key**— the signer private key must not be used as a substitute
+* `childSignature` and `signature` are not interchangeable
+* The `user` field must match the authenticated master account address and cannot be forged
+* Only **whitelisted addresses** are supported for creation. Please contact the **project team** for configuration.
+
+
+
+# Create Sub-Account (TRADE)
+
+> **Response:**
+
+```javascript
+{
+    "code": 200,
+    "msg": "success"
+}
+```
+
+`POST /fapi/v3/createSubAccount`
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| subSourceAddr | STRING | YES | Sub-account wallet address |
+| subAccountName | STRING | YES | Sub-account name |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| user | STRING | YES | Master account wallet address |
+| signer | STRING | YES | Signer address associated with the master account |
+| childSignature | STRING | YES | Sub-account's signature over the message body (see Signature Instructions below) |
+| signature | STRING | YES | Master account's signature over the message body, **must be signed using the master account's wallet private key** (see Signature Instructions below) |
+
+---
+
+### Signature Instructions
+
+This endpoint requires **two independent signatures**. The message body differs between the two:
+
+#### Step 1: Sub-Account Signature (childSignature)
+
+The sub-account signs the following message body using **its own wallet private key:**
+
+```
+subAccountName={subAccountName}&subSourceAddr={subSourceAddr}&nonce={nonce}&user={user}&signer={signer}
+```
+
+#### Step 2: Master Account Signature (signature)
+
+The master account signs the following message body using **its own wallet private key** (not the signer private key). The message body **appends `childSignature`** to the one used in Step 1:
+
+```
+subAccountName={subAccountName}&subSourceAddr={subSourceAddr}&nonce={nonce}&user={user}&signer={signer}&childSignature={childSignature}
+```
+
+> The key difference between the two message bodies: the master account's message body **includes** `childSignature`, while the sub-account's does not.
+
+#### Supported Signing Algorithms
+
+| Account Type | Signing Algorithm | Encoding Format |
+|---|---|---|
+| EVM Address | EIP-712 Typed Data (chainId=1666, message.msg=message body) | Hex |
+| Solana Address | Ed25519 | Base58 |
+
+> The address types of the master account and sub-account must match (EVM with EVM, Solana with Solana).
+
+---
+
+### Important Notes
+
+* `signature` **must be signed using the master account's wallet private key** — the signer private key must not be used as a substitute.
+* `childSignature` and `signature` are not interchangeable.
+* The `user` field must match the authenticated master account address and cannot be forged.
+
+
+
+# Get Sub-Account List (USER_DATA)
+
+> **Response:**
+
+```javascript
+[
+    {
+        "accountId": 123456,
+        "subAccountName": "trading-desk-1",
+        "parentAccount": false
+    },
+    {
+        "accountId": 100000,
+        "subAccountName": "",
+        "parentAccount": true
+    }
+]
+```
+
+`GET /fapi/v3/getSubAccountList`
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| user | STRING | YES | Master account wallet address |
+| signer | STRING | YES | Signer address associated with the master account |
+| signature | STRING | YES | Signature over the message body (see Signature Instructions below) |
+
+**Response fields:**
+
+| Name | Type | Description |
+|------|------|-------------|
+| accountId | LONG | Account ID |
+| subAccountName | STRING | Sub-account name |
+| parentAccount | BOOLEAN | Whether this entry is the master account (`true`) or a sub-account (`false`) |
+
+---
+
+### Signature Instructions
+
+Sign the following message body using the **signer's private key** (EIP-712, always used regardless of whether the parent account is EVM or Solana):
+
+```
+nonce={nonce}&user={user}&signer={signer}
+```
+
+#### Signing Algorithm
+
+| Algorithm | Encoding Format |
+|---|---|
+| EIP-712 Typed Data (chainId=1666, message.msg=message body) | Hex |
+
+> Unlike other sub-account endpoints, `getSubAccountList` always uses the **signer private key** (EIP-712) for signing, even when the master account is a Solana address.
+
+
+
+# Update Sub-Account (TRADE)
+
+> **Response:**
+
+```javascript
+{
+    "code": 200,
+    "msg": "success"
+}
+```
+
+`POST /fapi/v3/updateSubAccount`
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| subSourceAddr | STRING | YES | Sub-account wallet address to update |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| user | STRING | YES | Master account wallet address |
+| signer | STRING | YES | Signer address associated with the master account |
+| subAccountName | STRING | NO | New sub-account name (at least one of `subAccountName` or `status` must be provided) |
+| status | STRING | NO | Sub-account status: `NORMAL` (active) or `FROZEN` (frozen) |
+| signature | STRING | YES | Master account's signature over the message body, **must be signed using the master account's wallet private key** (see Signature Instructions below) |
+
+---
+
+### Signature Instructions
+
+The master account signs the following message body using **its own wallet private key** (not the signer private key):
+
+```
+subSourceAddr={subSourceAddr}&nonce={nonce}&user={user}&signer={signer}[&subAccountName={subAccountName}][&status={status}]
+```
+
+> Only include optional fields (`subAccountName`, `status`) in the message body if they are included in the request.
+
+#### Supported Signing Algorithms
+
+| Account Type | Signing Algorithm | Encoding Format |
+|---|---|---|
+| EVM Address | EIP-712 Typed Data (chainId=1666, message.msg=message body) | Hex |
+| Solana Address | Ed25519 | Base58 |
+
+---
+
+### Important Notes
+
+* `signature` **must be signed using the master account's wallet private key** — the signer private key must not be used as a substitute.
+* At least one of `subAccountName` or `status` must be provided.
+* `status` accepted values: `NORMAL` (unfreeze / active), `FROZEN` (freeze).
+* A frozen sub-account cannot initiate transfers.
+
+
+
+# Sub-Account Transfer (TRADE)
+
+> **Response:**
+
+```javascript
+{
+    "code": 200,
+    "msg": "success"
+}
+```
+
+`POST /fapi/v3/subAccountTransfer`
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| toAccountAddress | STRING | YES | Destination wallet address |
+| asset | STRING | YES | Asset name (e.g., `USDT`) |
+| amount | STRING | YES | Transfer amount |
+| kindType | ENUM | YES | Transfer direction (see table below) |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| user | STRING | NO | Signing account wallet address (master account address in most cases; sub-account address when the sub-account initiates a transfer to the master account). Optional — pass either `user` or `signer` |
+| signer | STRING | NO | Agent wallet address associated with `user`, registered and approved via `registerAndApproveAgent`/`approveAgent`. Optional — pass either `user` or `signer` |
+| fromAccountAddress | STRING | NO | Source wallet address. Required when the source account differs from `user` (e.g., sub→sub transfers or master→sub transfers initiated by a third party) |
+| signature | STRING | YES | Signature over the message body, signed with the private key of whichever account is passed: `user`'s private key if `user` is passed, or the agent's private key if `signer` is passed (see Signature Instructions below) |
+
+
+**`Parameter Values`:**
+
+| Transfer | user | signer | fromAccountAddress | toAccountAddress | signature |
+|------|------|------|------|------|------
+| Master → Sub | *(optional — master account address)* | *(optional — master account's agent)* | Master account address | Sub-account address | Signed with master account (or agent) private key
+| Sub → Master | *(optional — master account address)* | *(optional — master account's agent)* | Sub-account address | Master account address | Signed with master account (or agent) private key
+| Sub → Sub | *(optional — master account address)* | *(optional — master account's agent)* | Sub A address | Sub B address | Signed with master account (or agent) private key
+| Sub → Master | *(optional — sub-account address)* | *(optional — sub-account's agent)* | Sub-account address | Master account address | Signed with sub-account (or agent) private key
+| Sub → Sub | *(optional — Sub A address)* | *(optional — Sub A's agent)* | Sub A address | Sub B address | Signed with sub-account (or agent) private key
+
+> `user` and `signer` are both optional — pass either one to identify the signing account (`signer` must be an agent wallet approved for that `user`). The signature must be signed with the private key of whichever one is passed: `user`'s private key if `user` is passed, or the agent's private key if `signer` is passed.
+
+**`kindType` values:**
+
+| Value | Description |
+|-------|-------------|
+| `FUTURE_FUTURE` | Perpetual account → Perpetual account |
+| `FUTURE_SPOT` | Perpetual account → Spot account |
+| `SPOT_FUTURE` | Spot account → Perpetual account |
+| `SPOT_SPOT` | Spot account → Spot account |
+
+---
+
+### Signature Instructions
+
+Sign the following message body using the private key of whichever account you pass — the **`user` account's wallet private key** if `user` is passed, or the **agent's wallet private key** if `signer` is passed instead:
+
+**Without `fromAccountAddress`:**
+```
+toAccountAddress={toAccountAddress}&asset={asset}&amount={amount}&kindType={kindType}&nonce={nonce}&user={user}&signer={signer}
+```
+
+**With `fromAccountAddress`:**
+```
+toAccountAddress={toAccountAddress}&asset={asset}&amount={amount}&kindType={kindType}&nonce={nonce}&user={user}&signer={signer}&fromAccountAddress={fromAccountAddress}
+```
+
+#### Supported Signing Algorithms
+
+| Account Type | Signing Algorithm | Encoding Format |
+|---|---|---|
+| EVM Address | EIP-712 Typed Data (chainId=1666, message.msg=message body) | Hex |
+| Solana Address | Ed25519 | Base58 |
+
+---
+
+### Transfer Scenarios
+
+| Scenario | `user` | `fromAccountAddress` | Signing Key |
+|----------|--------|----------------------|-------------|
+| Master → Sub | Master account address | *(not required)* | Master account wallet private key |
+| Sub → Master | Sub-account address | *(not required)* | Sub-account wallet private key |
+| Sub A → Sub B | Master account address | Sub A address | Master account wallet private key |
+| Sub A → Sub B | Sub-account address | *(not required)* | Sub-account wallet private key |
+---
+
+### Important Notes
+
+* `user` and `signer` are both optional — pass either one; only one is needed to identify the signing account.
+* `signature` **must be signed with the private key of whichever account is passed** — `user`'s wallet private key if `user` is passed, or the agent's wallet private key if `signer` is passed.
+* `signer` must be an agent wallet address associated with `user`, registered and approved via `POST /fapi/v3/registerAndApproveAgent` or `approveAgent` with `canSpotTrade` or `canPerpTrade` permission.
+* When signing with a **sub-account's private key**, transfers **to the master account** are supported. Sub→Sub transfers are also supported, with the source address being the signing **sub-account**.
+* Transfers to or from a **frozen sub-account** will fail.
+* Transfers to **external addresses** (addresses not within the sub-account relationship) are not supported.
+
+
+
+# Migrate User Assets (WITHDRAW)
+
+> **Response:**
+
+```javascript
+{
+    "batchId": "a1B2c3D4e5F6g7H8i9J0k1"   // batch ID for querying migration history
+}
+```
+
+`POST /fapi/v3/asset/migrateUser`
+
+**Weight:** 50
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| user | STRING | YES | Source account wallet address — the account from which assets will be migrated |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signature | STRING | YES | Signature over the request body, signed using the `user` account's wallet private key (EIP-712 for EVM addresses, Ed25519 for Solana addresses) |
+
+**Notes:**
+
+* The source account must have **no open positions** before migration can proceed; the request will be rejected otherwise.
+* The source account must have **no open orders** before migration can proceed; the request will be rejected otherwise.
+* All assets with a positive available balance are automatically included. Assets with zero balance are skipped.
+* Up to **300 assets** are processed per migration batch.
+* Assets are transferred to the **authenticated user's account** (the destination).
+* If the source account has no assets with a positive balance, an empty response is returned and no transfer is initiated.
+* Record the returned `batchId` to query migration status via [Migrate User Assets History](#migrate-user-assets-history-user_data).
+
+---
+
+# Migrate User Assets History (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+    "batchId": "a1B2c3D4e5F6g7H8i9J0k1",
+    "totalCount": 2,                    // total number of records
+    "successCount": 1,                  // number of successful records (status=S)
+    "processingCount": 0,               // number of processing records (status=P)
+    "failCount": 0,                     // number of failed records (status=F)
+    "initCount": 1,                     // number of pending records (status=I)
+    "details": [
+        {
+            "id": 1001,
+            "asset": "USDT",
+            "amount": "500.00000000",
+            "tranId": 9876543210,
+            "status": "S",              // I=pending, S=success, F=failed
+            "fromStatus": "S",          // S=success, F=failed, P=processing
+            "fromErrorCode": null,
+            "fromResponse": null,
+            "toStatus": "S",            // S=success, F=failed, P=processing
+            "toErrorCode": null,
+            "toResponse": null
+        },
+        {
+            "id": 1002,
+            "asset": "BTC",
+            "amount": "0.05000000",
+            "tranId": null,             // null if not yet processed
+            "status": "I",              // I=pending, S=success, F=failed
+            "fromStatus": null,
+            "fromErrorCode": null,
+            "fromResponse": null,
+            "toStatus": null,
+            "toErrorCode": null,
+            "toResponse": null
+        }
+    ]
+}
+```
+
+`GET /fapi/v3/asset/migrateUser/history`
+
+**Weight:** 50
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| batchId | STRING | YES | Batch ID returned from the [Migrate User Assets](#migrate-user-assets-withdraw) endpoint |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| user | STRING | YES | Authenticated user's wallet address |
+| signer | STRING | YES | Signer address associated with the `user` account |
+| signature | STRING | YES | Signature over the request body |
+
+**Notes:**
+
+* `batchId` is mandatory. Each `batchId` corresponds to a single migration batch.
+* The query is scoped to the authenticated user — only migrations initiated by or associated with the authenticated account are returned.
+
+
+
+
+# Register and Approve Agent (PUBLIC)
+
+> **Response:**
+
+```javascript
+{
+    "code": 200,
+    "msg": "success"
+}
+```
+
+`POST /fapi/v3/registerAndApproveAgent`
+
+Registers a new API agent account and grants it trading/withdrawal permissions in a single call. Once approved, the agent can use API Keys to act on behalf of the user within the specified permission scope.
+
+**Weight:** 50
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| user | STRING | YES | User's wallet address |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| agentName | STRING | YES | Display name for the agent |
+| agentAddress | STRING | YES | Agent's wallet address |
+| expired | LONG | YES | Agent expiration timestamp (milliseconds) |
+| signatureChainId | LONG | YES | Chain ID used when generating the signature (`56` for EVM addresses, `101` for Solana addresses) |
+| signature | STRING | YES | Signature over the message body, signed using the user's wallet private key (see Signature Instructions below) |
+| canSpotTrade | BOOLEAN | YES | Whether the agent is permitted to place spot orders |
+| canPerpTrade | BOOLEAN | YES | Whether the agent is permitted to place perpetual futures orders |
+| canWithdraw | BOOLEAN | YES | Whether the agent is permitted to initiate withdrawals |
+| ipWhitelist | STRING | NO | Space-separated list of permitted IP addresses or CIDR ranges (e.g. `192.168.1.1 10.0.0.0/24`). **Required when `canWithdraw` is `true`.** |
+| agentCode | STRING | NO | Referral/invitation code for agent registration |
+
+---
+
+### Signature Instructions
+
+Sign the following message body using the **user's wallet private key**:
+
+```
+msg: user={user}&nonce={nonce}&agentName={agentName}&agentAddress={agentAddress}&expired={expired}&signatureChainId={signatureChainId}&canSpotTrade={canSpotTrade}&canPerpTrade={canPerpTrade}&canWithdraw={canWithdraw}&ipWhitelist={ipWhitelist}
+```
+
+> **EVM addresses only:** wrap the `msg` string above as `message.msg` in the following EIP-712 typed data structure before signing:
+
+> **⚠️ Note:** `domain.chainId` must be set to the value of the request parameter `signatureChainId` (`56` for EVM addresses, `101` for Solana addresses) — do **not** use the fixed value `1666`.
+
+```
+typed_data = {
+  "types": {
+    "EIP712Domain": [
+      {"name": "name", "type": "string"},
+      {"name": "version", "type": "string"},
+      {"name": "chainId", "type": "uint256"},
+      {"name": "verifyingContract", "type": "address"}
+    ],
+    "Message": [
+      { "name": "msg", "type": "string" }
+    ]
+  },
+  "primaryType": "Message",
+  "domain": {
+    "name": "AsterSignTransaction",
+    "version": "1",
+    "chainId": signatureChainId,
+    "verifyingContract": "0x0000000000000000000000000000000000000000"
+  },
+  "message": {
+    "msg": "$msg"
+  }
+}
+```
+
+#### Supported Signing Algorithms
+
+| Account Type | Signing Algorithm | Encoding |
+|---|---|---|
+| EVM Address | EIP-712 Typed Data (chainId=signatureChainId, message.msg=message body) | Hex |
+| Solana Address | Ed25519 | Base58 |
+
+---
+
+### Important Notes
+
+* `nonce` must be a microsecond-precision timestamp. The difference from server time must not exceed **10 seconds**, and the same nonce cannot be reused.
+* `expired` is the agent's validity deadline in **milliseconds**. The agent will automatically expire after this timestamp.
+* `ipWhitelist` uses **spaces** as the delimiter and supports CIDR notation (e.g. `192.168.1.1 10.0.0.0/24`). **`ipWhitelist` is required and must not be empty when `canWithdraw` is `true`.**
+* This endpoint is **unauthenticated** — no API Key or HMAC header is required. All authorization is verified through the on-chain `signature`.
+* This endpoint combines agent registration and permission granting into a single call, equivalent to the standalone registration step followed by `approveAgent`.
+
+
+
+# Get Direct Announcements (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "total": 2,
+  "rows": [
+    {
+      "id": 1001,
+      "contents": [
+        {
+          "language": "en",
+          "title": "Platform Maintenance Notice",
+          "subtitle": "Scheduled downtime",
+          "content": "The platform will undergo scheduled maintenance on 2026-06-20 from 02:00 to 04:00 UTC."
+        },
+        {
+          "language": "zh",
+          "title": "平台维护公告",
+          "subtitle": "定期停机",
+          "content": "平台将于2026年6月20日UTC时间02:00至04:00进行定期维护。"
+        }
+      ],
+      "category": "MAINTENANCE",
+      "publishTime": 1750000000000,
+      "jumpLink": "https://www.asterdex.com/en/announcement/1001"
+    }
+  ]
+}
+```
+
+`GET /fapi/v3/announcement/direct`
+
+Retrieves the list of direct announcements for the authenticated user, with pagination support.
+
+**Weight:** 1
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| page | INT | NO | Page number, starting from `1`. Default: `1` |
+| size | INT | NO | Number of results per page. Default: `20` |
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| total | LONG | Total number of announcements |
+| rows | ARRAY | List of announcement objects |
+| rows[].id | LONG | Announcement ID |
+| rows[].contents | ARRAY | Multi-language content list |
+| rows[].contents[].language | STRING | Language code (e.g. `en`, `zh`) |
+| rows[].contents[].title | STRING | Announcement title |
+| rows[].contents[].subtitle | STRING | Announcement subtitle |
+| rows[].contents[].content | STRING | Announcement body text |
+| rows[].category | STRING | Announcement category |
+| rows[].publishTime | LONG | Publish timestamp (milliseconds) |
+| rows[].jumpLink | STRING | Link to the full announcement page |
+
+---
+
+# Get Direct Announcement By ID (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "id": 1001,
+  "contents": [
+    {
+      "language": "en",
+      "title": "Platform Maintenance Notice",
+      "subtitle": "Scheduled downtime",
+      "content": "The platform will undergo scheduled maintenance on 2026-06-20 from 02:00 to 04:00 UTC."
+    },
+    {
+      "language": "zh",
+      "title": "平台维护公告",
+      "subtitle": "定期停机",
+      "content": "平台将于2026年6月20日UTC时间02:00至04:00进行定期维护。"
+    }
+  ],
+  "category": "MAINTENANCE",
+  "publishTime": 1750000000000,
+  "jumpLink": "https://www.asterdex.com/en/announcement/1001"
+}
+```
+
+`GET /fapi/v3/announcement/directById`
+
+Retrieves a single direct announcement by its ID for the authenticated user.
+
+**Weight:** 1
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| id | LONG | YES | Announcement ID |
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| id | LONG | Announcement ID |
+| contents | ARRAY | Multi-language content list |
+| contents[].language | STRING | Language code (e.g. `en`, `zh`) |
+| contents[].title | STRING | Announcement title |
+| contents[].subtitle | STRING | Announcement subtitle |
+| contents[].content | STRING | Announcement body text |
+| category | STRING | Announcement category |
+| publishTime | LONG | Publish timestamp (milliseconds) |
+| jumpLink | STRING | Link to the full announcement page |
+
+---
+
+# Get Builder User Accounts (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "total": 2,
+  "currentPage": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "hasMore": false,
+  "rows": [
+    {
+      "address": "0x1234...abcd",
+      "feeTier": 0,
+      "canTrade": true,
+      "canDeposit": true,
+      "canWithdraw": true,
+      "updateTime": 1751500000000,
+      "accountType": 0,
+      "dualSidePosition": false,
+      "jointMargin": false,
+      "feeBurn": false,
+      "feeBurnAssetId": 0,
+      "symbolConfig": [
+        {
+          "symbol": "BTCUSDT",
+          "leverage": 20,
+          "notionalLimitCoef": "10"
+        }
+      ]
+    }
+  ]
+}
+```
+
+`GET /fapi/v3/builder/userAccounts`
+
+Query account information for the users trading under the caller's builder code, with pagination. The authenticated account is used as the builder identity — there is no separate `builder` address parameter.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| userAddresses | STRING | NO | Comma-separated list of up to 50 user wallet addresses to query |
+| symbol | STRING | NO | When sent, only this symbol's entry is returned in `symbolConfig` |
+| page | INT | NO | Page number, starting from `1`. Default: `1` |
+| limit | INT | NO | Number of results per page. Default `50`; max `1000` |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signer | STRING | YES | Signer address associated with the authenticated account |
+| signature | STRING | YES | Signature over the request body |
+
+* If `userAddresses` is sent, only those addresses are returned; each address must have already approved the caller's address as its builder, otherwise it is left out of `rows` and reported in `errors` instead.
+* If `userAddresses` is omitted, every user currently bound to this builder is paginated through instead, ordered by the time the binding was created.
+* `userAddresses` accepts at most 50 addresses per request; sending more is rejected.
+* The caller's own account must already have a generated on-chain address (i.e. have completed at least one deposit), or the request is rejected.
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| total | LONG | Total number of matching users |
+| currentPage | INT | Current page number |
+| totalPages | INT | Total number of pages |
+| pageSize | INT | Number of records per page |
+| hasMore | BOOLEAN | Whether more pages are available |
+| rows | ARRAY | List of account records |
+| rows[].address | STRING | Wallet address of the user |
+| rows[].feeTier | INT | Account commission tier |
+| rows[].canTrade | BOOLEAN | Whether the account can trade |
+| rows[].canDeposit | BOOLEAN | Whether the account can deposit |
+| rows[].canWithdraw | BOOLEAN | Whether the account can withdraw |
+| rows[].updateTime | LONG | Last update time (milliseconds) |
+| rows[].accountType | INT | Account type |
+| rows[].dualSidePosition | BOOLEAN | Whether Hedge Mode is enabled |
+| rows[].jointMargin | BOOLEAN | Whether Multi-Assets Mode is enabled |
+| rows[].feeBurn | BOOLEAN | Whether fee burn is enabled |
+| rows[].feeBurnAssetId | INT | Fee burn asset ID |
+| rows[].symbolConfig | ARRAY | Per-symbol configuration |
+| rows[].symbolConfig[].symbol | STRING | Symbol |
+| rows[].symbolConfig[].leverage | INT | Current initial leverage |
+| rows[].symbolConfig[].notionalLimitCoef | STRING | Notional limit coefficient |
+| errors | ARRAY | Present only when one or more requested addresses could not be returned |
+| errors[].address | STRING | The address that was left out of `rows` |
+| errors[].errorMsg | STRING | Reason the address was left out of `rows`: `This function can only be used after deposit` (address has no generated account), `User privacy mode is enabled, this operation is not allowed.`, `Failed to check privacy switch status for this address.`, or `This user address is not bound to this builder.` (only possible when `userAddresses` is explicitly supplied) |
+
+---
+
+# Get Builder User Open Orders (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "total": 1,
+  "currentPage": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "hasMore": false,
+  "rows": [
+    {
+      "address": "0x1234...abcd",
+      "symbol": "BTCUSDT",
+      "orderId": 1917641,
+      "clientOrderId": "abc",
+      "price": "0",
+      "origQty": "0.40",
+      "executedQty": "0",
+      "avgPrice": "0.00000",
+      "stopPrice": "9300",
+      "status": "NEW",
+      "side": "BUY",
+      "positionSide": "SHORT",
+      "type": "TRAILING_STOP_MARKET",
+      "timeInForce": "GTC",
+      "time": 1579276756075,
+      "workingType": "CONTRACT_PRICE"
+    }
+  ]
+}
+```
+
+`GET /fapi/v3/builder/userOpenOrders`
+
+Query current open orders for the users trading under the caller's builder code, with pagination. The authenticated account is used as the builder identity — there is no separate `builder` address parameter.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| userAddresses | STRING | NO | Comma-separated list of up to 50 user wallet addresses to query |
+| symbol | STRING | NO | When sent, only open orders on this symbol are returned |
+| page | INT | NO | Page number, starting from `1`. Default: `1` |
+| limit | INT | NO | Number of results per page. Default `50`; max `1000` |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signer | STRING | YES | Signer address associated with the authenticated account |
+| signature | STRING | YES | Signature over the request body |
+
+* If `userAddresses` is sent, only those addresses are returned; each address must have already approved the caller's address as its builder, otherwise it is left out of `rows` and reported in `errors` instead.
+* If `userAddresses` is omitted, every user currently bound to this builder is paginated through instead, ordered by the time the binding was created. `page`/`limit` page through the bound users, not the individual orders — each returned user may contribute zero or more rows.
+* `userAddresses` accepts at most 50 addresses per request; sending more is rejected.
+* The caller's own account must already have a generated on-chain address (i.e. have completed at least one deposit), or the request is rejected.
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| total | LONG | Total number of matching users on this page's underlying query |
+| currentPage | INT | Current page number |
+| totalPages | INT | Total number of pages |
+| pageSize | INT | Number of records per page |
+| hasMore | BOOLEAN | Whether more pages are available |
+| rows | ARRAY | List of open orders across the returned users |
+| rows[].address | STRING | Wallet address of the order owner |
+| rows[].symbol | STRING | Symbol |
+| rows[].orderId | LONG | Order ID |
+| rows[].clientOrderId | STRING | Client order ID |
+| rows[].price | STRING | Order price |
+| rows[].origQty | STRING | Original order quantity |
+| rows[].executedQty | STRING | Executed quantity |
+| rows[].avgPrice | STRING | Average filled price |
+| rows[].stopPrice | STRING | Stop price |
+| rows[].status | STRING | Order status |
+| rows[].side | STRING | Order side |
+| rows[].positionSide | STRING | Position side: `BOTH`, `LONG`, `SHORT` |
+| rows[].type | STRING | Order type |
+| rows[].timeInForce | STRING | [Time in force](#enum-definitions) |
+| rows[].time | LONG | Order time (milliseconds) |
+| rows[].workingType | STRING | Working type |
+| errors | ARRAY | Present only when one or more requested addresses could not be returned |
+| errors[].address | STRING | The address that was left out of `rows` |
+| errors[].errorMsg | STRING | Reason the address was left out of `rows`: `This function can only be used after deposit` (address has no generated account), `User privacy mode is enabled, this operation is not allowed.`, `Failed to check privacy switch status for this address.`, or `This user address is not bound to this builder.` (only possible when `userAddresses` is explicitly supplied) |
+
+---
+
+# Get Builder User Balances (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "total": 1,
+  "currentPage": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "hasMore": false,
+  "rows": [
+    {
+      "address": "0x1234...abcd",
+      "asset": "USDT",
+      "walletBalance": "23.72469206",
+      "price": "1",
+      "balanceInUsd": "23.72469206"
+    }
+  ]
+}
+```
+
+`GET /fapi/v3/builder/userBalances`
+
+Query wallet balances for the users trading under the caller's builder code, with pagination. The authenticated account is used as the builder identity — there is no separate `builder` address parameter.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| userAddresses | STRING | NO | Comma-separated list of up to 50 user wallet addresses to query |
+| page | INT | NO | Page number, starting from `1`. Default: `1` |
+| limit | INT | NO | Number of results per page. Default `50`; max `1000` |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signer | STRING | YES | Signer address associated with the authenticated account |
+| signature | STRING | YES | Signature over the request body |
+
+* If `userAddresses` is sent, only those addresses are returned; each address must have already approved the caller's address as its builder, otherwise it is left out of `rows` and reported in `errors` instead.
+* If `userAddresses` is omitted, every user currently bound to this builder is paginated through instead, ordered by the time the binding was created.
+* `userAddresses` accepts at most 50 addresses per request; sending more is rejected.
+* The caller's own account must already have a generated on-chain address (i.e. have completed at least one deposit), or the request is rejected.
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| total | LONG | Total number of matching users |
+| currentPage | INT | Current page number |
+| totalPages | INT | Total number of pages |
+| pageSize | INT | Number of records per page |
+| hasMore | BOOLEAN | Whether more pages are available |
+| rows | ARRAY | List of balance records across the returned users |
+| rows[].address | STRING | Wallet address of the balance owner |
+| rows[].asset | STRING | Asset name |
+| rows[].walletBalance | STRING | Wallet balance |
+| rows[].price | STRING | Asset price used to compute `balanceInUsd` |
+| rows[].balanceInUsd | STRING | Wallet balance converted to USD |
+| errors | ARRAY | Present only when one or more requested addresses could not be returned |
+| errors[].address | STRING | The address that was left out of `rows` |
+| errors[].errorMsg | STRING | Reason the address was left out of `rows`: `This function can only be used after deposit` (address has no generated account), `User privacy mode is enabled, this operation is not allowed.`, `Failed to check privacy switch status for this address.`, or `This user address is not bound to this builder.` (only possible when `userAddresses` is explicitly supplied) |
+
+---
+
+# Get Builder User Position Risk (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "total": 1,
+  "currentPage": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "hasMore": false,
+  "rows": [
+    {
+      "address": "0x1234...abcd",
+      "symbol": "BTCUSDT",
+      "positionAmt": "20.000",
+      "entryPrice": "6563.66500",
+      "markPrice": "6679.50671178",
+      "unRealizedProfit": "2316.83423560",
+      "liquidationPrice": "5930.78",
+      "leverage": "10",
+      "maxNotionalValue": "20000000",
+      "marginType": "isolated",
+      "isolatedMargin": "15517.54150468",
+      "isAutoAddMargin": "false",
+      "positionSide": "LONG",
+      "notional": "133593.13423560",
+      "isolatedWallet": "13200.70726908",
+      "updateTime": 1625474304765
+    }
+  ]
+}
+```
+
+`GET /fapi/v3/builder/userPositionRisk`
+
+Query current position information for the users trading under the caller's builder code, with pagination. The authenticated account is used as the builder identity — there is no separate `builder` address parameter.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| userAddresses | STRING | NO | Comma-separated list of up to 50 user wallet addresses to query |
+| symbol | STRING | NO | When sent, only positions on this symbol are returned |
+| page | INT | NO | Page number, starting from `1`. Default: `1` |
+| limit | INT | NO | Number of results per page. Default `50`; max `1000` |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signer | STRING | YES | Signer address associated with the authenticated account |
+| signature | STRING | YES | Signature over the request body |
+
+* If `userAddresses` is sent, only those addresses are returned; each address must have already approved the caller's address as its builder, otherwise it is left out of `rows` and reported in `errors` instead.
+* If `userAddresses` is omitted, every user currently bound to this builder is paginated through instead, ordered by the time the binding was created. `page`/`limit` page through the bound users, not the individual positions — each returned user may contribute zero or more rows.
+* `userAddresses` accepts at most 50 addresses per request; sending more is rejected.
+* The caller's own account must already have a generated on-chain address (i.e. have completed at least one deposit), or the request is rejected.
+* For a user in One-way Mode, only the `BOTH`-side position is returned; for a user in Hedge Mode, the `LONG`/`SHORT`-side positions are returned.
+* `liquidationPrice` is reported as `0` whenever the underlying value would be negative.
+* This batch endpoint only returns positions with a non-zero `positionAmt`. This differs from the single-account `GET /fapi/v3/positionRisk`, which returns every symbol's position including ones with `positionAmt = 0`.
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| total | LONG | Total number of matching users on this page's underlying query |
+| currentPage | INT | Current page number |
+| totalPages | INT | Total number of pages |
+| pageSize | INT | Number of records per page |
+| hasMore | BOOLEAN | Whether more pages are available |
+| rows | ARRAY | List of position records across the returned users |
+| rows[].address | STRING | Wallet address of the position owner |
+| rows[].symbol | STRING | Symbol |
+| rows[].positionAmt | STRING | Position amount |
+| rows[].entryPrice | STRING | Average entry price |
+| rows[].markPrice | STRING | Mark price |
+| rows[].unRealizedProfit | STRING | Unrealized profit |
+| rows[].liquidationPrice | STRING | Liquidation price |
+| rows[].leverage | STRING | Current initial leverage |
+| rows[].maxNotionalValue | STRING | Maximum available notional with current leverage |
+| rows[].marginType | STRING | Margin type: `isolated` or `cross` |
+| rows[].isolatedMargin | STRING | Isolated margin |
+| rows[].isAutoAddMargin | STRING | Whether auto-add-margin is enabled for the position |
+| rows[].positionSide | STRING | Position side: `BOTH`, `LONG`, `SHORT` |
+| rows[].notional | STRING | Position notional value |
+| rows[].isolatedWallet | STRING | Isolated wallet balance |
+| rows[].updateTime | LONG | Last update time (milliseconds) |
+| errors | ARRAY | Present only when one or more requested addresses could not be returned |
+| errors[].address | STRING | The address that was left out of `rows` |
+| errors[].errorMsg | STRING | Reason the address was left out of `rows`: `This function can only be used after deposit` (address has no generated account), `User privacy mode is enabled, this operation is not allowed.`, `Failed to check privacy switch status for this address.`, or `This user address is not bound to this builder.` (only possible when `userAddresses` is explicitly supplied) |
+
+---
+
+# Get Builder User Commission Rates (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "total": 1,
+  "currentPage": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "hasMore": false,
+  "rows": [
+    {
+      "address": "0x1234...abcd",
+      "symbol": "BTCUSDT",
+      "makerCommissionRate": "0.0002",
+      "takerCommissionRate": "0.0004"
+    }
+  ]
+}
+```
+
+`GET /fapi/v3/builder/userCommissionRates`
+
+Query commission rates on a symbol for the users trading under the caller's builder code, with pagination. The authenticated account is used as the builder identity — there is no separate `builder` address parameter.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| userAddresses | STRING | NO | Comma-separated list of up to 50 user wallet addresses to query |
+| symbol | STRING | YES | Symbol to look up commission rates for |
+| page | INT | NO | Page number, starting from `1`. Default: `1` |
+| limit | INT | NO | Number of results per page. Default `50`; max `1000` |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signer | STRING | YES | Signer address associated with the authenticated account |
+| signature | STRING | YES | Signature over the request body |
+
+* If `userAddresses` is sent, only those addresses are returned; each address must have already approved the caller's address as its builder, otherwise it is left out of `rows` and reported in `errors` instead.
+* If `userAddresses` is omitted, every user currently bound to this builder is paginated through instead, ordered by the time the binding was created.
+* `userAddresses` accepts at most 50 addresses per request; sending more is rejected.
+* The caller's own account must already have a generated on-chain address (i.e. have completed at least one deposit), or the request is rejected.
+* Each user's `makerCommissionRate`/`takerCommissionRate` is derived from their own fee tier plus any per-symbol fee adjustment on their account, the same computation used by `GET /fapi/v3/commissionRate`.
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| total | LONG | Total number of matching users |
+| currentPage | INT | Current page number |
+| totalPages | INT | Total number of pages |
+| pageSize | INT | Number of records per page |
+| hasMore | BOOLEAN | Whether more pages are available |
+| rows | ARRAY | List of commission-rate records |
+| rows[].address | STRING | Wallet address of the user |
+| rows[].symbol | STRING | Symbol |
+| rows[].makerCommissionRate | STRING | Maker commission rate |
+| rows[].takerCommissionRate | STRING | Taker commission rate |
+| errors | ARRAY | Present only when one or more requested addresses could not be returned |
+| errors[].address | STRING | The address that was left out of `rows` |
+| errors[].errorMsg | STRING | Reason the address was left out of `rows`: `This function can only be used after deposit` (address has no generated account), `User privacy mode is enabled, this operation is not allowed.`, `Failed to check privacy switch status for this address.`, or `This user address is not bound to this builder.` (only possible when `userAddresses` is explicitly supplied) |
+
+---
+
+# Get Builder Trades (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "total": 42,
+  "currentPage": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "hasMore": false,
+  "rows": [
+    {
+      "tradeId": 698759,
+      "insertTime": 1751500000000,
+      "symbol": "BTCUSDT",
+      "positionSide": "SHORT",
+      "price": "7819.01",
+      "qty": "0.002",
+      "baseAsset": "BTC",
+      "baseType": "CRYPTO",
+      "quoteAsset": "USDT",
+      "side": "SELL",
+      "activeBuy": false,
+      "feeAsset": "USDT",
+      "totalQuota": "15.63802",
+      "fee": "-0.07819010",
+      "orderId": 25851813,
+      "realizedProfit": "-0.91539999",
+      "marginAsset": "USDT",
+      "userAddress": "0x1234...abcd",
+      "builderFee": "0.00050000"
+    }
+  ]
+}
+```
+
+`GET /fapi/v3/builder/userTrades`
+
+Query the paginated trade history of users trading under the caller's builder code. The authenticated account is used as the builder identity — there is no separate `builder` address parameter.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| userAddresses | STRING | NO | Comma-separated list of up to 50 user wallet addresses to query |
+| startTime | LONG | NO | Timestamp in ms |
+| endTime | LONG | NO | Timestamp in ms |
+| page | INT | NO | Page number, starting from `1`. Default: `1` |
+| limit | INT | NO | Number of results per page. Default `50`; max `1000` |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signer | STRING | YES | Signer address associated with the authenticated account |
+| signature | STRING | YES | Signature over the request body |
+
+* If neither `startTime` nor `endTime` is sent, the recent 7 days' data is returned.
+* The resolved `startTime` must not be earlier than 90 days before the current time, or the request is rejected.
+* `endTime` cannot be more than 1 day ahead of the current server time.
+* Results are ordered by trade time descending.
+* If `userAddresses` is sent, only trades of those addresses are returned; each address must have already approved the caller's address as its builder, otherwise it is left out of `rows` and reported in `errors` instead.
+* If `userAddresses` is omitted, trades of every user currently bound to this builder are returned instead.
+* `userAddresses` accepts at most 50 addresses per request; sending more is rejected.
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| total | LONG | Total number of matching trades |
+| currentPage | INT | Current page number |
+| totalPages | INT | Total number of pages |
+| pageSize | INT | Number of records per page |
+| hasMore | BOOLEAN | Whether more pages are available |
+| rows | ARRAY | List of trade records |
+| rows[].tradeId | LONG | Trade ID |
+| rows[].insertTime | LONG | Trade time (milliseconds) |
+| rows[].symbol | STRING | Symbol |
+| rows[].positionSide | STRING | Position side: `BOTH`, `LONG`, `SHORT` |
+| rows[].price | STRING | Trade price |
+| rows[].qty | STRING | Trade quantity |
+| rows[].baseAsset | STRING | Base asset |
+| rows[].baseType | STRING | Symbol type: `CRYPTO` or `STOCK` |
+| rows[].quoteAsset | STRING | Quote asset |
+| rows[].side | STRING | Trade side |
+| rows[].activeBuy | BOOLEAN | Whether the trade was an active buy |
+| rows[].feeAsset | STRING | Commission asset |
+| rows[].totalQuota | STRING | Notional value of the trade (price × qty) |
+| rows[].fee | STRING | Fee for the trade, from the trading user's perspective: negative when a fee is charged, positive when a rebate is applied. Unlike most other decimal fields in this response, `fee` is not stripped of trailing zeros |
+| rows[].orderId | LONG | Order ID |
+| rows[].realizedProfit | STRING | Realized profit |
+| rows[].marginAsset | STRING | Margin (settlement) asset |
+| rows[].userAddress | STRING | Wallet address of the trading user |
+| rows[].builderFee | STRING | Builder fee charged on the trade |
+| errors | ARRAY | Present only when one or more requested addresses could not be returned |
+| errors[].address | STRING | The address that was left out of `rows` |
+| errors[].errorMsg | STRING | Reason the address was left out of `rows`: `This function can only be used after deposit` (address has no generated account), `User privacy mode is enabled, this operation is not allowed.`, `Failed to check privacy switch status for this address.`, or `This user address is not bound to this builder.` (only possible when `userAddresses` is explicitly supplied) |
+
+---
+
+# Get Builder All Orders (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "total": 1,
+  "currentPage": 1,
+  "totalPages": 1,
+  "pageSize": 50,
+  "hasMore": false,
+  "rows": [
+    {
+      "avgPrice": "0.00000",
+      "clientOrderId": "abc",
+      "cumQuote": "0",
+      "executedQty": "0",
+      "orderId": 1917641,
+      "origQty": "0.40",
+      "origType": "TRAILING_STOP_MARKET",
+      "price": "0",
+      "reduceOnly": false,
+      "side": "BUY",
+      "positionSide": "SHORT",
+      "status": "NEW",
+      "stopPrice": "9300",
+      "closePosition": false,
+      "symbol": "BTCUSDT",
+      "time": 1579276756075,
+      "timeInForce": "GTC",
+      "type": "TRAILING_STOP_MARKET",
+      "activatePrice": "9020",
+      "priceRate": "0.3",
+      "updateTime": 1579276756075,
+      "workingType": "CONTRACT_PRICE",
+      "priceProtect": false,
+      "address": "0x1234...abcd"
+    }
+  ]
+}
+```
+
+`GET /fapi/v3/builder/userAllOrders`
+
+Query the paginated historical order records (active, canceled, or filled) of users trading under the caller's builder code. The authenticated account is used as the builder identity — there is no separate `builder` address parameter.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| userAddresses | STRING | NO | Comma-separated list of up to 50 user wallet addresses to query |
+| symbol | STRING | NO | When sent, only orders on this symbol are returned |
+| startTime | LONG | NO | Timestamp in ms |
+| endTime | LONG | NO | Timestamp in ms |
+| page | INT | NO | Page number, starting from `1`. Default: `1` |
+| limit | INT | NO | Number of results per page. Default `50`; max `1000` |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signer | STRING | YES | Signer address associated with the authenticated account |
+| signature | STRING | YES | Signature over the request body |
+
+* If neither `startTime` nor `endTime` is sent, the recent 7 days' data is returned.
+* The resolved `startTime` must not be earlier than 90 days before the current time, or the request is rejected.
+* `endTime` cannot be more than 1 day ahead of the current server time.
+* If `userAddresses` is sent, only orders of those addresses are returned; each address must have already approved the caller's address as its builder, otherwise it is left out of `rows` and reported in `errors` instead.
+* If `userAddresses` is omitted, orders of every user currently bound to this builder are returned instead.
+* `userAddresses` accepts at most 50 addresses per request; sending more is rejected.
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| total | LONG | Total number of matching orders |
+| currentPage | INT | Current page number |
+| totalPages | INT | Total number of pages |
+| pageSize | INT | Number of records per page |
+| hasMore | BOOLEAN | Whether more pages are available |
+| rows | ARRAY | List of order records |
+| rows[].orderId | LONG | Order ID |
+| rows[].symbol | STRING | Symbol |
+| rows[].status | STRING | Order status |
+| rows[].clientOrderId | STRING | Client order ID |
+| rows[].price | STRING | Order price |
+| rows[].avgPrice | STRING | Average filled price |
+| rows[].origQty | STRING | Original order quantity |
+| rows[].executedQty | STRING | Executed quantity |
+| rows[].cumQuote | STRING | Cumulative quote quantity |
+| rows[].timeInForce | STRING | [Time in force](#enum-definitions) |
+| rows[].type | STRING | Order type |
+| rows[].reduceOnly | BOOLEAN | Whether reduce-only |
+| rows[].side | STRING | Order side |
+| rows[].stopPrice | STRING | Stop price. Please ignore when order type is `TRAILING_STOP_MARKET` |
+| rows[].workingType | STRING | Working type |
+| rows[].origType | STRING | Original order type |
+| rows[].time | LONG | Order time (milliseconds) |
+| rows[].updateTime | LONG | Update time (milliseconds) |
+| rows[].priceRate | STRING | Callback rate, only returned with `TRAILING_STOP_MARKET` orders |
+| rows[].activatePrice | STRING | Activation price, only returned with `TRAILING_STOP_MARKET` orders |
+| rows[].positionSide | STRING | Position side: `BOTH`, `LONG`, `SHORT` |
+| rows[].closePosition | BOOLEAN | Whether Close-All |
+| rows[].priceProtect | BOOLEAN | Whether the conditional order trigger is protected |
+| rows[].address | STRING | Wallet address of the order owner |
+| errors | ARRAY | Present only when one or more requested addresses could not be returned |
+| errors[].address | STRING | The address that was left out of `rows` |
+| errors[].errorMsg | STRING | Reason the address was left out of `rows`: `This function can only be used after deposit` (address has no generated account), `User privacy mode is enabled, this operation is not allowed.`, `Failed to check privacy switch status for this address.`, or `This user address is not bound to this builder.` (only possible when `userAddresses` is explicitly supplied) |
+
+---
+
+# Get Builder Approved User List (USER_DATA)
+
+> **Response:**
+
+```javascript
+{
+  "rows": [
+    {
+      "userAddress": "0x1234...abcd",
+      "builderAddress": "0x5678...efgh",
+      "maxFeeRate": 0.0001,
+      "builderName": "MyBuilder",
+      "approveTime": 1768903037082
+    }
+  ],
+  "total": 1,
+  "currentPage": 1,
+  "totalPages": 1,
+  "pageSize": 100,
+  "hasMore": false
+}
+```
+
+`GET /fapi/v3/builder/approvedUserList`
+
+Query the list of users who have approved the caller's address as their builder.
+
+**Weight:** 5
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| startTime | LONG | NO | Only return users approved after this timestamp (ms). If omitted, defaults to `0`, meaning no time filter is applied and all approved users are returned. |
+| endTime | LONG | NO | Only return users approved on or before this timestamp (ms). If omitted, defaults to the current server time. |
+| page | INT | NO | Page number, starting from `1`. Defaults to `1`. |
+| limit | INT | NO | Page size. Defaults to `100`, maximum `1000`. |
+| nonce | LONG | YES | Microsecond-level timestamp, used for replay attack prevention |
+| signer | STRING | YES | Signer address associated with the authenticated account |
+| signature | STRING | YES | Signature over the request body |
+
+* The authenticated account is used as the builder identity — there is no separate `builder` address parameter.
+* Results are paginated; use `page` and `limit` to page through the full result set.
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| rows | ARRAY | List of approved-user records for the current page |
+| rows[].userAddress | STRING | Wallet address of the approved user |
+| rows[].builderAddress | STRING | Builder's wallet address |
+| rows[].maxFeeRate | DECIMAL | Maximum fee rate the user granted this builder |
+| rows[].builderName | STRING | Builder name set by the user when approving |
+| rows[].approveTime | LONG | Timestamp (ms) when the user approved the builder |
+| total | LONG | Total number of matching records across all pages |
+| currentPage | INT | Current page number |
+| totalPages | INT | Total number of pages |
+| pageSize | INT | Effective page size used |
+| hasMore | BOOLEAN | Whether more pages exist after this one |
+
+---
+
+# Get All Asset Logos
+
+> **Response:**
+
+```javascript
+[
+  {
+    "assetCode": "BTC",
+    "logoUrl": "https://example.com/logo/btc.png"
+  },
+  {
+    "assetCode": "ETH",
+    "logoUrl": "https://example.com/logo/eth.png"
+  }
+]
+```
+
+`GET /fapi/v3/common/asset/all-asset-logo`
+
+Query the logo URL of every active asset. This is a public endpoint — no authentication is required.
+
+**Weight:** 1
+
+**Parameters:**
+
+None
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| assetCode | STRING | Asset name |
+| logoUrl | STRING | URL of the asset's logo image |
+
+---
+
+# User Data Streams
+
+* The base API endpoint is: **https://fapi.asterdex.com**
+* A User Data Stream `listenKey` is valid for 60 minutes after creation.
+* Doing a `PUT` on a `listenKey` will extend its validity for 60 minutes.
+* Doing a `DELETE` on a `listenKey` will close the stream and invalidate the `listenKey`.
+* Doing a `POST` on an account with an active `listenKey` will return the currently active `listenKey` and extend its validity for 60 minutes.
+* The baseurl for websocket is **wss://fstream.asterdex.com**
+* User Data Streams are accessed at **/ws/\<listenKey\>**
+* User data stream payloads are **not guaranteed** to be in order during heavy periods; **make sure to order your updates using E**
+* A single connection to **fstream.asterdex.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
+
+## Start User Data Stream (USER_STREAM)
+
+> **Response:**
+
+```javascript
+{
+  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
+}
+```
+
+``POST /fapi/v3/listenKey``
+
+Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent. If the account has an active `listenKey`, that `listenKey` will be returned and its validity will be extended for 60 minutes.
+
+**Weight:**
+1
+
+**Parameters:**
+
+None
+
+## Keepalive User Data Stream (USER_STREAM)
+
+> **Response:**
+
+```javascript
+{}
+```
+
+``PUT /fapi/v3/listenKey``
+
+Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 60 minutes.
+
+**Weight:**
+1
+
+**Parameters:**
+
+None
+
+## Close User Data Stream (USER_STREAM)
+
+> **Response:**
+
+```javascript
+{}
+```
+
+``DELETE /fapi/v3/listenKey``
+
+Close out a user data stream.
+
+**Weight:**
+1
+
+**Parameters:**
+
+None
+
+## Event: User Data Stream Expired
+
+> **Payload:**
+
+```javascript
+{
+	'e': 'listenKeyExpired',      // event type
+	'E': 1576653824250				// event time
+}
+```
+
+When the `listenKey` used for the user data stream turns expired, this event will be pushed.
+
+**Notice:**
+
+* This event is not related to the websocket disconnection.
+* This event will be received only when a valid `listenKey` in connection got expired.
+* No more user data event will be updated after this event received until a new valid `listenKey` used.
+
+## Event: Margin Call
+
+> **Payload:**
+
+```javascript
+{
+    "e":"MARGIN_CALL",    	// Event Type
+    "E":1587727187525,		// Event Time
+    "cw":"3.16812045",		// Cross Wallet Balance. Only pushed with crossed position margin call
+    "p":[					// Position(s) of Margin Call
+      {
+        "s":"ETHUSDT",		// Symbol
+        "ps":"LONG",		// Position Side
+        "pa":"1.327",		// Position Amount
+        "mt":"CROSSED",		// Margin Type
+        "iw":"0",			// Isolated Wallet (if isolated position)
+        "mp":"187.17127",	// Mark Price
+        "up":"-1.166074",	// Unrealized PnL
+        "mm":"1.614445"		// Maintenance Margin Required
+      }
+    ]
+}
+```
+
+* When the user's position risk ratio is too high, this stream will be pushed.
+* This message is only used as risk guidance information and is not recommended for investment strategies.
+* In the case of a highly volatile market, there may be the possibility that the user's position has been liquidated at the same time when this stream is pushed out.
+
+## Event: Balance and Position Update
+
+> **Payload:**
+
+```javascript
+{
+  "e": "ACCOUNT_UPDATE",				// Event Type
+  "E": 1564745798939,            		// Event Time
+  "T": 1564745798938 ,           		// Transaction
+  "a":                          		// Update Data
+    {
+      "m":"ORDER",						// Event reason type
+      "B":[                     		// Balances
+        {
+          "a":"USDT",           		// Asset
+          "wb":"122624.12345678",    	// Wallet Balance
+          "cw":"100.12345678",			// Cross Wallet Balance
+          "bc":"50.12345678"			// Balance Change except PnL and Commission
+        },
+        {
+          "a":"BUSD",   
+          "wb":"1.00000000",
+          "cw":"0.00000000",   
+          "bc":"-49.12345678"
+        }
+      ],
+      "P":[
+        {
+          "s":"BTCUSDT",          	// Symbol
+          "pa":"0",               	// Position Amount
+          "ep":"0.00000",            // Entry Price
+          "cr":"200",             	// (Pre-fee) Accumulated Realized
+          "up":"0",						// Unrealized PnL
+          "mt":"isolated",				// Margin Type
+          "iw":"0.00000000",			// Isolated Wallet (if isolated position)
+          "ps":"BOTH"					// Position Side
+        }，
+        {
+        	"s":"BTCUSDT",
+        	"pa":"20",
+        	"ep":"6563.66500",
+        	"cr":"0",
+        	"up":"2850.21200",
+        	"mt":"isolated",
+        	"iw":"13200.70726908",
+        	"ps":"LONG"
+      	 },
+        {
+        	"s":"BTCUSDT",
+        	"pa":"-10",
+        	"ep":"6563.86000",
+        	"cr":"-45.04000000",
+        	"up":"-1423.15600",
+        	"mt":"isolated",
+        	"iw":"6570.42511771",
+        	"ps":"SHORT"
+        }
+      ]
+    }
+}
+```
+
+Event type is `ACCOUNT_UPDATE`.
+
+* When balance or position get updated, this event will be pushed.
+  
+  * `ACCOUNT_UPDATE` will be pushed only when update happens on user's account, including changes on balances, positions, or margin type.
+  * Unfilled orders or cancelled orders will not make the event `ACCOUNT_UPDATE` pushed, since there's no change on positions.
+  * Only positions of symbols with non-zero isolatd wallet or non-zero position amount will be pushed in the "position" part of the event `ACCOUNT_UPDATE` when any position changes.
+* When "FUNDING FEE" changes to the user's balance, the event will be pushed with the brief message:
+  
+  * When "FUNDING FEE" occurs in a **crossed position**, `ACCOUNT_UPDATE` will be pushed with only the balance `B`(including the "FUNDING FEE" asset only), without any position `P` message.
+  * When "FUNDING FEE" occurs in an **isolated position**, `ACCOUNT_UPDATE` will be pushed with only the balance `B`(including the "FUNDING FEE" asset only) and the relative position message `P`( including the isolated position on which the "FUNDING FEE" occurs only, without any other position message).
+* The field "m" represents the reason type for the event and may shows the following possible types:
+  
+  * DEPOSIT
+  * WITHDRAW
+  * ORDER
+  * FUNDING_FEE
+  * WITHDRAW_REJECT
+  * ADJUSTMENT
+  * INSURANCE_CLEAR
+  * ADMIN_DEPOSIT
+  * ADMIN_WITHDRAW
+  * MARGIN_TRANSFER
+  * MARGIN_TYPE_CHANGE
+  * ASSET_TRANSFER
+  * OPTIONS_PREMIUM_FEE
+  * OPTIONS_SETTLE_PROFIT
+  * AUTO_EXCHANGE
+* The field "bc" represents the balance change except for PnL and commission.
+
+## Event: Order Update
+
+> **Payload:**
+
+```javascript
+{
+  
+  "e":"ORDER_TRADE_UPDATE",		// Event Type
+  "E":1568879465651,			// Event Time
+  "T":1568879465650,			// Transaction Time
+  "o":{			
+    "s":"BTCUSDT",				// Symbol
+    "c":"TEST",					// Client Order Id
+      // special client order id:
+      // starts with "autoclose-": liquidation order
+      // "adl_autoclose": ADL auto close order
+    "S":"SELL",					// Side
+    "o":"TRAILING_STOP_MARKET",	// Order Type
+    "f":"GTC",					// Time in Force
+    "q":"0.001",				// Original Quantity
+    "p":"0",					// Original Price
+    "ap":"0",					// Average Price
+    "sp":"7103.04",				// Stop Price. Please ignore with TRAILING_STOP_MARKET order
+    "x":"NEW",					// Execution Type
+    "X":"NEW",					// Order Status
+    "i":8886774,				// Order Id
+    "l":"0",					// Order Last Filled Quantity
+    "z":"0",					// Order Filled Accumulated Quantity
+    "L":"0",					// Last Filled Price
+    "N":"USDT",            	// Commission Asset, will not push if no commission
+    "n":"0",               	// Commission, will not push if no commission
+    "T":1568879465651,			// Order Trade Time
+    "t":0,			        	// Trade Id
+    "b":"0",			    	// Bids Notional
+    "a":"9.91",					// Ask Notional
+    "m":false,					// Is this trade the maker side?
+    "R":false,					// Is this reduce only
+    "wt":"CONTRACT_PRICE", 		// Stop Price Working Type
+    "ot":"TRAILING_STOP_MARKET",	// Original Order Type
+    "ps":"LONG",						// Position Side
+    "cp":false,						// If Close-All, pushed with conditional order
+    "AP":"7476.89",				// Activation Price, only puhed with TRAILING_STOP_MARKET order
+    "cr":"5.0",					// Callback Rate, only puhed with TRAILING_STOP_MARKET order
+    "rp":"0"							// Realized Profit of the trade
+  }
+  
+}
+```
+
+When new order created, order status changed will push such event.
+event type is `ORDER_TRADE_UPDATE`.
+
+**Side**
+
+* BUY
+* SELL
+
+**Order Type**
+
+* MARKET
+* LIMIT
+* STOP
+* TAKE_PROFIT
+* LIQUIDATION
+
+**Execution Type**
+
+* NEW
+* CANCELED
+* CALCULATED		 - Liquidation Execution
+* EXPIRED
+* TRADE
+
+**Order Status**
+
+* NEW
+* PARTIALLY_FILLED
+* FILLED
+* CANCELED
+* EXPIRED
+* NEW_INSURANCE     - Liquidation with Insurance Fund
+* NEW_ADL				- Counterparty Liquidation`
+
+**Time in force**
+
+* GTC
+* IOC
+* GTX
+
+**Working Type**
+
+* MARK_PRICE
+* CONTRACT_PRICE
+
+## Event: Account Configuration Update previous Leverage Update
+
+> **Payload:**
+
+```javascript
+{
+    "e":"ACCOUNT_CONFIG_UPDATE",       // Event Type
+    "E":1611646737479,		           // Event Time
+    "T":1611646737476,		           // Transaction Time
+    "ac":{			
+    "s":"BTCUSDT",					   // symbol
+    "l":25						       // leverage
+   
+    }
+}
+```
+
+> **Or**
+
+```javascript
+{
+    "e":"ACCOUNT_CONFIG_UPDATE",       // Event Type
+    "E":1611646737479,		           // Event Time
+    "T":1611646737476,		           // Transaction Time
+    "ai":{							   // User's Account Configuration
+    "j":true,						   // Multi-Assets Mode
+    "f":true,                          // Specified token fee deduction
+    "d":true                           // Position mode: true for dual-side (hedge) mode, false for single-side (one-way) mode
+    }
+}
+```
+
+When the account configuration is changed, the event type will be pushed as `ACCOUNT_CONFIG_UPDATE`
+
+When the leverage of a trade pair changes, the payload will contain the object `ac` to represent the account configuration of the trade pair, where `s` represents the specific trade pair and `l` represents the leverage
+
+When the user Multi-Assets margin mode changes the payload will contain the object `ai` representing the user account configuration, where `j` represents the user Multi-Assets margin mode
+
+## Event: TradePro
+
+> **Topic Subscribe:**
+
+```javascript
+{
+  "method": "SUBSCRIBE",
+  "params": [
+    "btcusdt@tradepro"
+  ],
+  "id": 3
+}
+```
+
+> **Payload:**
+
+```javascript
+{
+    "stream": "btcusdt@tradepro",
+    "data": {
+        "e": "tradepro",
+        "E": 1773751963081,
+        "T": 1773751963079,
+        "s": "BTCUSDT",
+        "t": 128884613,
+        "p": "73685.5",
+        "q": "0.297",
+        "h": "0X0000000000000000000000000000000000000000000000000000000000000000",
+        "m": [
+            "hidden",
+            "hidden"
+        ]
+    }
+}
+```
+
+* h: Transaction hash of the trade.
+
+* m: Array containing the participant addresses:
+
+    * m[0]: Taker address
+
+    * m[1]: Maker address
+
+## Event: Public Announcement
+
+> **Payload:**
+
+```javascript
+{
+    "e": "announcement",
+    "en": {
+        "i": 161,
+        "t": "test announcement",
+        "s": "sub title",
+        "c": "NEW_LISTING",
+        "d": 1781684565591,
+        "S": false,
+        "j": "https://asterdex.com",
+        "C": "<p>test content</p>"
+    },
+    "zh": {
+        "i": 161,
+        "t": "测试公告",
+        "s": "子标题",
+        "c": "NEW_LISTING",
+        "d": 1781684565591,
+        "S": false,
+        "j": "https://asterdex.com",
+        "C": "<p>测试内容</p>"
+    }
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| e | STRING | Event type: `announcement` |
+| en | OBJECT | English announcement content |
+| zh | OBJECT | Chinese announcement content |
+| en.i / zh.i | LONG | Announcement ID |
+| en.t / zh.t | STRING | Announcement title |
+| en.s / zh.s | STRING | Announcement subtitle |
+| en.c / zh.c | STRING | Category: `NEW_LISTING` for public announcements |
+| en.d / zh.d | LONG | Announcement timestamp (ms) |
+| en.S / zh.S | BOOLEAN | Read status (`false` = unread) |
+| en.j / zh.j | STRING | Jump link URL |
+| en.C / zh.C | STRING | Announcement content (HTML) |
+
+## Event: Direct Announcement
+
+> **Payload:**
+
+```javascript
+{
+    "e": "announcement",
+    "en": {
+        "i": 162,
+        "t": "direct message test",
+        "s": "sub content",
+        "c": "DIRECT",
+        "d": 1781684634276,
+        "S": false,
+        "j": "https://asterdex.finance",
+        "C": "<p>test content</p>"
+    },
+    "zh": {
+        "i": 162,
+        "t": "个人消息测试",
+        "s": "子标题",
+        "c": "DIRECT",
+        "d": 1781684634276,
+        "S": false,
+        "j": "https://asterdex.finance",
+        "C": "<p>测试内容</p>"
+    }
+}
+```
+
+| Field | Type | Description |
+| --- | --- | --- |
+| e | STRING | Event type: `announcement` |
+| en | OBJECT | English announcement content |
+| zh | OBJECT | Chinese announcement content |
+| en.i / zh.i | LONG | Announcement ID |
+| en.t / zh.t | STRING | Announcement title |
+| en.s / zh.s | STRING | Announcement subtitle |
+| en.c / zh.c | STRING | Category: `DIRECT` for direct (personal) messages |
+| en.d / zh.d | LONG | Announcement timestamp (ms) |
+| en.S / zh.S | BOOLEAN | Read status (`false` = unread) |
+| en.j / zh.j | STRING | Jump link URL |
+| en.C / zh.C | STRING | Announcement content (HTML) |
+
+# Error Codes
+
+> Here is the error JSON payload:
+
+```javascript
+{
+  "code":-1121,
+  "msg":"Invalid symbol."
+}
+```
+
+Errors consist of two parts: an error code and a message.
+Codes are universal,but messages can vary.
+
+## 10xx - General Server or Network issues
+
+> -1000 UNKNOWN
+
+* An unknown error occured while processing the request.
+
+> -1001 DISCONNECTED
+
+* Internal error; unable to process your request. Please try again.
+
+> -1002 UNAUTHORIZED
+
+* You are not authorized to execute this request.
+
+> -1003 TOO_MANY_REQUESTS
+
+* Too many requests queued.
+* Too many requests; please use the websocket for live updates.
+* Too many requests; current limit is %s requests per minute. Please use the websocket for live updates to avoid polling the API.
+* Way too many requests; IP banned until %s. Please use the websocket for live updates to avoid bans.
+
+> -1004 DUPLICATE_IP
+
+* This IP is already on the white list
+
+> -1005 NO_SUCH_IP
+
+* No such IP has been white listed
+
+> -1006 UNEXPECTED_RESP
+
+* An unexpected response was received from the message bus. Execution status unknown.
+
+> -1007 TIMEOUT
+
+* Timeout waiting for response from backend server. Send status unknown; execution status unknown.
+
+> -1010 ERROR_MSG_RECEIVED
+
+* ERROR_MSG_RECEIVED.
+
+> -1011 NON_WHITE_LIST
+
+* This IP cannot access this route.
+
+> -1013 INVALID_MESSAGE
+
+* INVALID_MESSAGE.
+
+> -1014 UNKNOWN_ORDER_COMPOSITION
+
+* Unsupported order combination.
+
+> -1015 TOO_MANY_ORDERS
+
+* Too many new orders.
+* Too many new orders; current limit is %s orders per %s.
+
+> -1016 SERVICE_SHUTTING_DOWN
+
+* This service is no longer available.
+
+> -1020 UNSUPPORTED_OPERATION
+
+* This operation is not supported.
+
+> -1022 INVALID_SIGNATURE
+
+* Signature for this request is not valid.
+
+> -1023 START_TIME_GREATER_THAN_END_TIME
+
+* Start time is greater than end time.
+
+## 11xx - Request issues
+
+> -1100 ILLEGAL_CHARS
+
+* Illegal characters found in a parameter.
+* Illegal characters found in parameter '%s'; legal range is '%s'.
+
+> -1101 TOO_MANY_PARAMETERS
+
+* Too many parameters sent for this endpoint.
+* Too many parameters; expected '%s' and received '%s'.
+* Duplicate values for a parameter detected.
+
+> -1102 MANDATORY_PARAM_EMPTY_OR_MALFORMED
+
+* A mandatory parameter was not sent, was empty/null, or malformed.
+* Mandatory parameter '%s' was not sent, was empty/null, or malformed.
+* Param '%s' or '%s' must be sent, but both were empty/null!
+
+> -1103 UNKNOWN_PARAM
+
+* An unknown parameter was sent.
+
+> -1104 UNREAD_PARAMETERS
+
+* Not all sent parameters were read.
+* Not all sent parameters were read; read '%s' parameter(s) but was sent '%s'.
+
+> -1105 PARAM_EMPTY
+
+* A parameter was empty.
+* Parameter '%s' was empty.
+
+> -1106 PARAM_NOT_REQUIRED
+
+* A parameter was sent when not required.
+* Parameter '%s' sent when not required.
+
+> -1108 BAD_ASSET
+
+* Invalid asset.
+
+> -1109 BAD_ACCOUNT
+
+* Invalid account.
+
+> -1110 BAD_INSTRUMENT_TYPE
+
+* Invalid symbolType.
+
+> -1111 BAD_PRECISION
+
+* Precision is over the maximum defined for this asset.
+
+> -1112 NO_DEPTH
+
+* No orders on book for symbol.
+
+> -1113 WITHDRAW_NOT_NEGATIVE
+
+* Withdrawal amount must be negative.
+
+> -1114 TIF_NOT_REQUIRED
+
+* TimeInForce parameter sent when not required.
+
+> -1115 INVALID_TIF
+
+* Invalid timeInForce.
+
+> -1116 INVALID_ORDER_TYPE
+
+* Invalid orderType.
+
+> -1117 INVALID_SIDE
+
+* Invalid side.
+
+> -1118 EMPTY_NEW_CL_ORD_ID
+
+* New client order ID was empty.
+
+> -1119 EMPTY_ORG_CL_ORD_ID
+
+* Original client order ID was empty.
+
+> -1120 BAD_INTERVAL
+
+* Invalid interval.
+
+> -1121 BAD_SYMBOL
+
+* Invalid symbol.
+
+> -1125 INVALID_LISTEN_KEY
+
+* This listenKey does not exist.
+
+> -1127 MORE_THAN_XX_HOURS
+
+* Lookup interval is too big.
+* More than %s hours between startTime and endTime.
+
+> -1128 OPTIONAL_PARAMS_BAD_COMBO
+
+* Combination of optional parameters invalid.
+
+> -1130 INVALID_PARAMETER
+
+* Invalid data sent for a parameter.
+* Data sent for parameter '%s' is not valid.
+
+> -1136 INVALID_NEW_ORDER_RESP_TYPE
+
+* Invalid newOrderRespType.
+
+## 20xx - Processing Issues
+
+> -2010 NEW_ORDER_REJECTED
+
+* NEW_ORDER_REJECTED
+
+> -2011 CANCEL_REJECTED
+
+* Unknown order sent.
+
+> -2013 NO_SUCH_ORDER
+
+* Order does not exist.
+
+> -2014 BAD_API_KEY_FMT
+
+* API-key format invalid.
+
+> -2015 REJECTED_MBX_KEY
+
+* Invalid API-key, IP, or permissions for action.
+
+> -2016 NO_TRADING_WINDOW
+
+* No trading window could be found for the symbol. Try ticker/24hrs instead.
+
+> -2018 BALANCE_NOT_SUFFICIENT
+
+* Balance is insufficient.
+
+> -2019 MARGIN_NOT_SUFFICIEN
+
+* Margin is insufficient.
+
+> -2020 UNABLE_TO_FILL
+
+* Unable to fill.
+
+> -2021 ORDER_WOULD_IMMEDIATELY_TRIGGER
+
+* Order would immediately trigger.
+
+> -2022 REDUCE_ONLY_REJECT
+
+* ReduceOnly Order is rejected.
+
+> -2023 USER_IN_LIQUIDATION
+
+* User in liquidation mode now.
+
+> -2024 POSITION_NOT_SUFFICIENT
+
+* Position is not sufficient.
+
+> -2025 MAX_OPEN_ORDER_EXCEEDED
+
+* Reach max open order limit.
+
+> -2026 REDUCE_ONLY_ORDER_TYPE_NOT_SUPPORTED
+
+* This OrderType is not supported when reduceOnly.
+
+> -2027 MAX_LEVERAGE_RATIO
+
+* Exceeded the maximum allowable position at current leverage.
+
+> -2028 MIN_LEVERAGE_RATIO
+
+* Leverage is smaller than permitted: insufficient margin balance.
+
+> -2031 INVALID_BUILDER_PARAMETER
+
+* Invalid builder parameter.
+
+## 40xx - Filters and other Issues
+
+> -4000 INVALID_ORDER_STATUS
+
+* Invalid order status.
+
+> -4001 PRICE_LESS_THAN_ZERO
+
+* Price less than 0.
+
+> -4002 PRICE_GREATER_THAN_MAX_PRICE
+
+* Price greater than max price.
+
+> -4003 QTY_LESS_THAN_ZERO
+
+* Quantity less than zero.
+
+> -4004 QTY_LESS_THAN_MIN_QTY
+
+* Quantity less than min quantity.
+
+> -4005 QTY_GREATER_THAN_MAX_QTY
+
+* Quantity greater than max quantity.
+
+> -4006 STOP_PRICE_LESS_THAN_ZERO
+
+* Stop price less than zero.
+
+> -4007 STOP_PRICE_GREATER_THAN_MAX_PRICE
+
+* Stop price greater than max price.
+
+> -4008 TICK_SIZE_LESS_THAN_ZERO
+
+* Tick size less than zero.
+
+> -4009 MAX_PRICE_LESS_THAN_MIN_PRICE
+
+* Max price less than min price.
+
+> -4010 MAX_QTY_LESS_THAN_MIN_QTY
+
+* Max qty less than min qty.
+
+> -4011 STEP_SIZE_LESS_THAN_ZERO
+
+* Step size less than zero.
+
+> -4012 MAX_NUM_ORDERS_LESS_THAN_ZERO
+
+* Max mum orders less than zero.
+
+> -4013 PRICE_LESS_THAN_MIN_PRICE
+
+* Price less than min price.
+
+> -4014 PRICE_NOT_INCREASED_BY_TICK_SIZE
+
+* Price not increased by tick size.
+
+> -4015 INVALID_CL_ORD_ID_LEN
+
+* Client order id is not valid.
+* Client order id length should not be more than 36 chars
+
+> -4016 PRICE_HIGHTER_THAN_MULTIPLIER_UP
+
+* Price is higher than mark price multiplier cap.
+
+> -4017 MULTIPLIER_UP_LESS_THAN_ZERO
+
+* Multiplier up less than zero.
+
+> -4018 MULTIPLIER_DOWN_LESS_THAN_ZERO
+
+* Multiplier down less than zero.
+
+> -4019 COMPOSITE_SCALE_OVERFLOW
+
+* Composite scale too large.
+
+> -4020 TARGET_STRATEGY_INVALID
+
+* Target strategy invalid for orderType '%s',reduceOnly '%b'.
+
+> -4021 INVALID_DEPTH_LIMIT
+
+* Invalid depth limit.
+* '%s' is not valid depth limit.
+
+> -4022 WRONG_MARKET_STATUS
+
+* market status sent is not valid.
+
+> -4023 QTY_NOT_INCREASED_BY_STEP_SIZE
+
+* Qty not increased by step size.
+
+> -4024 PRICE_LOWER_THAN_MULTIPLIER_DOWN
+
+* Price is lower than mark price multiplier floor.
+
+> -4025 MULTIPLIER_DECIMAL_LESS_THAN_ZERO
+
+* Multiplier decimal less than zero.
+
+> -4026 COMMISSION_INVALID
+
+* Commission invalid.
+* `%s` less than zero.
+* `%s` absolute value greater than `%s`
+
+> -4027 INVALID_ACCOUNT_TYPE
+
+* Invalid account type.
+
+> -4028 INVALID_LEVERAGE
+
+* Invalid leverage
+* Leverage `%s` is not valid
+* Leverage `%s` already exist with `%s`
+
+> -4029 INVALID_TICK_SIZE_PRECISION
+
+* Tick size precision is invalid.
+
+> -4030 INVALID_STEP_SIZE_PRECISION
+
+* Step size precision is invalid.
+
+> -4031 INVALID_WORKING_TYPE
+
+* Invalid parameter working type
+* Invalid parameter working type: `%s`
+
+> -4032 EXCEED_MAX_CANCEL_ORDER_SIZE
+
+* Exceed maximum cancel order size.
+* Invalid parameter working type: `%s`
+
+> -4033 INSURANCE_ACCOUNT_NOT_FOUND
+
+* Insurance account not found.
+
+> -4044 INVALID_BALANCE_TYPE
+
+* Balance Type is invalid.
+
+> -4045 MAX_STOP_ORDER_EXCEEDED
+
+* Reach max stop order limit.
+
+> -4046 NO_NEED_TO_CHANGE_MARGIN_TYPE
+
+* No need to change margin type.
+
+> -4047 THERE_EXISTS_OPEN_ORDERS
+
+* Margin type cannot be changed if there exists open orders.
+
+> -4048 THERE_EXISTS_QUANTITY
+
+* Margin type cannot be changed if there exists position.
+
+> -4049 ADD_ISOLATED_MARGIN_REJECT
+
+* Add margin only support for isolated position.
+
+> -4050 CROSS_BALANCE_INSUFFICIENT
+
+* Cross balance insufficient.
+
+> -4051 ISOLATED_BALANCE_INSUFFICIENT
+
+* Isolated balance insufficient.
+
+> -4052 NO_NEED_TO_CHANGE_AUTO_ADD_MARGIN
+
+* No need to change auto add margin.
+
+> -4053 AUTO_ADD_CROSSED_MARGIN_REJECT
+
+* Auto add margin only support for isolated position.
+
+> -4054 ADD_ISOLATED_MARGIN_NO_POSITION_REJECT
+
+* Cannot add position margin: position is 0.
+
+> -4055 AMOUNT_MUST_BE_POSITIVE
+
+* Amount must be positive.
+
+> -4056 INVALID_API_KEY_TYPE
+
+* Invalid api key type.
+
+> -4057 INVALID_RSA_PUBLIC_KEY
+
+* Invalid api public key
+
+> -4058 MAX_PRICE_TOO_LARGE
+
+* maxPrice and priceDecimal too large,please check.
+
+> -4059 NO_NEED_TO_CHANGE_POSITION_SIDE
+
+* No need to change position side.
+
+> -4060 INVALID_POSITION_SIDE
+
+* Invalid position side.
+
+> -4061 POSITION_SIDE_NOT_MATCH
+
+* Order's position side does not match user's setting.
+
+> -4062 REDUCE_ONLY_CONFLICT
+
+* Invalid or improper reduceOnly value.
+
+> -4063 INVALID_OPTIONS_REQUEST_TYPE
+
+* Invalid options request type
+
+> -4064 INVALID_OPTIONS_TIME_FRAME
+
+* Invalid options time frame
+
+> -4065 INVALID_OPTIONS_AMOUNT
+
+* Invalid options amount
+
+> -4066 INVALID_OPTIONS_EVENT_TYPE
+
+* Invalid options event type
+
+> -4067 POSITION_SIDE_CHANGE_EXISTS_OPEN_ORDERS
+
+* Position side cannot be changed if there exists open orders.
+
+> -4068 POSITION_SIDE_CHANGE_EXISTS_QUANTITY
+
+* Position side cannot be changed if there exists position.
+
+> -4069 INVALID_OPTIONS_PREMIUM_FEE
+
+* Invalid options premium fee
+
+> -4070 INVALID_CL_OPTIONS_ID_LEN
+
+* Client options id is not valid.
+* Client options id length should be less than 32 chars
+
+> -4071 INVALID_OPTIONS_DIRECTION
+
+* Invalid options direction
+
+> -4072 OPTIONS_PREMIUM_NOT_UPDATE
+
+* premium fee is not updated, reject order
+
+> -4073 OPTIONS_PREMIUM_INPUT_LESS_THAN_ZERO
+
+* input premium fee is less than 0, reject order
+
+> -4074 OPTIONS_AMOUNT_BIGGER_THAN_UPPER
+
+* Order amount is bigger than upper boundary or less than 0, reject order
+
+> -4075 OPTIONS_PREMIUM_OUTPUT_ZERO
+
+* output premium fee is less than 0, reject order
+
+> -4076 OPTIONS_PREMIUM_TOO_DIFF
+
+* original fee is too much higher than last fee
+
+> -4077 OPTIONS_PREMIUM_REACH_LIMIT
+
+* place order amount has reached to limit, reject order
+
+> -4078 OPTIONS_COMMON_ERROR
+
+* options internal error
+
+> -4079 INVALID_OPTIONS_ID
+
+* invalid options id
+* invalid options id: %s
+* duplicate options id %d for user %d
+
+> -4080 OPTIONS_USER_NOT_FOUND
+
+* user not found
+* user not found with id: %s
+
+> -4081 OPTIONS_NOT_FOUND
+
+* options not found
+* options not found with id: %s
+
+> -4082 INVALID_BATCH_PLACE_ORDER_SIZE
+
+* Invalid number of batch place orders.
+* Invalid number of batch place orders: %s
+
+> -4083 PLACE_BATCH_ORDERS_FAIL
+
+* Fail to place batch orders.
+
+> -4084 UPCOMING_METHOD
+
+* Method is not allowed currently. Upcoming soon.
+
+> -4085 INVALID_NOTIONAL_LIMIT_COEF
+
+* Invalid notional limit coefficient
+
+> -4086 INVALID_PRICE_SPREAD_THRESHOLD
+
+* Invalid price spread threshold
+
+> -4087 REDUCE_ONLY_ORDER_PERMISSION
+
+* User can only place reduce only order
+
+> -4088 NO_PLACE_ORDER_PERMISSION
+
+* User can not place order currently
+
+> -4104 INVALID_CONTRACT_TYPE
+
+* Invalid contract type
+
+> -4114 INVALID_CLIENT_TRAN_ID_LEN
+
+* clientTranId  is not valid
+* Client tran id length should be less than 64 chars
+
+> -4115 DUPLICATED_CLIENT_TRAN_ID
+
+* clientTranId  is duplicated
+* Client tran id should be unique within 7 days
+
+> -4118 REDUCE_ONLY_MARGIN_CHECK_FAILED
+
+* ReduceOnly Order Failed. Please check your existing position and open orders
+
+> -4131 MARKET_ORDER_REJECT
+
+* The counterparty's best price does not meet the PERCENT_PRICE filter limit
+
+> -4135 INVALID_ACTIVATION_PRICE
+
+* Invalid activation price
+
+> -4137 QUANTITY_EXISTS_WITH_CLOSE_POSITION
+
+* Quantity must be zero with closePosition equals true
+
+> -4138 REDUCE_ONLY_MUST_BE_TRUE
+
+* Reduce only must be true with closePosition equals true
+
+> -4139 ORDER_TYPE_CANNOT_BE_MKT
+
+* Order type can not be market if it's unable to cancel
+
+> -4140 INVALID_OPENING_POSITION_STATUS
+
+* Invalid symbol status for opening position
+
+> -4141 SYMBOL_ALREADY_CLOSED
+
+* Symbol is closed
+
+> -4142 STRATEGY_INVALID_TRIGGER_PRICE
+
+* REJECT: take profit or stop order will be triggered immediately
+
+> -4144 INVALID_PAIR
+
+* Invalid pair
+
+> -4161 ISOLATED_LEVERAGE_REJECT_WITH_POSITION
+
+* Leverage reduction is not supported in Isolated Margin Mode with open positions
+
+> -4164 MIN_NOTIONAL
+
+* Order's notional must be no smaller than 5.0 (unless you choose reduce only)
+* Order's notional must be no smaller than %s (unless you choose reduce only)
+
+> -4165 INVALID_TIME_INTERVAL
+
+* Invalid time interval
+* Maximum time interval is %s days
+
+> -4183 PRICE_HIGHTER_THAN_STOP_MULTIPLIER_UP
+
+* Price is higher than stop price multiplier cap.
+* Limit price can't be higher than %s.
+
+> -4184 PRICE_LOWER_THAN_STOP_MULTIPLIER_DOWN
+
+* Price is lower than stop price multiplier floor.
+* Limit price can't be lower than %s.
+
+## 50xx - Deposit and Withdrawal Issues
+
+> -5047 INVALID_START_TIME
+
+* StartTime must be within the last %s days.
+
+> -5048 VAULT_SYMBOL_NOT_ALLOWED
+
+* This symbol is not allowed for this vault's asset restriction.
+
+> -5049 BUILDER_QUERY_NOT_ENABLED
+
+* Builder query API is not enabled for this account.
+
+> -5050 DEPOSIT_REQUIRED
+
+* This function can only be used after deposit.
+
+> -5051 PRIVACY_CHECK_FAILED
+
+* Failed to check privacy switch status for this address.
+
+> -5052 USER_PRIVACY_MODE_ENABLED
+
+* User privacy mode is enabled, this operation is not allowed.
+
+> -5053 USER_NOT_BOUND_TO_BUILDER
+
+* This user address is not bound to this builder.
+

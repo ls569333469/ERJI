@@ -1,0 +1,124 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据字段与统一接口 v0.6</title><style>
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#203247;background:#f4f6f9;font-size:15px;line-height:1.8;scroll-behavior:smooth}*{box-sizing:border-box}body{margin:0}a{color:#1d62b1;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:252px minmax(0,1fr);max-width:1640px;margin:auto}aside{position:sticky;top:0;height:100vh;overflow:auto;padding:26px 18px;border-right:1px solid #dce4ed;background:#f9fbfd}aside .brand{font-size:19px;font-weight:750;color:#163759;margin-bottom:8px}.edition{font-size:12px;color:#667c91;margin-bottom:24px}.toc ul{list-style:none;padding-left:0}.toc li{margin:8px 0}.toc ul ul{display:none}.toc>ul>li>ul{display:block;margin-left:0}.toc>ul>li>a{font-weight:700}.toc a{font-size:13px;color:#425b73}main{min-width:0;padding:30px 44px 100px;background:white}.banner{display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid #e1e8ef;padding-bottom:16px;color:#547087;font-size:13px}.badge{padding:3px 10px;background:#e7f3eb;border-radius:5px;color:#287344}h1{font-size:30px;line-height:1.4;color:#152f48;margin:28px 0}h2{font-size:23px;margin-top:48px;border-top:1px solid #dfe7ef;padding-top:24px;scroll-margin-top:20px}h3{font-size:18px;margin-top:30px;scroll-margin-top:20px}p{margin:14px 0}li{margin:6px 0}.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid #dce5ee;border-radius:8px}table{border-collapse:collapse;width:100%;font-size:13px;min-width:720px}th{background:#edf3f8;text-align:left;color:#24435e}td,th{padding:11px 13px;border-bottom:1px solid #e1e8ef;vertical-align:top}tr:last-child td{border-bottom:0}tr:nth-child(even)td{background:#fafcfe}pre{overflow:auto;padding:18px;background:#f0f4f8;border:1px solid #dce5ed;border-radius:8px;font-size:12px;line-height:1.7}code{font-family:Consolas,monospace;font-size:.9em;overflow-wrap:anywhere}p code,li code{background:#edf3f8;padding:2px 4px;border-radius:3px}.links{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0;font-size:13px}.footer{border-top:1px solid #dfe7ef;margin-top:50px;padding-top:18px;color:#72869a;font-size:12px}@media(max-width:950px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;padding:16px 22px;border-bottom:1px solid #dce4ed}.toc{max-height:200px;overflow:auto}main{padding:20px 18px 70px}h1{font-size:25px}table{min-width:680px}}@media print{aside,.banner,.links{display:none}.shell{display:block}main{padding:0}.table-wrap{overflow:visible}table{min-width:0;font-size:10px}h2{break-before:page}pre{white-space:pre-wrap}}
+</style></head><body><div class="shell"><aside><div class="brand">ERJI · 实施文档</div><div class="edition">v1.0 基线 / 2026.09.23<br>目录导航 · 本地资料</div><div class="toc">
+<ul>
+<li><a href="#v06">数据字段与统一接口 v0.6</a><ul>
+<li><a href="#_1">类型、时间与身份</a></li>
+<li><a href="#_2">行情与合约</a></li>
+<li><a href="#_3">跨市场聚合</a></li>
+<li><a href="#_4">清算与估算区分开</a></li>
+<li><a href="#campaignepisodeplansnapshot">Campaign、Episode、Plan和Snapshot</a></li>
+<li><a href="#_5">适配器与应用接口</a></li>
+<li><a href="#_6">设置、通知与恢复</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside><main><div class="banner"><span class="badge">需求基线已整理</span><span>正式应用待开发 · 当前信号页为合成演示</span></div><nav class="links"><a href="01_产品需求文档_v1.0.html">产品需求</a><a href="11_实施任务与验收矩阵_v1.0.html">实施清单</a><a href="12_CMC免费API实测_2026-09-23.html">CMC实测</a></nav><h1 id="v06">数据字段与统一接口 v0.6</h1>
+<p>2026-09-23 · 对齐<a href="01_产品需求文档_v1.0.html">PRD v1.0</a>。这是实现契约，当前HTML不是这些服务的实现。旧详细字段保留在<a href="03_数据字段与统一接口_v0.5.md">历史v0.5</a>，冲突处以本文与PRD为准。</p>
+<h2 id="_1">类型、时间与身份</h2>
+<p>Decimal以string传输、数据库numeric保存。UTC时间；event_time是源事件时间、received_at是到达时间、known_at是系统当时可知时间，不互相覆盖。Asset、Instrument、Pool、Venue分别建模；同ticker不自动合并。</p>
+<pre><code class="language-text">Asset: asset_id, symbol, chain_contracts[], identity_status, identity_evidence[], known_at
+Instrument: instrument_id, asset_id, venue_id, native_symbol, dex_namespace,
+  market_type, contract_type, multiplier, native_unit, quote_asset,
+  listed_at, delisted_at, spec_version, known_at
+RawEvent: source_id, native_id, event_time, received_at, sequence?, raw_ref, sha256
+FieldQuality: status, reason, source_time, received_at, expected_refresh_seconds,
+  age_seconds, source_ref, comparable_set_id?
+</code></pre>
+<p>FieldQuality.status统一为fresh/stale/missing/unmapped/no_market_in_scope/coverage_changed/insufficient_history/conflict/invalid。partial为对象级汇总状态，具体字段必须列原因。零值须有有效来源，未知值为null+reason。没有OI只暂停依赖OI的解释，技术路径按自己的必需数据继续。</p>
+<h2 id="_2">行情与合约</h2>
+<pre><code class="language-text">Candle: instrument_id, resolution, open_time, close_time, is_closed,
+  open, high, low, close, base_volume, quote_volume, trade_count?,
+  revision, quality, raw_ref
+OpenInterestPoint: instrument_id, source_id, native_value?, native_unit?,
+  base_quantity?, notional_usd?, conversion_method?, conversion_price?,
+  price_kind?, quote_usd_rate?, event_time, received_at, quality, raw_ref
+FundingPoint: instrument_id, rate, value_kind(settled|predicted|vendor_current),
+  settled_at?, actual_interval_seconds?, next_settlement_at?, mark_at_settlement?,
+  source_id, quality, raw_ref
+FundingWindow: instrument_id, start_exclusive, end_inclusive,
+  settlement_count, settled_rate_sum, short_payment_index,
+  short_receipt_index, short_net_cost_index, history_complete, missing_ranges[]
+TradeFlow: instrument_id, start, end, quote_buy_aggressor, quote_sell_aggressor,
+  signed_difference, cvd_reset_at, coverage, raw_ref
+DepthSample: instrument_id, probe_notional_usd, buy_slippage_bps,
+  sell_slippage_bps, spread_bps, depth_plus_minus_1pct, sequence_valid,
+  sellability_status, quality, raw_ref
+SupplySnapshot: asset_id, circulating_supply, price, price_source,
+  circulating_cap, supply_source, supply_as_of, known_at, quality
+</code></pre>
+<p>CMC funding默认vendor_current，不进入FundingWindow。只有实际settled记录才逐次累计；负费率空头支付项max(-r,0)，收入项max(r,0)，固定名义本金净成本-Σr。base_quantity未知不能从不明price强行补齐。数量恒定而价格上涨只改变名义USD。反向合约单独按规格处理。</p>
+<h2 id="_3">跨市场聚合</h2>
+<pre><code class="language-text">AggregateSnapshot: snapshot_id, asset_id, as_of, category,
+  usd_included_instruments[], quantity_included_instruments[],
+  excluded[{instrument_id,source_id,reason}], provider_versions[],
+  market_set_hash, sum_usd, compatible_base_sum?,
+  windows[{start,end,start_set_hash,end_set_hash,comparable,
+    delta_quantity_pct?,delta_usd_pct?,quantity_effect_usd?,valuation_effect_usd?,reason}],
+  circulating_cap?, supply_snapshot_id?, nominal_density?,
+  percentiles[{window,baseline_start,baseline_end,n,coverage_hash,value?,reason}], quality
+</code></pre>
+<p>同instrument只选一个合格主版本，其他源留作核对；同源相同ID不同内容先隔离冲突组。供应商交易对ID先映射合约规格，不能仅按ticker相加。当前USD覆盖与数量变化覆盖分别展示。变化窗口任一端覆盖变更时暂停比较，不能把新纳入市场当新资金。</p>
+<h2 id="_4">清算与估算区分开</h2>
+<pre><code class="language-text">LiquidationEvent: venue_id, instrument_id, event_id, time, position_side,
+  native_side, side_semantics, notional_usd, quantity?, price?,
+  record_kind(order|fill|snapshot), coverage, dedupe_key, raw_ref
+LiquidationAggregate: provider_id, asset_id, window, window_end,
+  long_usd?, short_usd?, total_usd?, provider_reported_zero,
+  covered_venues?, coverage_notes, quality, raw_ref
+LiquidationZone: venue_id, namespace, min_price, max_price, bin_width,
+  price_reference, sampled_address_set_id, observed_positions, model,
+  assumptions[], nearest_zone?, largest_in_range?, cumulative_notional?,
+  as_of, expires_at, unknowns[]
+</code></pre>
+<p>CMC窗口金额为Aggregate，不还原成逐笔Event；未知平台覆盖照实记录。未来清算区P1，无数据返回missing及原因，不能默认造一张热力图。</p>
+<h2 id="campaignepisodeplansnapshot">Campaign、Episode、Plan和Snapshot</h2>
+<pre><code class="language-text">Campaign: campaign_id, asset_id, reference_instrument_id,
+  first_seen_at, first_seen_price, first_confirmed_at?, first_confirmed_price?,
+  first_recommended_at?, first_recommended_price?, state, ended_at?, end_reason?
+Episode: episode_id, campaign_id, instrument_id, strategy_id, structure_id,
+  origin_timeframe, knowledge_cutoff, detected_at, bar_close_time,
+  confirmed_at?, invalidated_at?, invalid_reason?, frozen_upper, frozen_lower,
+  frozen_atr, frozen_buffer, config_version, rule_version, prior_episode_id?
+Plan: plan_id, episode_id, execution_instrument_id, direction,
+  entry_zone, trigger_rule, protection_rule, revoke_rule, structural_break_rule,
+  targets_1d[], targets_1w[], measured_targets[], fee_assumptions,
+  net_r?, risk_budget?, expires_at, revision, revision_reason?
+TargetZone: id, timeframe, lower, upper, kind(historical|measured),
+  anchor_ids[], confirmed_at, prerequisites[], history_start,
+  status(pending|tested|passed|failed|insufficient_history), known_at
+SignalSnapshot: snapshot_id, campaign_id, episode_id, plan_id, plan_revision,
+  schema_version, config_version, rule_version, as_of,
+  action_new, action_existing, reason_codes[], phase, aggregate_snapshot_id?,
+  primary_funding?, venue_anomalies[], support[], counter[], missing[],
+  source_refs[], quality, expires_at, next_review_at
+</code></pre>
+<p>action_new：participate/trial/wait_entry/do_not_chase/pause。action_existing：hold/reduce/exit/not_applicable。用户看到中文行动；这些枚举不等于真实订单。首报不可改，首报后涨幅同参考市场计算。退出优先，数据故障暂停新参与但不删除保护位；事件失效不可复活。</p>
+<p>图层由snapshot生成：box/range、trigger_marker、entry_band、protection_line、revoke_line、structure_break_line、target_zone、observed_liquidation。每个overlay保存instrument_id、origin_timeframe、snapshot_id、时间锚点、价格锚点和style_key；切市场不搬原价位。</p>
+<h2 id="_5">适配器与应用接口</h2>
+<pre><code class="language-text">capabilities() -&gt; SourceCapabilities
+list_instruments() -&gt; Instrument[]
+fetch_klines(instrument, resolution, start, end) -&gt; Candle[]
+subscribe_trades / subscribe_order_book -&gt; EventStream
+fetch_open_interest / fetch_funding / fetch_mark_index -&gt; normalized + raw_ref
+fetch_liquidations -&gt; LiquidationEvent[] | NotSupported
+fetch_liquidation_aggregates -&gt; LiquidationAggregate[] | NotSupported
+health() -&gt; SourceHealth
+</code></pre>
+<p>不支持的方法返回NotSupported，不能空列表假装支持但没有交易。CMC支持aggregation provider，不能因其无trades/depth影响原生adapter。应用REST/SSE清单以PRD §9.3为准；统一响应含schema_version/as_of/data_quality/source_refs，列表另含list_snapshot_id/cursor/sort_version。图层、列表、TG使用同snapshot_id。</p>
+<h2 id="_6">设置、通知与恢复</h2>
+<pre><code class="language-text">SettingsVersion: config_version, parent_version, state(draft|published),
+  schema_version, config_json, validated_budget, effective_at, actor_id, reason
+NotificationDestination: destination_id, type, owner_id, chat_id,
+  binding_state, token_secret_ref, enabled, permissions_checked_at
+Subscription: id, destination_id, filters, quiet_hours, timezone, paused
+Outbox: id, event_id, destination_id, transition_type, plan_revision,
+  snapshot_id, created_at, expires_at, state, attempts, next_attempt_at,
+  lease_owner?, lease_until?, dedupe_key
+Delivery: id, outbox_id, attempted_at, status, telegram_message_id?,
+  retry_after?, sanitized_error_code?, uncertain_result, current_state_check
+BotUpdate: bot_id, update_id, received_at, processed_at, offset_checkpoint
+</code></pre>
+<p>Outbox与事件同事务，destination+event+transition+plan_revision唯一。进程重启按租约恢复；发送前再验证订阅、TTL与当前行动。网络超时标unknown，不保证sendMessage端到端恰好一次。设置不保存凭证正文，导出和日志不含secret；正式TG发送需用户明确绑定目标。</p>
+<p>采集节奏和参数以PRD §8登记表为唯一默认，废止旧稿CMC统一5–15分钟等假设；免费预算约束优先于刷新期望。</p><div class="footer">ERJI · 来源、参数与能力状态可复核。旧版本保留为历史。</div></main></div></body></html>

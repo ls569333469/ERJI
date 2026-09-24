@@ -1,0 +1,352 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>需求讨论覆盖清单 v1.0</title><style>
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#203247;background:#f4f6f9;font-size:15px;line-height:1.8;scroll-behavior:smooth}*{box-sizing:border-box}body{margin:0}a{color:#1d62b1;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:252px minmax(0,1fr);max-width:1640px;margin:auto}aside{position:sticky;top:0;height:100vh;overflow:auto;padding:26px 18px;border-right:1px solid #dce4ed;background:#f9fbfd}aside .brand{font-size:19px;font-weight:750;color:#163759;margin-bottom:8px}.edition{font-size:12px;color:#667c91;margin-bottom:24px}.toc ul{list-style:none;padding-left:0}.toc li{margin:8px 0}.toc ul ul{display:none}.toc>ul>li>ul{display:block;margin-left:0}.toc>ul>li>a{font-weight:700}.toc a{font-size:13px;color:#425b73}main{min-width:0;padding:30px 44px 100px;background:white}.banner{display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid #e1e8ef;padding-bottom:16px;color:#547087;font-size:13px}.badge{padding:3px 10px;background:#e7f3eb;border-radius:5px;color:#287344}h1{font-size:30px;line-height:1.4;color:#152f48;margin:28px 0}h2{font-size:23px;margin-top:48px;border-top:1px solid #dfe7ef;padding-top:24px;scroll-margin-top:20px}h3{font-size:18px;margin-top:30px;scroll-margin-top:20px}p{margin:14px 0}li{margin:6px 0}.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid #dce5ee;border-radius:8px}table{border-collapse:collapse;width:100%;font-size:13px;min-width:720px}th{background:#edf3f8;text-align:left;color:#24435e}td,th{padding:11px 13px;border-bottom:1px solid #e1e8ef;vertical-align:top}tr:last-child td{border-bottom:0}tr:nth-child(even)td{background:#fafcfe}pre{overflow:auto;padding:18px;background:#f0f4f8;border:1px solid #dce5ed;border-radius:8px;font-size:12px;line-height:1.7}code{font-family:Consolas,monospace;font-size:.9em;overflow-wrap:anywhere}p code,li code{background:#edf3f8;padding:2px 4px;border-radius:3px}.links{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0;font-size:13px}.footer{border-top:1px solid #dfe7ef;margin-top:50px;padding-top:18px;color:#72869a;font-size:12px}@media(max-width:950px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;padding:16px 22px;border-bottom:1px solid #dce4ed}.toc{max-height:200px;overflow:auto}main{padding:20px 18px 70px}h1{font-size:25px}table{min-width:680px}}@media print{aside,.banner,.links{display:none}.shell{display:block}main{padding:0}.table-wrap{overflow:visible}table{min-width:0;font-size:10px}h2{break-before:page}pre{white-space:pre-wrap}}
+</style></head><body><div class="shell"><aside><div class="brand">ERJI · 实施文档</div><div class="edition">v1.0 基线 / 2026.09.23<br>目录导航 · 本地资料</div><div class="toc">
+<ul>
+<li><a href="#v10">需求讨论覆盖清单 v1.0</a><ul>
+<li><a href="#oi37">OI与历史研究：37项继续保留</a></li>
+<li><a href="#_1">最新实施需求</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside><main><div class="banner"><span class="badge">需求基线已整理</span><span>正式应用待开发 · 当前信号页为合成演示</span></div><nav class="links"><a href="01_产品需求文档_v1.0.html">产品需求</a><a href="11_实施任务与验收矩阵_v1.0.html">实施清单</a><a href="12_CMC免费API实测_2026-09-23.html">CMC实测</a></nav><h1 id="v10">需求讨论覆盖清单 v1.0</h1>
+<p>2026-09-23。承接前轮检索归纳的37项OI讨论，加入最新行动、首报、多周期、架构、设置、排序及TG要求。本轮逐项对照前轮清单和当前对话；文档覆盖与代码实现分别说明。</p>
+<h2 id="oi37">OI与历史研究：37项继续保留</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>讨论要求</th>
+<th>v1.0落点</th>
+<th>当前状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OI-01</td>
+<td>数量与美元OI分开、1H/4H/24H</td>
+<td>PRD §6.2</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-02</td>
+<td>合约乘数、线性/反向、标记价换算</td>
+<td>PRD §1.3 / 6.2</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-03</td>
+<td>跨平台总量、各所占比、HYPE平台辨别</td>
+<td>PRD §6.2 / 7</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-04</td>
+<td>同合约不双算、多源不重复相加</td>
+<td>PRD §6.2</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-05</td>
+<td>覆盖变化、延迟、缺失、无匹配分开</td>
+<td>PRD §6.2 / 12</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-06</td>
+<td>OI/流通市值、非FDV、同期分母</td>
+<td>PRD §6.3</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-07</td>
+<td>历史/同组分位、样本基线</td>
+<td>PRD §6.3</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-08</td>
+<td>自由流通情景、相关指标避免重复计分</td>
+<td>PRD §6.3</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-09</td>
+<td>OI/成交、深度/冲击成本、非净流入</td>
+<td>PRD §6.4–6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-10</td>
+<td>实际结算周期改变、预测/已结算分开</td>
+<td>PRD §6.4</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-11</td>
+<td>资金费1H/4H/24H、净费用/支付指数</td>
+<td>PRD §6.4</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-12</td>
+<td>持续负费率、费用逼迫主动平空</td>
+<td>PRD §6.4</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-13</td>
+<td>perp/spot/mark/index及基差</td>
+<td>PRD §6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-14</td>
+<td>现货与永续主动成交/CVD</td>
+<td>PRD §6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-15</td>
+<td>已观测清算与估算、方向/窗口/采样</td>
+<td>PRD §6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-16</td>
+<td>涨价减仓不直接证明爆空、OI增仍可清算</td>
+<td>PRD §6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-17</td>
+<td>账户比非仓位比、大户样本非全市场</td>
+<td>PRD §6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-18</td>
+<td>链上集中度、实体归因、供应标签局限</td>
+<td>PRD §6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-19</td>
+<td>HL已知地址集合、Aster仓位隐私</td>
+<td>PRD §6.5</td>
+<td>P1；未知时不绘制清算区</td>
+</tr>
+<tr>
+<td>OI-20</td>
+<td>最近/最大/累计清算区、非期权痛点</td>
+<td>PRD §6.5</td>
+<td>P1；未知时不绘制清算区</td>
+</tr>
+<tr>
+<td>OI-21</td>
+<td>追加保证金/资金费使清算价动态变化</td>
+<td>PRD §6.5</td>
+<td>P1；未知时不绘制清算区</td>
+</tr>
+<tr>
+<td>OI-22</td>
+<td>趋势扩张与空头压力两路径</td>
+<td>PRD §3 / 6.1</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-23</td>
+<td>现货接力/回补/追涨拥挤/方向未明</td>
+<td>PRD §6.1 / 6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-24</td>
+<td>再积累、连续跟踪、不在第一阻力结束</td>
+<td>PRD §3.4 / 5.2</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-25</td>
+<td>1H参与4H阶段1D趋势、不能切周期救信号</td>
+<td>PRD §3.2 / 5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-26</td>
+<td>突破失败与箱体下沿失守</td>
+<td>PRD §5 / 8.2</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-27</td>
+<td>失效episode不复活、新结构新事件</td>
+<td>PRD §3.4</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-28</td>
+<td>对称下行、多头清算与负费率仍跌</td>
+<td>PRD §6.1 / 11</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-29</td>
+<td>真实阻力与价格发现、无百倍概率</td>
+<td>PRD §5.2 / 6.5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-30</td>
+<td>9币复盘逐一映射、不可事后因果填充</td>
+<td>PRD §6.1 / 11</td>
+<td>机制复盘已完成；策略增量验证待做</td>
+</tr>
+<tr>
+<td>OI-31</td>
+<td>X研究、造假质疑、未来数据/成本偏差</td>
+<td>PRD §6.5 / 11</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-32</td>
+<td>仅价格与加OI/费率/现货的增量对照</td>
+<td>PRD §11</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-33</td>
+<td>CMC新接口免费Key/配额/覆盖/最新非历史</td>
+<td>PRD §7.2</td>
+<td>8次Key请求已成功；批量/长期能力待做</td>
+</tr>
+<tr>
+<td>OI-34</td>
+<td>Aster8币历史、HL当前目录、Binance归档</td>
+<td>PRD §7 / 11</td>
+<td>历史核查记录保留；非全市场历史</td>
+</tr>
+<tr>
+<td>OI-35</td>
+<td>TradingView32.1.0、无Pine、同事件图层</td>
+<td>PRD §5.3</td>
+<td>库已运行验证；正式Datafeed/新图层待做</td>
+</tr>
+<tr>
+<td>OI-36</td>
+<td>浅色全宽、一币一行、通俗且有指导性</td>
+<td>PRD §4–5</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+<tr>
+<td>OI-37</td>
+<td>两市场池、数量预算与免费API优先</td>
+<td>PRD §1.2 / 7</td>
+<td>v1规划；已有合成示例不等于真实接入</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="_1">最新实施需求</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>已确认要求</th>
+<th>PRD落点</th>
+<th>当前状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NEW01</td>
+<td>满足条件明确建议参与/试仓；超价不追</td>
+<td>§3 / §8</td>
+<td>已定义四模板与优先级；待开发</td>
+</tr>
+<tr>
+<td>NEW02</td>
+<td>新参与和已有持仓独立建议</td>
+<td>§3.3–3.4</td>
+<td>已定义；非真实账户持仓</td>
+</tr>
+<tr>
+<td>NEW03</td>
+<td>首报/首次确认/首次参与价分开，长线跟踪</td>
+<td>§3.4</td>
+<td>已定义不可变记录；待开发</td>
+</tr>
+<tr>
+<td>NEW04</td>
+<td>OI金额及流通市值占比同列默认可见</td>
+<td>§4.1 / §6.3</td>
+<td>v1列设计完成；当前v0.7不同</td>
+</tr>
+<tr>
+<td>NEW05</td>
+<td>主流动性平台费率、异常DEX单独提示</td>
+<td>§6.4</td>
+<td>替代最负费率默认选源</td>
+</tr>
+<tr>
+<td>NEW06</td>
+<td>1H试仓、4H确认、1D/1W独立目标</td>
+<td>§3 / §5</td>
+<td>目标来源/不足状态明确</td>
+</tr>
+<tr>
+<td>NEW07</td>
+<td>箱体、突破K线、参与带、保护/撤销都画</td>
+<td>§5</td>
+<td>新图层与副图联动待实现</td>
+</tr>
+<tr>
+<td>NEW08</td>
+<td>序号、稳定排序、分页、列显隐和持久偏好</td>
+<td>§4</td>
+<td>不以序号冒充评级</td>
+</tr>
+<tr>
+<td>NEW09</td>
+<td>设置页、中文单位、草稿/发布/回滚</td>
+<td>§8</td>
+<td>默认参数登记与生效范围已确定</td>
+</tr>
+<tr>
+<td>NEW10</td>
+<td>模块化架构和未来交易所接入</td>
+<td>§7 / §9</td>
+<td>技术栈与adapter契约已确定</td>
+</tr>
+<tr>
+<td>NEW11</td>
+<td>TG绑定、模板、筛选、去重、TTL及重试</td>
+<td>§10</td>
+<td>官方文档已下载；未发送消息</td>
+</tr>
+<tr>
+<td>NEW12</td>
+<td>手机链接及无公网本机模式</td>
+<td>§10.2</td>
+<td>无PUBLIC_APP_URL隐藏看图按钮</td>
+</tr>
+<tr>
+<td>NEW13</td>
+<td>CMC免费Key权限与真实覆盖</td>
+<td>§7.2 / 实测报告</td>
+<td>8次请求/8 credits；支持Aster/HL样本</td>
+</tr>
+<tr>
+<td>NEW14</td>
+<td>单页重复冲突、延迟及供应商字段口径</td>
+<td>§6.2 / §7.2</td>
+<td>已发现并纳入验收；非简单全行相加</td>
+</tr>
+<tr>
+<td>NEW15</td>
+<td>明确实施顺序与验收</td>
+<td>§13–14 / 文档11</td>
+<td>M0–M5、27条AC；正式工程待建</td>
+</tr>
+</tbody>
+</table></div>
+<p>本版替代旧版中的“CMC尚未Key验证”“主市场选最负费率”“全等4H才允许试仓”“只显示观察区”等当前决定。历史文档与旧演示原样保留，不能作为新代码默认值。</p><div class="footer">ERJI · 来源、参数与能力状态可复核。旧版本保留为历史。</div></main></div></body></html>

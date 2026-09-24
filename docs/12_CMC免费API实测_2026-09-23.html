@@ -1,0 +1,126 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CMC 免费 API 实测 · 2026-09-23</title><style>
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#203247;background:#f4f6f9;font-size:15px;line-height:1.8;scroll-behavior:smooth}*{box-sizing:border-box}body{margin:0}a{color:#1d62b1;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:252px minmax(0,1fr);max-width:1640px;margin:auto}aside{position:sticky;top:0;height:100vh;overflow:auto;padding:26px 18px;border-right:1px solid #dce4ed;background:#f9fbfd}aside .brand{font-size:19px;font-weight:750;color:#163759;margin-bottom:8px}.edition{font-size:12px;color:#667c91;margin-bottom:24px}.toc ul{list-style:none;padding-left:0}.toc li{margin:8px 0}.toc ul ul{display:none}.toc>ul>li>ul{display:block;margin-left:0}.toc>ul>li>a{font-weight:700}.toc a{font-size:13px;color:#425b73}main{min-width:0;padding:30px 44px 100px;background:white}.banner{display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid #e1e8ef;padding-bottom:16px;color:#547087;font-size:13px}.badge{padding:3px 10px;background:#e7f3eb;border-radius:5px;color:#287344}h1{font-size:30px;line-height:1.4;color:#152f48;margin:28px 0}h2{font-size:23px;margin-top:48px;border-top:1px solid #dfe7ef;padding-top:24px;scroll-margin-top:20px}h3{font-size:18px;margin-top:30px;scroll-margin-top:20px}p{margin:14px 0}li{margin:6px 0}.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid #dce5ee;border-radius:8px}table{border-collapse:collapse;width:100%;font-size:13px;min-width:720px}th{background:#edf3f8;text-align:left;color:#24435e}td,th{padding:11px 13px;border-bottom:1px solid #e1e8ef;vertical-align:top}tr:last-child td{border-bottom:0}tr:nth-child(even)td{background:#fafcfe}pre{overflow:auto;padding:18px;background:#f0f4f8;border:1px solid #dce5ed;border-radius:8px;font-size:12px;line-height:1.7}code{font-family:Consolas,monospace;font-size:.9em;overflow-wrap:anywhere}p code,li code{background:#edf3f8;padding:2px 4px;border-radius:3px}.links{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0;font-size:13px}.footer{border-top:1px solid #dfe7ef;margin-top:50px;padding-top:18px;color:#72869a;font-size:12px}@media(max-width:950px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;padding:16px 22px;border-bottom:1px solid #dce4ed}.toc{max-height:200px;overflow:auto}main{padding:20px 18px 70px}h1{font-size:25px}table{min-width:680px}}@media print{aside,.banner,.links{display:none}.shell{display:block}main{padding:0}.table-wrap{overflow:visible}table{min-width:0;font-size:10px}h2{break-before:page}pre{white-space:pre-wrap}}
+</style></head><body><div class="shell"><aside><div class="brand">ERJI · 实施文档</div><div class="edition">v1.0 基线 / 2026.09.23<br>目录导航 · 本地资料</div><div class="toc">
+<ul>
+<li><a href="#cmc-api-2026-09-23">CMC 免费 API 实测 · 2026-09-23</a><ul>
+<li><a href="#_1">请求与计费</a></li>
+<li><a href="#_2">覆盖与时效</a></li>
+<li><a href="#_3">必须解决的数据问题</a></li>
+<li><a href="#_4">清算接口</a></li>
+<li><a href="#_5">接入决定与未验收项</a></li>
+<li><a href="#_6">可复核证据</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside><main><div class="banner"><span class="badge">需求基线已整理</span><span>正式应用待开发 · 当前信号页为合成演示</span></div><nav class="links"><a href="01_产品需求文档_v1.0.html">产品需求</a><a href="11_实施任务与验收矩阵_v1.0.html">实施清单</a><a href="12_CMC免费API实测_2026-09-23.html">CMC实测</a></nav><h1 id="cmc-api-2026-09-23">CMC 免费 API 实测 · 2026-09-23</h1>
+<p><strong>结论：用户提供的免费Key可调用本次代币级衍生品市场及清算接口。</strong> BTC/HYPE/ASTER样本中同时有Aster和Hyperliquid的USD OI，RAVE有Aster。可纳入P0聚合补充，不必把CMC限定为市值工具。</p>
+<p>这是8次只读请求的能力验证，不是全币种、长期稳定或正式服务验收。执行时间为2026-09-23 23:25–23:33（Asia/Shanghai）。Key仅从用户指定本地文件读取，没有写入响应证据或发布文档；本次没有交易或TG发送。</p>
+<h2 id="_1">请求与计费</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>请求</th>
+<th>参数摘要</th>
+<th>HTTP/业务状态</th>
+<th>响应credits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4次代币市场</td>
+<td>BTC/HYPE/ASTER/RAVE，perpetual，all，USD，limit=100</td>
+<td>全部200 / error_code=0</td>
+<td>各1</td>
+</tr>
+<tr>
+<td>2次补页</td>
+<td>BTC/HYPE，start=101，limit=100</td>
+<td>全部200 / 0</td>
+<td>各1</td>
+</tr>
+<tr>
+<td>1次完整单页</td>
+<td>BTC，crypto_id=1，limit=500</td>
+<td>200 / 0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1次清算</td>
+<td>symbol=BTC,HYPE,RAVE，USD</td>
+<td>200 / 0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table></div>
+<p>合计8请求、响应credit_count合计8。未读取账户用量接口，不能据此声称账户只消耗8或剩余14,992。请求使用标准base <code>https://pro-api.coinmarketcap.com</code>，不带旧无Key探针中的额外<code>/public-api</code>前缀。认证头为<code>X-CMC_PRO_API_KEY</code>，证据不保存头值。</p>
+<p>验证路径：</p>
+<pre><code class="language-text">GET /v5/cryptocurrency/derivatives/market-pairs/list/latest
+GET /v5/derivatives/liquidations/cryptocurrency/list/latest
+</code></pre>
+<h2 id="_2">覆盖与时效</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>资产</th>
+<th>返回行 / 唯一供应商市场身份</th>
+<th>核实的重点平台</th>
+<th>更新时间年龄中位数 / 最大</th>
+<th>超过5分钟行数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BTC</td>
+<td>193 / 192</td>
+<td>Aster、Hyperliquid</td>
+<td>166.7秒 / 10.40小时</td>
+<td>21</td>
+</tr>
+<tr>
+<td>HYPE</td>
+<td>119 / 119</td>
+<td>Aster、Hyperliquid</td>
+<td>101.7秒 / 10.30小时</td>
+<td>11</td>
+</tr>
+<tr>
+<td>ASTER</td>
+<td>95 / 95</td>
+<td>Aster、Hyperliquid</td>
+<td>101.2秒 / 10.28小时</td>
+<td>7</td>
+</tr>
+<tr>
+<td>RAVE</td>
+<td>52 / 52</td>
+<td>Aster</td>
+<td>102.1秒 / 0.33小时</td>
+<td>3</td>
+</tr>
+</tbody>
+</table></div>
+<p>BTC采用后续单页；HYPE为两次响应合并；ASTER/RAVE单页。年龄以每条所在响应的status.timestamp减quotes.last_updated计算。不同请求不是原子快照；超5分钟只是诊断统计，不是所有字段的统一剔除阈值。未换算为本系统instrument、未过滤冲突/时效前的数量不能称最终合格覆盖。</p>
+<p>平台匹配依据exchange_id：Aster=1452、Hyperliquid=8112，不通过字符串包含ASTER判断平台。样本资产crypto_id：BTC=1、HYPE=32196、ASTER=36341、RAVE=38967；正式接入仍需合约地址/规格映射。RAVE此次无HL匹配不证明过去从未挂牌，也不证明其他namespace完全无市场。</p>
+<h2 id="_3">必须解决的数据问题</h2>
+<ol>
+<li><strong>单页也有身份冲突。</strong> BTC单页报告193行，实际193行、192个exchange_id+market_id。Kraken同一market_id=47233的两条XBT/USD记录有不同价格和OI，不能相加，也不能任取其中一条当正确。先隔离整组，核查原生线性/反向规格与供应商映射后再纳入。完全相同的重复才直接折叠。</li>
+<li><strong>分页不是一致快照。</strong> 早前BTC两页共194行、193个唯一ID；请求时间不同，且已发现单页冲突，不能将差异直接归因于排名漂移。优先在允许预算下完整单页，仍校验重复、总数和时间；必须分页时记录每页时间并显示非原子覆盖。</li>
+<li><strong>有更新延迟。</strong> 部分记录超过10小时，HTTP200和接口60秒缓存不保证市场字段实时。逐字段质量、源年龄和汇总排除理由必须显示。</li>
+<li><strong>无原始OI数量。</strong> <code>quotes[].open_interest</code>与<code>exchange_reported_quotes[].open_interest</code>为同一市场的不同响应层，不是两个市场；USD请求下作为供应商报告USD名义OI保存。样本没有原生张数、乘数或base OI，不能直接按某个price反推新开仓数量。</li>
+<li><strong>费率没有实际周期/结算标记。</strong> 当前funding_rate只保存vendor状态，待原生历史核对后才进入已结算序列；不能假设所有平台8H或用最新费率乘次数。报告价与转换价可能不同，index_basis也不照搬为自定义perp/index−1。</li>
+<li><strong>质量标记要按字段解释。</strong> exclusions的price/volume不能直接称OI虚假；反之无flag也不证明字段准确。供应商0值保存为报告值并带来源，空字段/未返回市场则是未知。</li>
+</ol>
+<h2 id="_4">清算接口</h2>
+<p>返回BTC/HYPE/RAVE三币，total_size=3，has_more=false，均含1H/4H/24H总额、多头和空头金额，last_updated=2026-09-23T15:25:00Z。RAVE的1H字段为0，而4H/24H非0；只能解释为供应商当次窗口报告0，不能泛化成全市场没有清算。</p>
+<p>本接口是代币窗口汇总，没有每笔成交、地址杠杆和未来清算价。不能拿它直接绘制完整历史清算tape或未来清算热力图。窗口汇总有重叠，不能将连续两次24H数字相加。也不能与已被其统计的原生清算金额再次合计。</p>
+<h2 id="_5">接入决定与未验收项</h2>
+<p>原生Binance/Hyperliquid/Aster负责高频、持仓数量、真实结算周期、K线与可成交流动性。CMC低频补跨所美元OI和清算背景，自存历史，主表明确已覆盖范围。免费预算按实际credit_count累计，70%提醒、85%降频、95%暂停非必要请求。</p>
+<p>尚未验收按所批量接口、账户套餐/剩余额度、全部资产/平台覆盖、供应市值端点、长期稳定性、原生逐字段数值一致性和历史OI/全量清算。免费Key成功不代表以上能力自动成功。新增测试应针对这些缺口，避免无目的重复消耗额度。</p>
+<h2 id="_6">可复核证据</h2>
+<ul>
+<li><a href="api/cmc-auth-check-2026-09-23/manifest.json">请求manifest</a>：实际URL、HTTP、时间、credits、响应文件SHA-256。</li>
+<li><a href="api/cmc-auth-check-2026-09-23/coverage-summary.json">覆盖摘要</a>：按每次响应重新计算的年龄、冲突及平台记录。</li>
+<li><a href="api/cmc-auth-check-2026-09-23/BTC-onepage.json">BTC单页原始响应</a>、<a href="api/cmc-auth-check-2026-09-23/liquidations.json">清算原始响应</a>。其余响应同目录保留。</li>
+<li><a href="https://coinmarketcap.com/api/documentation/pro-api-reference/derivatives">官方衍生品文档</a>、<a href="https://coinmarketcap.com/api/pricing/">官方套餐</a>。官方快照保留在research目录；实测证据优先说明本账号当前可用范围。</li>
+</ul><div class="footer">ERJI · 来源、参数与能力状态可复核。旧版本保留为历史。</div></main></div></body></html>

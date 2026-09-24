@@ -1,0 +1,8 @@
+{
+  "database": "erji_pd2_fresh_1790272446",
+  "migration": "fresh_to_head",
+  "schema_drift": false,
+  "tables": 26,
+  "alembic": "pd2_snapshot_datasets",
+  "bootstrap": true
+}

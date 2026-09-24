@@ -1,0 +1,101 @@
+{
+  "project": "ERJI 多源加密市场雷达",
+  "scope": "PD2 隔离实施验证",
+  "generated_at": "2026-09-24T23:50:25.962Z",
+  "environment": {
+    "web": "http://127.0.0.1:18802",
+    "api": "http://127.0.0.1:18803",
+    "schema": "erji_pd2_20260924",
+    "formal_project_synced": false,
+    "production_database_modified": false
+  },
+  "checks": [
+    {
+      "id": "backend_tests",
+      "status": "passed",
+      "evidence": "pd2_runtime.py test: 84 passed, 1 warning"
+    },
+    {
+      "id": "frontend_typecheck",
+      "status": "passed",
+      "evidence": "tsc --noEmit -p apps/web/tsconfig.json exit 0"
+    },
+    {
+      "id": "frontend_build",
+      "status": "passed",
+      "evidence": "Next build with isolated PD2 dist dir exit 0"
+    },
+    {
+      "id": "health",
+      "status": "passed",
+      "evidence": "/v1/health HTTP 200; research_live"
+    },
+    {
+      "id": "structure_signal",
+      "status": "passed",
+      "evidence": "BTC box episode returned structure_pending, box levels, trigger, first_seen_price, daily/weekly targets"
+    },
+    {
+      "id": "chart_indicators",
+      "status": "passed",
+      "evidence": "Browser UI shows 4H candles, volume, ERJI EMA, ERJI MACD, box/trigger/first signal/targets, multi-timeframe matrix"
+    },
+    {
+      "id": "oi_history",
+      "status": "partial",
+      "evidence": "BTC OI 历史接口 200；盘中一度显示 0.48% 占比；后续样本过期时返回 stale 且不输出占比。不能将单次有效样本等同持续新鲜。"
+    },
+    {
+      "id": "oi_quality_labels",
+      "status": "passed",
+      "evidence": "代码与类型检查通过；浏览器实测有效和历史不足；重启隔离 API 后实测现货 not_applicable。过期与映射缺失原因通过 API 抽查。"
+    },
+    {
+      "id": "funding_quality",
+      "status": "passed",
+      "evidence": "Funding source, interval and quality status visible"
+    },
+    {
+      "id": "recommended_signal",
+      "status": "partial",
+      "evidence": "接口启用并返回 200，当前推荐列表为空；BTC 待突破；尚未用实时可参与样本验收推荐计划全流程。"
+    },
+    {
+      "id": "cross_market_oi",
+      "status": "partial",
+      "evidence": "Current primary row is single-market; cross-market aggregate is surfaced as evidence where available but not claimed as complete"
+    },
+    {
+      "id": "liquidation",
+      "status": "external_source_limited",
+      "evidence": "Do not label vendor liquidation maps as exact exchange-wide liquidation prices; layers remain source-qualified"
+    },
+    {
+      "id": "cmc_supply_mapping",
+      "status": "partial",
+      "evidence": "CMC key integration remains subject to symbol/supply mapping freshness"
+    },
+    {
+      "id": "telegram",
+      "status": "not_executed",
+      "evidence": "No TG notifications enabled"
+    },
+    {
+      "id": "formal_sync",
+      "status": "not_executed",
+      "evidence": "隔离副本未同步 D:/Axiangmu/erji"
+    },
+    {
+      "id": "chart_label_density",
+      "status": "partial",
+      "evidence": "近端支撑阻力由四条收敛为两条并缩短标签；构建与类型检查通过。密集目标区域仍需进一步视觉优化。"
+    }
+  ],
+  "notes": [
+    "当前无推荐信号是结构待突破规则结果，不能强行显示建议参与。",
+    "缺失数据不填零，前端显示具体质量状态。",
+    "本轮未操作正式项目、正式数据库、交易、TG 或 API Key。",
+    "历史回测校准与真实可参与样本的完整验收尚未完成。",
+    "目前采集新鲜度存在波动，需要继续排查刷新连续性。"
+  ]
+}

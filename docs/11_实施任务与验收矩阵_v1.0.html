@@ -1,0 +1,189 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ERJI 实施任务与验收矩阵 v1.0</title><style>
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#203247;background:#f4f6f9;font-size:15px;line-height:1.8;scroll-behavior:smooth}*{box-sizing:border-box}body{margin:0}a{color:#1d62b1;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:252px minmax(0,1fr);max-width:1640px;margin:auto}aside{position:sticky;top:0;height:100vh;overflow:auto;padding:26px 18px;border-right:1px solid #dce4ed;background:#f9fbfd}aside .brand{font-size:19px;font-weight:750;color:#163759;margin-bottom:8px}.edition{font-size:12px;color:#667c91;margin-bottom:24px}.toc ul{list-style:none;padding-left:0}.toc li{margin:8px 0}.toc ul ul{display:none}.toc>ul>li>ul{display:block;margin-left:0}.toc>ul>li>a{font-weight:700}.toc a{font-size:13px;color:#425b73}main{min-width:0;padding:30px 44px 100px;background:white}.banner{display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid #e1e8ef;padding-bottom:16px;color:#547087;font-size:13px}.badge{padding:3px 10px;background:#e7f3eb;border-radius:5px;color:#287344}h1{font-size:30px;line-height:1.4;color:#152f48;margin:28px 0}h2{font-size:23px;margin-top:48px;border-top:1px solid #dfe7ef;padding-top:24px;scroll-margin-top:20px}h3{font-size:18px;margin-top:30px;scroll-margin-top:20px}p{margin:14px 0}li{margin:6px 0}.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid #dce5ee;border-radius:8px}table{border-collapse:collapse;width:100%;font-size:13px;min-width:720px}th{background:#edf3f8;text-align:left;color:#24435e}td,th{padding:11px 13px;border-bottom:1px solid #e1e8ef;vertical-align:top}tr:last-child td{border-bottom:0}tr:nth-child(even)td{background:#fafcfe}pre{overflow:auto;padding:18px;background:#f0f4f8;border:1px solid #dce5ed;border-radius:8px;font-size:12px;line-height:1.7}code{font-family:Consolas,monospace;font-size:.9em;overflow-wrap:anywhere}p code,li code{background:#edf3f8;padding:2px 4px;border-radius:3px}.links{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0;font-size:13px}.footer{border-top:1px solid #dfe7ef;margin-top:50px;padding-top:18px;color:#72869a;font-size:12px}@media(max-width:950px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;padding:16px 22px;border-bottom:1px solid #dce4ed}.toc{max-height:200px;overflow:auto}main{padding:20px 18px 70px}h1{font-size:25px}table{min-width:680px}}@media print{aside,.banner,.links{display:none}.shell{display:block}main{padding:0}.table-wrap{overflow:visible}table{min-width:0;font-size:10px}h2{break-before:page}pre{white-space:pre-wrap}}
+</style></head><body><div class="shell"><aside><div class="brand">ERJI · 实施文档</div><div class="edition">v1.0 基线 / 2026.09.23<br>目录导航 · 本地资料</div><div class="toc">
+<ul>
+<li><a href="#erji-v10">ERJI 实施任务与验收矩阵 v1.0</a><ul>
+<li><a href="#_1">开发顺序</a></li>
+<li><a href="#_2">首个可运行交付</a></li>
+<li><a href="#_3">阶段验收</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside><main><div class="banner"><span class="badge">需求基线已整理</span><span>正式应用待开发 · 当前信号页为合成演示</span></div><nav class="links"><a href="01_产品需求文档_v1.0.html">产品需求</a><a href="11_实施任务与验收矩阵_v1.0.html">实施清单</a><a href="12_CMC免费API实测_2026-09-23.html">CMC实测</a></nav><h1 id="erji-v10">ERJI 实施任务与验收矩阵 v1.0</h1>
+<p>实施基线：2026-09-23。配合<a href="01_产品需求文档_v1.0.html">最终PRD</a>使用。表中是待开发工作，不是完成清单；本轮完成的是需求、API样本验证和文档。已有图表运行验证及v0.7演示作为输入。</p>
+<h2 id="_1">开发顺序</h2>
+<p>先用少量真实币打通目录→K线/OI→计划→表格/图层→通知的完整路径，再扩容到300–400扫描名额、80深度资产。M1积累历史时可并行推进M2，但未经验证的字段不能靠合成值填进真实模式。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>优先/阶段</th>
+<th>模块与建议位置</th>
+<th>依赖</th>
+<th>交付/验收编号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T01</td>
+<td>P0/M0</td>
+<td><code>apps/web</code>、<code>services/api</code>、<code>services/worker</code>、<code>infra</code></td>
+<td>无</td>
+<td>稳定版本lock、启动命令、健康检查；AC25</td>
+</tr>
+<tr>
+<td>T02</td>
+<td>P0/M0</td>
+<td><code>packages/contracts</code>、<code>migrations</code></td>
+<td>T01</td>
+<td>Decimal/UTC、迁移、raw/coverage/campaign/episode/plan/outbox表；AC09/14/23</td>
+</tr>
+<tr>
+<td>T03</td>
+<td>P0/M0</td>
+<td>服务端settings/secrets</td>
+<td>T02</td>
+<td>密钥引用、日志脱敏、草稿校验发布；AC18/20</td>
+</tr>
+<tr>
+<td>T04</td>
+<td>P0/M1</td>
+<td><code>engine/adapters/base</code>及scheduler</td>
+<td>T02</td>
+<td>capability、源独立限流/租约/回补/断线去重；AC17/23/26</td>
+</tr>
+<tr>
+<td>T05</td>
+<td>P0/M1</td>
+<td>Binance Spot/Futures/Alpha adapter</td>
+<td>T04</td>
+<td>目录/规格、closed K线、OI、结算、深度；AC08/09/11</td>
+</tr>
+<tr>
+<td>T06</td>
+<td>P0/M1</td>
+<td>Wallet发现/池行情adapter</td>
+<td>T04</td>
+<td>Rising身份、市值供应证据、指定池K线/可卖出性；AC10/26</td>
+</tr>
+<tr>
+<td>T07</td>
+<td>P0/M1</td>
+<td>Hyperliquid/Aster adapter</td>
+<td>T04</td>
+<td>namespace/规格、OI数量、费用、清算语义；AC08/09/11/12</td>
+</tr>
+<tr>
+<td>T08</td>
+<td>P0/M1</td>
+<td>CMC aggregation adapter</td>
+<td>T04</td>
+<td>已有8请求fixture、字段冲突隔离、批量能力实测、credits；AC09/12/19</td>
+</tr>
+<tr>
+<td>T09</td>
+<td>P0/M1</td>
+<td>OKX小池交叉验证</td>
+<td>T04/T05</td>
+<td>单位/时间/规格对照；全池扫描留P1；AC17/26</td>
+</tr>
+<tr>
+<td>T10</td>
+<td>P0/M1</td>
+<td>identity/quality/market-selection</td>
+<td>T05–08</td>
+<td>市场去重、分母、字段时效、滑点选主市场；AC07/09/10/26</td>
+</tr>
+<tr>
+<td>T11</td>
+<td>P0/M2</td>
+<td><code>engine/features</code></td>
+<td>T10</td>
+<td>TA-Lib基准、数量/金额分离、实际费率累计、分位样本；AC08/11/24</td>
+</tr>
+<tr>
+<td>T12</td>
+<td>P0/M2</td>
+<td>structures/targets/overlays</td>
+<td>T11</td>
+<td>20/60窗口与箱体区分，1D/1W独立目标及确认延迟；AC13/15</td>
+</tr>
+<tr>
+<td>T13</td>
+<td>P0/M2</td>
+<td><code>engine/strategies</code>与lifecycle</td>
+<td>T11/T12</td>
+<td>四策略、参与价带、成本后R、首报、保护/撤销；AC01–04/16</td>
+</tr>
+<tr>
+<td>T14</td>
+<td>P0/M2</td>
+<td>signal snapshot / REST / SSE</td>
+<td>T13</td>
+<td>同事务事件、版本冻结、断线恢复、分页快照；AC06/14/23</td>
+</tr>
+<tr>
+<td>T15</td>
+<td>P0/M3</td>
+<td><code>/signals</code>、<code>/watchlist</code></td>
+<td>T14</td>
+<td>浅色一行14列、两视图、排序不跳、收藏隐藏；AC05/06/27</td>
+</tr>
+<tr>
+<td>T16</td>
+<td>P0/M3</td>
+<td><code>/assets/{id}</code>、TradingView Datafeed</td>
+<td>T14</td>
+<td>明显箱体、箭头、参与带、独立退出线、OI联动副图；AC13–16/27</td>
+</tr>
+<tr>
+<td>T17</td>
+<td>P0/M3</td>
+<td><code>/settings</code>、<code>/sources</code></td>
+<td>T03/T10/T14</td>
+<td>中文含义/单位、预算模拟、发布回滚、覆盖状态；AC18/19/26</td>
+</tr>
+<tr>
+<td>T18</td>
+<td>P0/M4</td>
+<td>Telegram receiver/destinations</td>
+<td>T03/T14</td>
+<td>getMe、绑定码、权限、offset；发送测试必须明确目标；AC20/22</td>
+</tr>
+<tr>
+<td>T19</td>
+<td>P0/M4</td>
+<td>outbox dispatcher/notifications页</td>
+<td>T18</td>
+<td>过滤/冷却/TTL/发送前复核/429/未知结果；AC21/23</td>
+</tr>
+<tr>
+<td>T20</td>
+<td>P0/M2–5</td>
+<td><code>engine/backtest</code>、<code>/history</code>、<code>/research</code></td>
+<td>T11–14</td>
+<td>负样本、已知时间、成本、对照和纸上记录；AC24/25</td>
+</tr>
+<tr>
+<td>T21</td>
+<td>P0/M4–5</td>
+<td>backups/health/retention</td>
+<td>T14/T19</td>
+<td>崩溃补数、恢复演练、源隔离、容量与延迟；AC23/26</td>
+</tr>
+<tr>
+<td>T22</td>
+<td>P1</td>
+<td>Gate/Bitget/更多链、地址清算区、实验形态、TG图片</td>
+<td>P0稳定</td>
+<td>单源独立验收，不用未知数据伪造功能；AC12/15/17</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="_2">首个可运行交付</h2>
+<p>M0建立完整路由与模型，M1先接少量Binance+Hyperliquid+Aster市场及CMC；M2用已有fixture复算，再接真实采集。首个演示必须区分真实字段、历史回放和缺失，不将旧合成页面当实盘。CMC当前样本不必重复请求；新增探针只针对尚未验证的批量、供应和规格问题。</p>
+<p>优先测试：数量恒定但价格变化、1000倍合约、同ID冲突、覆盖变更、结算周期改变、缺K线、箱体假突破、目标先被穿越、信号过期、进程重启、TG未知发送结果。测试验证业务语义，避免只断言代码自身常量。</p>
+<h2 id="_3">阶段验收</h2>
+<p>27项验收定义以PRD §14为唯一原文；每次完成记录commit、配置版本、数据fixture/时间范围、实际结果及缺口。页面可用和接口200只能证明相应能力，不能代替信号收益验证。</p>
+<p>M5先运行7天验收数据质量与故障恢复，再累计足够的行情/失败样本评估收益。7天不是策略盈利认证。免费额度不足先减频/减池，保留已有事件保护监测，不自动购买套餐。</p><div class="footer">ERJI · 来源、参数与能力状态可复核。旧版本保留为历史。</div></main></div></body></html>

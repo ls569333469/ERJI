@@ -1,0 +1,176 @@
+[
+  {
+    "sample": "BTC",
+    "url": "https://pro-api.coinmarketcap.com/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_symbol=BTC&category=perpetual&center_type=all&convert=USD&limit=100",
+    "retrieved_at": "2026-09-23T15:25:56.632307+00:00",
+    "http_status": 200,
+    "status": {
+      "timestamp": "2026-09-23T15:25:56.186Z",
+      "error_code": "0",
+      "error_message": "",
+      "elapsed": 29,
+      "credit_count": 1
+    },
+    "file": "BTC.json",
+    "sha256": "e1a677215a312869813bd7fd0c1fe7e7fb6f60fdcaa608997ec18bb985028613",
+    "data_keys": [
+      "crypto_id",
+      "crypto_name",
+      "symbol",
+      "num_market_pairs",
+      "market_pairs"
+    ]
+  },
+  {
+    "sample": "HYPE",
+    "url": "https://pro-api.coinmarketcap.com/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_symbol=HYPE&category=perpetual&center_type=all&convert=USD&limit=100",
+    "retrieved_at": "2026-09-23T15:25:57.218394+00:00",
+    "http_status": 200,
+    "status": {
+      "timestamp": "2026-09-23T15:25:56.700Z",
+      "error_code": "0",
+      "error_message": "",
+      "elapsed": 23,
+      "credit_count": 1
+    },
+    "file": "HYPE.json",
+    "sha256": "0cf28496acdd09f548d8bd2c06462c8bdf5cfe901caf0a74a3eb46345be4c686",
+    "data_keys": [
+      "crypto_id",
+      "crypto_name",
+      "symbol",
+      "num_market_pairs",
+      "market_pairs"
+    ]
+  },
+  {
+    "sample": "ASTER",
+    "url": "https://pro-api.coinmarketcap.com/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_symbol=ASTER&category=perpetual&center_type=all&convert=USD&limit=100",
+    "retrieved_at": "2026-09-23T15:25:57.730525+00:00",
+    "http_status": 200,
+    "status": {
+      "timestamp": "2026-09-23T15:25:57.230Z",
+      "error_code": "0",
+      "error_message": "",
+      "elapsed": 27,
+      "credit_count": 1
+    },
+    "file": "ASTER.json",
+    "sha256": "45bc4f33a0a6528000b995192d0a1fc1d5b74be558f09b3efc476186d24b2ebf",
+    "data_keys": [
+      "crypto_id",
+      "crypto_name",
+      "symbol",
+      "num_market_pairs",
+      "market_pairs"
+    ]
+  },
+  {
+    "sample": "RAVE",
+    "url": "https://pro-api.coinmarketcap.com/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_symbol=RAVE&category=perpetual&center_type=all&convert=USD&limit=100",
+    "retrieved_at": "2026-09-23T15:25:58.593302+00:00",
+    "http_status": 200,
+    "status": {
+      "timestamp": "2026-09-23T15:25:58.058Z",
+      "error_code": "0",
+      "error_message": "",
+      "elapsed": 23,
+      "credit_count": 1
+    },
+    "file": "RAVE.json",
+    "sha256": "d6e9a7350ede9d26b3d4bff8e3f1d8de9b51cadba87d77de0f38f1cdb4119bf8",
+    "data_keys": [
+      "crypto_id",
+      "crypto_name",
+      "symbol",
+      "num_market_pairs",
+      "market_pairs"
+    ]
+  },
+  {
+    "sample": "liquidations",
+    "url": "https://pro-api.coinmarketcap.com/v5/derivatives/liquidations/cryptocurrency/list/latest?symbol=BTC%2CHYPE%2CRAVE&convert=USD&limit=100",
+    "retrieved_at": "2026-09-23T15:25:59.398635+00:00",
+    "http_status": 200,
+    "status": {
+      "timestamp": "2026-09-23T15:25:58.841Z",
+      "error_code": "0",
+      "error_message": "",
+      "elapsed": 3,
+      "credit_count": 1
+    },
+    "file": "liquidations.json",
+    "sha256": "02771f05e88987ca2756ad0a080673f42a67fc5dfcd77513f412a62328492a95",
+    "data_keys": [
+      "cryptocurrencies",
+      "total_size",
+      "has_more"
+    ]
+  },
+  {
+    "sample": "BTC-page2",
+    "url": "https://pro-api.coinmarketcap.com/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_symbol=BTC&category=perpetual&center_type=all&convert=USD&limit=100&start=101",
+    "retrieved_at": "2026-09-23T15:27:08.814692+00:00",
+    "http_status": 200,
+    "status": {
+      "timestamp": "2026-09-23T15:27:08.327Z",
+      "error_code": "0",
+      "error_message": "",
+      "elapsed": 34,
+      "credit_count": 1
+    },
+    "file": "BTC-page2.json",
+    "sha256": "97ee5e65d6490852a0b3214f82a2948f421289637bc35343143452287fd1beb2",
+    "data_keys": [
+      "crypto_id",
+      "crypto_name",
+      "symbol",
+      "num_market_pairs",
+      "market_pairs"
+    ]
+  },
+  {
+    "sample": "HYPE-page2",
+    "url": "https://pro-api.coinmarketcap.com/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_symbol=HYPE&category=perpetual&center_type=all&convert=USD&limit=100&start=101",
+    "retrieved_at": "2026-09-23T15:27:09.697242+00:00",
+    "http_status": 200,
+    "status": {
+      "timestamp": "2026-09-23T15:27:09.178Z",
+      "error_code": "0",
+      "error_message": "",
+      "elapsed": 26,
+      "credit_count": 1
+    },
+    "file": "HYPE-page2.json",
+    "sha256": "71434ccbc20d88bcbd6a1fac7b23be6c71fe84a2c715c84cea717d2ec116bcbe",
+    "data_keys": [
+      "crypto_id",
+      "crypto_name",
+      "symbol",
+      "num_market_pairs",
+      "market_pairs"
+    ]
+  },
+  {
+    "sample": "BTC-onepage",
+    "url": "https://pro-api.coinmarketcap.com/v5/cryptocurrency/derivatives/market-pairs/list/latest?crypto_id=1&category=perpetual&center_type=all&convert=USD&limit=500",
+    "retrieved_at": "2026-09-23T15:33:02.235127+00:00",
+    "http_status": 200,
+    "status": {
+      "timestamp": "2026-09-23T15:33:01.745Z",
+      "error_code": "0",
+      "error_message": "",
+      "elapsed": 30,
+      "credit_count": 1
+    },
+    "file": "BTC-onepage.json",
+    "sha256": "499340d432a3d0c3c2d95471a893e23636875b994c5fb82bfc936ac8b2d8d62d",
+    "data_keys": [
+      "crypto_id",
+      "crypto_name",
+      "symbol",
+      "num_market_pairs",
+      "market_pairs"
+    ]
+  }
+]

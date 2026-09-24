@@ -1,0 +1,1426 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ERJI 多源加密市场雷达 · 产品需求文档 v1.0</title><style>
+:root{font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;color:#203247;background:#f4f6f9;font-size:15px;line-height:1.8;scroll-behavior:smooth}*{box-sizing:border-box}body{margin:0}a{color:#1d62b1;text-decoration:none}a:hover{text-decoration:underline}.shell{display:grid;grid-template-columns:252px minmax(0,1fr);max-width:1640px;margin:auto}aside{position:sticky;top:0;height:100vh;overflow:auto;padding:26px 18px;border-right:1px solid #dce4ed;background:#f9fbfd}aside .brand{font-size:19px;font-weight:750;color:#163759;margin-bottom:8px}.edition{font-size:12px;color:#667c91;margin-bottom:24px}.toc ul{list-style:none;padding-left:0}.toc li{margin:8px 0}.toc ul ul{display:none}.toc>ul>li>ul{display:block;margin-left:0}.toc>ul>li>a{font-weight:700}.toc a{font-size:13px;color:#425b73}main{min-width:0;padding:30px 44px 100px;background:white}.banner{display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid #e1e8ef;padding-bottom:16px;color:#547087;font-size:13px}.badge{padding:3px 10px;background:#e7f3eb;border-radius:5px;color:#287344}h1{font-size:30px;line-height:1.4;color:#152f48;margin:28px 0}h2{font-size:23px;margin-top:48px;border-top:1px solid #dfe7ef;padding-top:24px;scroll-margin-top:20px}h3{font-size:18px;margin-top:30px;scroll-margin-top:20px}p{margin:14px 0}li{margin:6px 0}.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid #dce5ee;border-radius:8px}table{border-collapse:collapse;width:100%;font-size:13px;min-width:720px}th{background:#edf3f8;text-align:left;color:#24435e}td,th{padding:11px 13px;border-bottom:1px solid #e1e8ef;vertical-align:top}tr:last-child td{border-bottom:0}tr:nth-child(even)td{background:#fafcfe}pre{overflow:auto;padding:18px;background:#f0f4f8;border:1px solid #dce5ed;border-radius:8px;font-size:12px;line-height:1.7}code{font-family:Consolas,monospace;font-size:.9em;overflow-wrap:anywhere}p code,li code{background:#edf3f8;padding:2px 4px;border-radius:3px}.links{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0;font-size:13px}.footer{border-top:1px solid #dfe7ef;margin-top:50px;padding-top:18px;color:#72869a;font-size:12px}@media(max-width:950px){.shell{grid-template-columns:1fr}aside{position:static;height:auto;padding:16px 22px;border-bottom:1px solid #dce4ed}.toc{max-height:200px;overflow:auto}main{padding:20px 18px 70px}h1{font-size:25px}table{min-width:680px}}@media print{aside,.banner,.links{display:none}.shell{display:block}main{padding:0}.table-wrap{overflow:visible}table{min-width:0;font-size:10px}h2{break-before:page}pre{white-space:pre-wrap}}
+</style></head><body><div class="shell"><aside><div class="brand">ERJI · 实施文档</div><div class="edition">v1.0 修订 / 2026.09.24<br>目录导航 · 本地资料</div><div class="toc">
+<ul>
+<li><a href="#erji-v10">ERJI 多源加密市场雷达 · 产品需求文档 v1.0</a><ul>
+<li><a href="#0">0. 本次冻结的决定与当前状态</a></li>
+<li><a href="#1">1. 产品目标、范围与用户流程</a></li>
+<li><a href="#2">2. 页面导航与信息架构</a></li>
+<li><a href="#3">3. 信号、追踪与行动模型</a></li>
+<li><a href="#4">4. 信号总览设计、序号与排序</a></li>
+<li><a href="#5">5. 图表与多周期目标设计</a></li>
+<li><a href="#6-oi">6. OI、费用与妖币证据口径</a></li>
+<li><a href="#7-api20269">7. API选型、截至2026年9月的能力与扩展</a></li>
+<li><a href="#8">8. 参数设置页面与参数登记表</a></li>
+<li><a href="#9">9. 技术架构与数据契约</a></li>
+<li><a href="#10-telegram-bot">10. Telegram Bot提醒</a></li>
+<li><a href="#11_1">11. 历史研究、回放与策略验证</a></li>
+<li><a href="#12_1">12. 运行目标、存储、权限与故障处理</a></li>
+<li><a href="#13_1">13. 实施顺序与交付门槛</a></li>
+<li><a href="#14">14. 最终验收矩阵</a></li>
+<li><a href="#15">15. 资料依据与交付边界</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside><main><div class="banner"><span class="badge">需求基线已整理</span><span>正式应用待开发 · 当前信号页为合成演示</span></div><nav class="links"><a href="01_产品需求文档_v1.0.html">产品需求</a><a href="11_实施任务与验收矩阵_v1.0.html">实施清单</a><a href="12_CMC免费API实测_2026-09-23.html">CMC实测</a></nav><h1 id="erji-v10">ERJI 多源加密市场雷达 · 产品需求文档 v1.0</h1>
+<p><strong>实施基线：2026 年 9 月 23 日；本次修订：2026 年 9 月 24 日，Asia/Shanghai。版本保持 v1.0。</strong> 本文整合本任务全部已确认讨论，用于正式应用开发。API资料以2026年9月已保存的官方快照和实测记录为依据；旧版文档与合成预览保留为历史，不代表当前线上能力。</p>
+<p><strong>核心交付：明确行动建议 + 可追溯的合约证据 + 多周期交易计划 + 可见图表标注 + 持续跟踪与 Telegram 提醒。</strong> 主页面浅色、全宽、一币一行。符合策略规则时明确显示“建议参与”或“建议试仓”，不把所有判断降为“观察候选”。建议的依据、有效价格区间、退出方式、目标来源、时效必须同时提供。</p>
+<p><strong>本次修订：</strong> 数量OI原有24H统一显示为1D（近24小时），复用同一指标，默认行同时显示4H与1D；建议参与、建议试仓各有独立列表；阶段总览按明确规则分组显示，每组仍一币一行。截图只参考分组交互，不采用“突破前夜”“静默建仓”等未验证机制名称。</p>
+<h2 id="0">0. 本次冻结的决定与当前状态</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>实施决定</th>
+<th>当前状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户范围</td>
+<td>先做个人/小团队内部测试、只读行情与人工执行辅助</td>
+<td>未接交易账户，不自动下单</td>
+</tr>
+<tr>
+<td>市场</td>
+<td>Binance Spot/Futures/Alpha + Binance Wallet Rising 链上 Meme/FOMO</td>
+<td>范围已确认，正式采集待开发</td>
+</tr>
+<tr>
+<td>参与建议</td>
+<td>提前参与、突破确认、回踩确认、趋势再启动四类计划</td>
+<td>页面目前仍为v0.7演示，本轮需求新增</td>
+</tr>
+<tr>
+<td>OI</td>
+<td>数量、美元名义值、流通市值比例、跨场分布、费用及解除证据分别建模</td>
+<td>合成示例已展示；真实汇总待开发</td>
+</tr>
+<tr>
+<td>主市场</td>
+<td>以可成交流动性选择参考现货/永续，各自独立；异常平台单独提示</td>
+<td>替代v0.7“默认选择最负费率平台”</td>
+</tr>
+<tr>
+<td>图表</td>
+<td>沿用已运行验证的 Charting Library 32.1.0，固定提交与哈希</td>
+<td>库可运行，自动多周期结构及完整副图待开发</td>
+</tr>
+<tr>
+<td>CMC</td>
+<td>免费Key用于衍生品聚合与清算补充</td>
+<td>已完成8次只读请求，均成功，响应合计8 credits；BTC/HYPE/ASTER/RAVE及3币清算样本已验证，非全覆盖验收</td>
+</tr>
+<tr>
+<td>技术栈</td>
+<td>Next.js/TypeScript前端；Python/FastAPI服务及worker；PostgreSQL</td>
+<td>当前目录只有文档、预览与工具，正式工程待建立</td>
+</tr>
+<tr>
+<td>通知</td>
+<td>官方Telegram Bot API，文本提醒为P0，图片卡为P1</td>
+<td>本轮已下载官方文档；绑定与发送服务待开发</td>
+</tr>
+<tr>
+<td>参数</td>
+<td>设置页管理，可保存草稿、校验预算、发布版本、回滚</td>
+<td>本轮定义；不让前端自行重算正式信号</td>
+</tr>
+<tr>
+<td>验证</td>
+<td>历史回放、负样本、成本、前向纸上跟踪</td>
+<td>9币为机制复盘，不是已验证收益策略</td>
+</tr>
+</tbody>
+</table></div>
+<p>本文优先于v0.7及更早版本的冲突内容。保留的基础需求包括：身份校验、免费优先、数据血缘、收藏/静音持久化、告警去重、历史表现、策略研究、跨平台扩展与完整OI科学口径。新增日线/周线目标和明确参与建议，不改变未知数据不得捏造的原则。</p>
+<h2 id="1">1. 产品目标、范围与用户流程</h2>
+<h3 id="11">1.1 产品要回答的问题</h3>
+<ol>
+<li>哪些币现在出现值得参与的行情，当前是否建议参与？</li>
+<li>建议在哪个市场、什么价格区间参与，采用提前跟进还是回踩确认？</li>
+<li>是什么结构、哪个周期，哪根K线完成触发？</li>
+<li>合约持仓是在积累、扩张、解除还是重新积累？压力在哪个平台？</li>
+<li>日线与周线分别看什么目标，达到后继续持有还是调整？</li>
+<li>什么条件建议退出，数据失效和价格失效分别是什么？</li>
+<li>从首次发现到现在经历了什么，原建议是否实际可执行？</li>
+</ol>
+<p>完整流程：目录与身份 → 候选池 → 采集/质量检查 → 各市场计算 → 同资产证据汇总 → 技术与合约分类 → 行动计划 → 总览/图表/TG同快照展示 → 持续更新 → 失效/结束 → 完整样本复盘。</p>
+<p>不做自动交易、钱包签名、会员计费、交易所返佣和全网钱包枚举。建议持有/减仓/退出面向已持仓者或纸上计划；系统不假定每个收到提醒的人都实际买入。首版提供“新参与”和“已有仓位”两种阅读口径，不必连接账户。</p>
+<h3 id="12">1.2 资产池与容量</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>资产池</th>
+<th>目录</th>
+<th>首轮正式扫描预算</th>
+<th>深度跟踪</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Binance Spot/Futures</td>
+<td>活动目录全量，区分现货/永续/交割及合约规格</td>
+<td>150–200资产，包含仅现货资产</td>
+<td>共享80资产预算中的优先部分</td>
+</tr>
+<tr>
+<td>Binance Alpha</td>
+<td>官方token list，保存chain与CA</td>
+<td>最多100合格资产</td>
+<td>与其他池去重后分配</td>
+</tr>
+<tr>
+<td>链上Meme/FOMO</td>
+<td>Binance Wallet Rising；初始最多200候选</td>
+<td>50–100质量合格资产</td>
+<td>优先活跃事件、收藏与新触发</td>
+</tr>
+</tbody>
+</table></div>
+<p>去重前为300–400扫描名额，实际数量按Asset并集显示；一个Asset的多个合约/池各自消耗接口预算。低于合格数不补无效币，超预算者排队或低频。目录数、扫描数、深度数、信号数分别显示。退榜不终止已有趋势追踪；退出由事件规则、下架或明确的数据终止决定。</p>
+<p>链上正式扫描默认可信流通市值≥$1M，主池流动性参考门槛$100K；二者为待验证初始参数。流动性总额不等于指定金额可成交深度，仍检查实际报价/滑点和可卖出性。未知供应不得用FDV顶替；未核实安全/可交易性保留技术发现，但暂停新参与建议。Rising只负责发现，K线来自明确Instrument/Pool，不能拿热榜价拼OHLCV。</p>
+<p>Alpha属于Binance生态池，Rising为链上发现主入口。GMGN/FOMO/Surf等不是必须串联的发现依赖。外部热度作为候选线索，不作为成交/流通事实。多链支持以发现源、身份与行情adapter真实覆盖为准，设置页只提供已验收链。</p>
+<h3 id="13">1.3 资产身份与市场范围</h3>
+<p>Asset、Instrument、Pool、Venue分开；同ticker不同CA不合并。封装币、桥接币、1000倍合约、反向/线性合约记录显式映射和规格。Hyperliquid是平台、HYPE是资产，Aster和ASTER同理。保存挂牌/下架、身份映射、namespace和来源的已知时间。当前目录无匹配不代表历史没有合约。</p>
+<p>P0先把线性USDT/USDC永续按规格验收；交割和币本位反向合约可入目录，未通过换算验收前不混入数量变化。UI分别显示永续OI与扩展衍生品口径，不静默把交割合约加进原来的分母。稳定币计价转换USD保留汇率时间，脱锚不可默认1。</p>
+<h2 id="2">2. 页面导航与信息架构</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>页面</th>
+<th>路径</th>
+<th>核心内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>信号总览</td>
+<td><code>/signals?view=stages</code></td>
+<td>默认按阶段分组，每组一币一行；切换全部/合约证据</td>
+</tr>
+<tr>
+<td>建议参与 / 建议试仓</td>
+<td><code>/signals?view=recommended</code> / <code>?view=trial</code></td>
+<td>独立列表，只纳入当前仍有效且可执行的相应行动，含价格带与退出条件</td>
+</tr>
+<tr>
+<td>图表与计划</td>
+<td><code>/assets/{asset_id}?campaign=&amp;event=&amp;snapshot=</code></td>
+<td>可分享的独立地址，同时支持总览弹窗打开</td>
+</tr>
+<tr>
+<td>我的观察</td>
+<td><code>/watchlist</code></td>
+<td>收藏、备注、静音、手工声明/纸上持仓、追踪历史</td>
+</tr>
+<tr>
+<td>历史与研究</td>
+<td><code>/history</code>、<code>/research</code></td>
+<td>全部事件、到期表现、策略版本、回放与对照实验</td>
+</tr>
+<tr>
+<td>数据源状态</td>
+<td><code>/sources</code></td>
+<td>交易所覆盖、能力、延迟、限频、缺口、导入进度</td>
+</tr>
+<tr>
+<td>参数设置</td>
+<td><code>/settings</code></td>
+<td>市场、策略、风险、排序图表、来源、TG及版本发布</td>
+</tr>
+<tr>
+<td>通知记录</td>
+<td><code>/notifications</code></td>
+<td>触发、过滤、发送、重试、失败和重复抑制记录</td>
+</tr>
+</tbody>
+</table></div>
+<p>设置与通知不是隐藏的开发配置，P0必须有可用页面。解释文字讲业务含义，不把内部字段名、供应商报错或API堆给普通使用者；详细诊断可展开。</p>
+<h2 id="3">3. 信号、追踪与行动模型</h2>
+<h3 id="31">3.1 三层状态分别保存</h3>
+<ul>
+<li><strong>事实/解释：</strong> 箱体突破、数量OI增加、费用偏负、已观测清算等。事实与机制推断分别存储。</li>
+<li><strong>行情阶段：</strong> 异常关注、结构待突破、早期上行触发、结构确认、趋势持续、结构转弱、已失效、已结束，分组规则见§4.3。阶段可跳过或改变，不要求机械依序经过；它描述市场，不等于购买评级。</li>
+<li><strong>行动建议：</strong> 建议参与、建议试仓、等待到价参与、不建议追入、暂不参与；已有仓位另给继续持有/减仓/退出计划。</li>
+</ul>
+<p>同一行可显示“已有仓位建议持有；新参与不建议追入”。“已观测空头清算”是附加事实，不自动升为最高参与优先级。缺少OI不取消独立技术计划；但不能给它附加已确认合约压力标签。</p>
+<h3 id="32-p0">3.2 四个P0策略模板</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>策略ID</th>
+<th>触发与确认</th>
+<th>输出</th>
+<th>主要退出依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>early_breakout</code></td>
+<td>1H收盘越过事先冻结的4H结构上沿及缓冲，成交增强；显示4H待确认</td>
+<td>建议试仓，若位置合适</td>
+<td>该策略固定保护退出线、早期触发撤销及有效期</td>
+</tr>
+<tr>
+<td><code>confirmed_breakout</code></td>
+<td>4H收盘满足其结构突破与成交规则</td>
+<td>建议参与：突破跟进</td>
+<td>冻结突破撤销条件与独立盘中保护线</td>
+</tr>
+<tr>
+<td><code>retest_entry</code></td>
+<td>已确认突破后实际发生回踩，随后1H收回指定边界且成交符合规则</td>
+<td>建议参与：回踩确认</td>
+<td>回踩结构失效与保护线</td>
+</tr>
+<tr>
+<td><code>trend_restart</code></td>
+<td>趋势中形成新的有效整理结构并再次触发，不重复拿旧箱体追价</td>
+<td>建议参与第二段/建议试仓，按确认周期</td>
+<td>新episode的结构与保护线</td>
+</tr>
+</tbody>
+</table></div>
+<p>仅盘中触碰为“待触发”，不能伪装收盘确认。early_breakout允许提前参与，不必等4H；独立标记其确认级别、统计失败率和收益分布。只有结构/价格规则的计划使用technical路径；满足合约组合时加上pressure路径。高OI或深负费率本身不触发买入建议。</p>
+<h3 id="33">3.3 行动判定顺序与可执行性</h3>
+<p>按以下顺序确定当前行动，前面的条件具有优先权：</p>
+<ol>
+<li>已触发保护退出/事件失效：新参与停止；已有/纸上仓位显示退出计划，记录原因。</li>
+<li>必需行情过期、身份不明或链上可卖出性未核实：暂停新的参与建议，保留事件和已知保护位，不把数据故障说成价格失效。</li>
+<li>策略未触发：显示等待到价参与，列价格区及具体确认条件；只有背景异常时为暂不参与/异常关注。</li>
+<li>策略已触发但现价超出允许追价带、成本过高或第一有效目标空间不足：不建议追入，不修改旧建议价格。</li>
+<li>策略触发、现价在参与带、深度/成本合格、规则需要的证据齐全：early为建议试仓，确认/回踩/再启动为建议参与。</li>
+</ol>
+<p>初始盈亏空间门槛作为研究参数：试仓策略净R≥1.5，确认策略净R≥1.8。对做多使用入场带上沿E、盘中保护价S、第一可用目标区下沿T：<code>R=(T−E−盈利路径费用)/(E−S+止损路径费用)</code>；费用均换成每币价格单位，含手续费、预计滑点及计划持有情景资金费。T≤E、S≥E或成本未知时不能生成R。远处周线目标不能替代更近的有效阻力使R虚高。</p>
+<p>无历史上方阻力时允许预先规定的测算目标，但显式标“测算”，不填“历史阻力”。连测算前提也不足时保留触发事实，暂停依赖目标R的入场模板；已有趋势仍可按保护线跟踪。计划不保证成交：接口延迟、跳空与滑点单独报告。</p>
+<p>每次建议包括：执行市场、方向、策略、入场带、保护位、盘中/收盘触发方式、失效规则、目标区/依据、报价时间、有效期和下一次评估时间。到价尚未满足确认时不能显示“现在可参与”。现价超参与带后即时降为“不建议追入/等待回踩”，不能等下一根4H才改变。</p>
+<p>风险预算是用户配置的模拟风险，不是默认读取真实资产。默认不填写账户本金；可选研究预设为试仓每计划净值风险0.25%、确认0.5%，总开放风险上限2%，均可关闭/调整。数量按止损距离和成本计算，受可成交量上限约束；这不是拿总资产25%/50%买入，也不建议默认杠杆。</p>
+<h3 id="34-episode">3.4 长期追踪、首报与episode</h3>
+<p><code>Campaign</code>代表一轮资产趋势追踪；<code>Episode</code>代表一个具体结构/策略事件；<code>Snapshot</code>是某次证据与行动版本。一个campaign可有多个独立episode；不同执行市场的计划并列而不混价。</p>
+<ul>
+<li>首次发现价格与时间在系统实际首次识别时写入，之后不可被升级、排序、重新加载改写。</li>
+<li>首次确认价格、首次建议参与价分别保存，不混称“首报”。收盘信号保存bar_close_time和detected_at，K线标记可定位开盘时间，但通知不得提前到开盘。</li>
+<li>首报后涨幅始终用同一参考市场：<code>当前同市场价/首次发现价−1</code>。主市场切换后旧参考停止更新就显示缺失；不能把新市场价接上旧首报收益。</li>
+<li>箱体失效后该episode永不复活；新结构创建新episode，若仍属未结束的campaign则保留campaign首报，显示“新一段”。</li>
+<li>P0一个Asset默认一个活动主campaign，可包含多周期/多策略事件。整体结束条件：无活动episode且没有独立确认的1D趋势，连续48小时（研究参数）无新触发后结束；身份终止/下架按数据终止单列。新campaign保留旧历史链接，不能重启以隐藏亏损。</li>
+<li>同一资产多策略竞争展示优先级由第4节决定；展示主计划不会删除其他计划。</li>
+</ul>
+<p>已有仓位路径可按预设目标管理：默认到第一目标区提示“建议减仓至计划初始规模的50%，剩余按确认4H低点保护”（研究预设，可关闭）；趋势持续为继续持有，保护位触发为退出。没有用户录入/纸上成交记录时标“持仓参考计划”，不显示虚构真实仓位盈亏。目标已经被首次触发前价格走过则标“已穿越”，不能事后记为计划止盈。</p>
+<h2 id="4">4. 信号总览设计、序号与排序</h2>
+<h3 id="41">4.1 默认行与列</h3>
+<p>浅色全宽，单币单行，建议行高44–52px；内容不折成多行。左固定序号/代币/行动，右固定图表入口；中间横向滚动，支持列显隐、拖动宽度与恢复默认。小屏保留少量固定列，其余表内滚动，不挤成不可读的小字。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>默认列</th>
+<th>表达方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>序号</td>
+<td>当前筛选及排序下的1、2、3…；跨页连续</td>
+</tr>
+<tr>
+<td>2</td>
+<td>代币/市场标签</td>
+<td>ticker + 可区分市场小标签，收藏独立按钮；悬浮显示CA/身份</td>
+</tr>
+<tr>
+<td>3</td>
+<td>当前行动</td>
+<td>建议参与/试仓/等待到价/不建议追入/暂停，颜色与文字共同表达</td>
+</tr>
+<tr>
+<td>4</td>
+<td>首报</td>
+<td>首报价 · 首报后% · 跟踪时长，同单元格单行；点击看首次确认</td>
+</tr>
+<tr>
+<td>5</td>
+<td>当前价</td>
+<td>执行/参考市场明确，过期有标记</td>
+</tr>
+<tr>
+<td>6</td>
+<td>多周期阶段</td>
+<td>如“1H触发 · 4H确认 · 日线展开”；悬浮完整状态</td>
+</tr>
+<tr>
+<td>7</td>
+<td>持仓OI/流通市值</td>
+<td>如“$136M · 3.58%”，同格显示两值；没有可靠分母则“占比未知”</td>
+</tr>
+<tr>
+<td>8</td>
+<td>数量OI变化</td>
+<td>默认同格单行“4H +8.2% · 1D +14.6%”（格式示例）；可切1H/4H/1D，窄屏可选单周期。1D=近24小时，复用原24H字段，未知写“1D不足”；不是美元变化</td>
+</tr>
+<tr>
+<td>9</td>
+<td>主市场费率</td>
+<td>平台 + 最新已结算费率/实际周期；有异常平台显示短提示</td>
+</tr>
+<tr>
+<td>10</td>
+<td>参与区</td>
+<td>明确区间、当前是否在区内，不能写空泛“关注回踩”</td>
+</tr>
+<tr>
+<td>11</td>
+<td>日线目标</td>
+<td>价格区间 + 距离%，标历史压力/测算/已穿越/不足</td>
+</tr>
+<tr>
+<td>12</td>
+<td>周线目标</td>
+<td>价格区间 + 前置条件入口；不表示本周一定到达</td>
+</tr>
+<tr>
+<td>13</td>
+<td>保护/失效</td>
+<td>默认保护退出价与盘中/收盘标签；悬浮区分突破撤销和箱底失守</td>
+</tr>
+<tr>
+<td>14</td>
+<td>证据/图表</td>
+<td>重要异常图标 + 图表按钮，直接定位对应事件</td>
+</tr>
+</tbody>
+</table></div>
+<p>默认不展示账户多空比、神秘总分、多套重复涨幅或所有原始指标。可选列包含数量OI1H/1D（原24H）、美元变化、名义密度分位、合约量、主动成交差额、已观测清算及覆盖。页面提供“阶段总览”“建议参与”“建议试仓”“全部信号”“合约证据”入口，切换不改变事件/筛选/收藏；全部信号与合约证据采用平铺表格。</p>
+<p>顶部将“建议参与(N)”与“建议试仓(N)”做成常驻独立入口；默认打开阶段总览，各阶段有自己的分组标题、计数和表格。另提供技术/合约/交叉、市场池、平台、时间周期、收藏、数据质量和搜索筛选。重要风险有独立常驻通知条，不能因为默认行动排序靠后而看不到。筛选显示实际条数与暂停/缺失数量。</p>
+<h3 id="42">4.2 排序是确定规则，不是上涨概率</h3>
+<p>默认主计划选择及排序：有效“建议参与” → “建议试仓” → “等待到价” → “不建议追入” → 暂停/结束；组内先必需数据合格，再按净R降序、距参与区距离升序、触发更新时间降序，最后asset_id/plan_id稳定打破并列。R缺失排序到底；不以极端OI或负费率绝对值单独决定推荐次序。</p>
+<p>已有仓位模式按“需退出 → 需减仓 → 持有”的管理紧急性排序。用户自选排序支持首报时间、首报后涨幅、现价变化、OI金额/占比/数量变化、成交增强、净R、目标距离、更新时间。负费率排序明确升/降序；不是按字符串或绝对值偷换含义。</p>
+<p>序号是视图行号，不是asset_id、历史排名或风险等级；平铺/建议列表跨页连续，阶段总览在每组内从1开始且组内跨页连续，组别折叠不重新编号。收藏/置顶为独立状态，置顶区单列，不能暗中提升策略建议；导出保留当时筛选、排序、快照时间。隐藏按稳定Asset/chain+CA持久保存，同名其他资产不误隐藏。</p>
+<p>实时行情允许更新数字，列表位置默认不自动跳动；出现改变排序或阶段的新信号显示“有N条更新”，用户刷新排序/分组。安全状态即时覆盖此冻结规则：退出、失效、超出参与带或必需数据过期，必须立即更新行动，并从建议参与/试仓列表移出，不能为避免跳行继续显示有效买入；阶段页可原位标“状态已变”直到用户重排，计数标注快照时间。详情打开时保持滚动、筛选与选中行。服务端分页/游标绑定<code>list_snapshot_id</code>与排序版本，避免页间重复、漏行；页码切换后的序号连续，不伪装永久名次。</p>
+<h3 id="43">4.3 按阶段分开展示与建议参与独立列表</h3>
+<p><strong>默认阶段总览：</strong> 每个阶段独立显示“阶段名 · 资产数 · 阶段含义”，下方是相同列结构的紧凑表格，可折叠/展开，列宽、表头和横向滚动保持一致。空组默认折叠，支持隐藏空组；展开偏好持久化。每币仍只占一行，不改成卡片。阶段跳转条可直接定位某组。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>默认顺序</th>
+<th>阶段 / phase_id</th>
+<th>进入依据</th>
+<th>行动如何显示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>异常关注 / anomaly_watch</td>
+<td>通过质量检查的数量OI或费用异常等已触发，但尚无有效可交易结构</td>
+<td>显示暂不参与；不把增仓叫庄家建仓</td>
+</tr>
+<tr>
+<td>2</td>
+<td>结构待突破 / structure_pending</td>
+<td>已识别并记录有效箱体/区间及触发边界，尚未满足1H提前或4H确认</td>
+<td>等待到价参与，列具体确认条件</td>
+</tr>
+<tr>
+<td>3</td>
+<td>早期上行触发 / early_trigger</td>
+<td>early_breakout已满足1H闭合触发，4H尚未确认</td>
+<td>合格则建议试仓，超价/缺数据则显示实际行动</td>
+</tr>
+<tr>
+<td>4</td>
+<td>结构确认 / structure_confirmed</td>
+<td>4H突破已确认，或其后的有效回踩计划已确认，尚未满足趋势持续条件</td>
+<td>净R/价带/成本合格则建议参与</td>
+</tr>
+<tr>
+<td>5</td>
+<td>趋势持续 / trend_continuing</td>
+<td>确认之后至少新增1根有效4H收盘仍在上沿之上，并形成已确认抬高低点，原事件未失效</td>
+<td>持仓可继续持有；新买仍须有有效入场计划，不自动追涨</td>
+</tr>
+<tr>
+<td>6</td>
+<td>结构转弱 / weakening</td>
+<td>一次完整4H收盘低于最近已确认的4H抬高低点，但尚未触发本计划保护或撤销；缺少该拐点则不生成此标签</td>
+<td>新参与暂停；持仓显示其管理计划；若已触发退出则不滞留此组</td>
+</tr>
+<tr>
+<td>7</td>
+<td>已失效 / invalidated</td>
+<td>该主事件保护退出或结构撤销触发，且无新的有效主episode取代</td>
+<td>显示失效原因/时间，停止旧入场提醒</td>
+</tr>
+<tr>
+<td>8</td>
+<td>已结束 / ended</td>
+<td>达到campaign结束规则或数据/身份终止，无活动主计划</td>
+<td>仅供复盘；与价格失效分开</td>
+</tr>
+</tbody>
+</table></div>
+<p>前6组为活动阶段；已失效/已结束默认折叠、显示最近7日，可到历史页查看全部。没有异常也没有结构的普通扫描币不占信号分组，进入资产目录。数据暂停是质量状态，保留最后可确认阶段和时间，不把断网当转弱。空头费用压力、已观测清算、持仓再积累作为证据标签，不作为必然上涨的阶段名称；回踩确认/趋势再启动显示策略标签。</p>
+<p><strong>分组唯一性：</strong> 同一筛选快照先按§4.2选一个主计划/主episode，每个Asset在阶段总览只归入一组；优先处理终止/失效和转弱，再判断趋势持续、确认、提前触发、待突破、异常。已失效旧episode不会压过同campaign中新建立的有效主episode；旧事件在时间线保留。不同执行市场的计划可在行内展开，其风险通知独立保留。组内仍按§4.2排序，各组独立分页；计数为当前筛选下的去重资产数，不是分页已加载数。</p>
+<p><strong>建议参与独立列表：</strong> 仅包含action_new=participate、未过期、未撤销、所需数据合格且当前价仍在参与区的主计划，不受其属于哪个行情阶段限制；默认按净R/距离/更新时间排序。建议试仓使用独立入口，筛选action_new=trial。不能把等待确认、不建议追入、曾经建议买入但已过期的代币混入。无结果明确显示“当前没有符合条件的参与建议”。</p>
+<p>这是同一数据集的不同视图：某币可在“建议参与”页看到，也可在“阶段总览”的结构确认组看到，但只有一个资产记录与同一snapshot；两个入口的计数不能相加声称总信号数。顶部风险条独立于买入筛选，用户已有仓位的退出提醒不因买入页过滤而消失。</p>
+<p>收藏/隐藏/筛选、主计划、首报、图表和TG均引用同一事件快照。阶段变化保存from_phase、to_phase、reason、changed_at；首次价格不重置，纯页面换组不生成新信号或重复TG提醒。所有“建议参与”表示规则合格的人工交易参考，不触发自动买单。</p>
+<h2 id="5">5. 图表与多周期目标设计</h2>
+<h3 id="51">5.1 默认布局与图层</h3>
+<p>点击行打开大图表抽屉/弹窗，支持进入独立页面；左侧主图和副图、右侧行动计划与证据，下方平台明细与事件时间线。图表区域优先可见，OI明细不能挤压K线到无法识别。首次进入自动选择原事件周期并定位完整结构及触发柱。</p>
+<p>必须绘制并可独立开关：</p>
+<ol>
+<li>明显填充的箱体/通道，标周期、起止时间、上下沿。已确认箱体与普通N根高低区间使用不同名称。</li>
+<li>指向具体K线的“首次发现”“1H提前触发”“4H确认”标记；点击标记显示收盘价、确认时间、成交倍数和规则版本。</li>
+<li>入场区/回踩带，盘中保护位、突破撤销线、结构下沿分别标注，不能叠成一条含糊失效线。</li>
+<li>日线目标区、周线目标区及来源；重叠时合并视觉区域但保留两种来源。历史压力实线、测算目标虚线。</li>
+<li>已观测清算标记与估算清算区独立图层；没有来源时不生成假热力图。</li>
+<li>触发/升级/减仓/退出的时间线；手工绘图使用独立命名空间，不改变正式信号。</li>
+</ol>
+<p>成交量默认独立副图，不遮挡箱体。数量OI、美元OI、资金费/累计成本、已观测清算可切换副图；默认数量OI与费率，金额选看。副图单位、来源、采样间隔清楚，时间缺口断线显示。P0允许独立同步面板，但必须时间轴/光标联动；原生custom study可后续替换，不用伪造价格OHLC充当OI。</p>
+<p>提供“看首次突破”“看当前趋势”“看全部追踪”三个定位；多周期按钮1H/4H/1D/1W（SDK编码60/240/1D/1W，周线适配须实测）。切换只改变查看尺度，不重写事件。价格跨度大时可切对数轴，图层价格仍是原始数值。所有标记在更大周期聚合柱上需保留精确原始时间。</p>
+<h3 id="52">5.2 结构识别和目标推导</h3>
+<p>基础指标：已闭合K线、价格区间/已确认拐点、相对报价成交额、ATR14（Wilder）、EMA20/50。RSI/MACD/ADX/布林带/锚定VWAP/Fibonacci/VPVR保留人工研究，不默认叠加成评分。圆弧底、双底与三角形先实验模板，未验证不冒充主策略准确识别。</p>
+<p>P0两种结构必须区分：</p>
+<ul>
+<li>N根高点突破：使用触发前20/60根高低边界即可，名称明确为“区间高点突破”。</li>
+<li>箱体：在上述候选窗口中，用已确认摆动高/低点的重复价格簇估计上下沿，分别取有效簇中位价；不用全窗口最高最低价让“内部收盘比例”永远自动通过。每边至少2次相隔≥2柱的触及，触及容差0.5ATR，至少80%收盘在候选边界内，窗口前后半段收盘中位价漂移不超过箱体高度50%，均为可配置研究起点。上下沿必须有序，候选过窄导致容差带重叠时拒绝箱体标签；未通过只能称区间，不能为了画框硬叫箱体。</li>
+</ul>
+<p>拐点默认左右各2根确认，识别时间延后2根；锚点不能在当时尚未确认时进入回测特征。箱体边界在触发时冻结。突破确认缓冲默认0.25ATR14，相对报价成交额默认前20根中位数的1.5倍，强成交标签2倍；参数待验证。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>目标计算</th>
+<th>使用限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>日线T1</td>
+<td>最近已确认且仍在价格上方的日线阻力/前高簇</td>
+<td>形成价格带；标样本范围、触及与最后确认时间</td>
+</tr>
+<tr>
+<td>周线T2</td>
+<td>独立周线阻力/前高簇</td>
+<td>明确先突破哪一日线关口，不预测到达日期</td>
+</tr>
+<tr>
+<td>测算扩展</td>
+<td>预先固定的箱体高度投射，上沿+1倍箱体高度为首个研究目标</td>
+<td>只在相应模板使用，注明测算；不能把4H投射叫周线目标</td>
+</tr>
+<tr>
+<td>价格发现</td>
+<td>已突破可用历史高点或没有上方有效阻力</td>
+<td>显示历史范围；无可靠目标则给趋势保护而非编顶部</td>
+</tr>
+</tbody>
+</table></div>
+<p>同周期阻力簇默认距离在0.5ATR内归并；目标区宽度至少覆盖实际拐点簇，可用该周期0.25ATR最小缓冲。目标构建仅用截至当时已确认的数据，与当前参与市场一致；平台现货高点不能直接作为另平台合约可成交目标。</p>
+<p>1D/1W独立状态与历史长度分别显示。周K按UTC周一00:00聚合，仅用完整周；展示Asia/Shanghai时间不改变边界。初始获取尽可能多的已发布日线、上限730日；20周结构至少需要20个已闭合周，EMA50另需其预热。新币不足时不生成虚构周线，不影响已有短周期信号。</p>
+<p>第一阻力不是涨幅上限。突破后目标状态由pending→tested→passed/failed，继续跟踪现货接力、确认低点抬升或新一轮合约压力；旧目标与当时建议保留，不能改成新目标掩盖原结论。日线趋势仍在也不能复活已失效4H计划。</p>
+<h3 id="53">5.3 图表组件分工</h3>
+<p>Charting Library 32.1.0继续固定在已核验提交<code>4338800674706e4cbd88e65b873cc08d557dfbf0</code>，构建日期2026-08-17；这是项目已验证版本，不宣称2026年9月全球最新。前端通过Datafeed接本系统行情，后台计算正式指标与信号。它不提供Pine脚本执行、社区策略、会员策略服务或后台扫描。</p>
+<p>用户可以添加原生指标/手工绘图。正式策略通过Python规则实现，研究工具选型不依赖TradingView网站。图表包版本、来源和哈希另见历史采用记录；先保留已有资源，交付检查所用功能资源齐全，不能把按需缓存宣称完整离线包。</p>
+<h2 id="6-oi">6. OI、费用与妖币证据口径</h2>
+<h3 id="61">6.1 五类字段、六种状态</h3>
+<p>字段层：规模（美元/市值比）、数量变化（1H/4H/1D，1D=原24H）、跨场分布、持仓成本、仓位解除证据。输出状态：持仓积累方向待定、上涨伴随持仓扩张、空头成本压力升高、上涨伴随持仓解除、高位再积累持仓、多头拥挤风险。下跌/多头清算对称保留，不能把所有场景解释成做多。</p>
+<p>TUT校验趋势扩张路径，MYX校验数量/金额分离，LAB校验持续费用和主动套保退出，RAVE校验启动与后期挤压分段、负费率仍可崩跌。其余COAI跨市场价格分歧、SIREN多episode及事后调查、GENIUS挂牌先后、PIPPIN未知因果、AKE未证实插针/清算说法均进入研究反例。</p>
+<h3 id="62">6.2 数量、估值、聚合与覆盖</h3>
+<p>原始张数/单位、base数量、合约乘数、线性/反向、USD名义值、转换价格及mark/index种类全部保存。每份合约只计一次，不双算多空。原生和CMC对应同一instrument选择一个主版本，不重复相加；保留其他版本用于差异检查。</p>
+<p>供应商内部也必须去重。本轮CMC单页BTC结果中，同一exchange_id+market_id出现两条不同价格/OI的记录；身份无法进一步消歧前，整个冲突组退出可用合计，不随意取第一条、最新一条或较大值。完全相同重复可折叠，原始证据全部保留。不同报价币或namespace的市场不能只按ticker去重。</p>
+<p>线性合约<code>N=Q×P</code>。同集合两端的数量变化和美元变化分别算；分解可用<code>Σ[(Q1−Q0)P0]</code>数量贡献与<code>Σ[Q1(P1−P0)]</code>估值贡献，两者之和是名义变化，不是流入资金。反向合约按原始张数/固定参考敞口单列，不能以当前USD/价格的变化误称新开仓。</p>
+<p>页面叫“已覆盖市场OI”，列included/excluded与原因、as_of、合约类别。当前金额允许汇总合格可用源；变化窗口要求起止市场集合及价格口径兼容。新增/丢失覆盖时该窗口显示“暂停比较”，不能把覆盖改变算增仓；其他单平台可比变化仍可显示。保存1H/4H/24H窗口起止与最大对齐误差；24H在数量OI界面统一显示为1D（近24小时）。</p>
+<p>缺失状态分别为fresh/stale/missing/unmapped/no_market_in_scope/coverage_changed/insufficient_history。空响应和未匹配不自动等于零。必需OI缺失只暂停依赖OI的解释/策略，纯技术链路仍可运行。</p>
+<h3 id="621-oi1d24h">6.2.1 数量OI周期命名：1D就是原有24H</h3>
+<p>原方案已包含24H数量变化，本次统一前端名称为<strong>1H / 4H / 1D（近24小时）</strong>。1D在本字段中就是滚动24H：截至当前合格as_of的数量，与24小时前可比较数量相比。内部窗口保留24H/86400秒，不新增一套日界线指标、不重复请求、不重复计分。</p>
+<p>计算为<code>(Q_as_of / Q_24h_ago - 1) × 100%</code>，只对单位兼容、两端一致的已覆盖市场集合计算，起点必须大于0。任一端缺失、过期、单位未知或覆盖改变返回null+reason，不用USD变化顶替数量变化。端点采样时间和对齐误差继续使用现有窗口契约。</p>
+<p>数量OI的“1D（近24小时）”随原生OI采样滚动更新，无须等待日K收盘。图表周期按钮的1D仍表示日K；两者通过列名、tooltip和实际起止时间区分，不把滚动OI称为“日线收盘已确认”。技术策略的日K收盘规则不受此次改名影响。</p>
+<p>默认主表在同格单行显示4H和1D，1H可切换查看；建议参与列表、阶段组表、图表证据和TG使用相同snapshot里的24H字段。统计分位仍使用原来的按日独立样本要求，不将每分钟重叠24H窗口当独立日样本。CMC只有USD OI的样本不能生成数量变化。</p>
+<h3 id="63-oi">6.3 OI比例与异常分级</h3>
+<p>OI/同期流通市值显示在默认行；分母包含circulating_supply、价格、来源、时间与known_at，FDV不可代替。不能推导实际保证金、杠杆、空头比例、控盘程度或轧空概率。不使用3%/10%/25%通用危险档。自由流通量仅允许有依据的情景，不做“总量减Top10”。数量/供给与美元OI/市值相关，不能重复加分。</p>
+<p>历史分位按同币、同窗口、同覆盖取触发前样本。初始基线90日，1H/4H使用非重叠锚点样本，至少300个有效样本才给分位；1D（即原滚动24H）仅做背景，至少60个日样本且注明分辨率，不以短样本P97.5制造精度。期间主要覆盖改变需重建可比基线，历史不足只显示幅度，不能阻断短历史技术计划。</p>
+<p>初始研究标签：数量增长为正且≥P90为异常，≥P97.5为强增长；数量变化为负且≤P5为快速解除；24H已结算费率和为负且≤自身P10为费用异常。单平台与可比聚合分别计算。强度只提高检查优先级，不自动改变参与方向。防抖可要求3次相隔5分钟的合格快照（至少10分钟）；真实清算事件及保护退出不等防抖。</p>
+<h3 id="64">6.4 主市场费率与异常平台</h3>
+<p>参考现货和参考永续独立选择。使用相同测试金额的买入/卖出预计滑点、价差、±1%盘口深度及稳定性，成交额/OI作辅助，不仅看成交额。初始测试金额$1,000、可设$100–$100,000；薄池还需可成交报价和可卖出检查。</p>
+<p>选择合格数据中两侧较差预计滑点最低者，再以价差/持续深度打破并列。每15分钟评估；候选滑点优于当前20%并连续3次成立才切换，减少抖动。当前源失效可立即换参考，但必须标来源变更并暂停不可比指标；已发交易计划绑定原执行市场，不迁移点位与首报价。</p>
+<p>总览显示所选主永续最新已结算费率/实际周期，预测值另列。详情展示各所费率、1H/4H/24H实际结算累计、负费率连续时长与结算次数、净成本/支付项。没有结算记录显示未结算/历史不足，不以最新费率乘次数补齐。</p>
+<p>跨场可选24H综合费率只在同窗口/覆盖足够时，用各时点OI权重明确计算并命名“参考综合”，不是任何平台实际收费；默认不启用，不能掩盖Aster等异动。异常平台独立提示，包括其OI份额、费用异常与质量，不要求它是主市场。</p>
+<p>负费率支付项<code>max(-r,0)</code>、正费率收入项<code>max(r,0)</code>；固定美元名义本金的空头净成本为<code>-Σr</code>。固定币数实际费用还须逐次用数量×settlement mark×费率。费用挤压、主动平空、套保退出、强平分别描述。</p>
+<h3 id="65">6.5 成交、清算、供给与一致性</h3>
+<p>现货与永续主动买卖差额/CVD分别计算。K线<code>2×taker_buy_quote−quote_volume</code>表示成交主动性差额，不等于净流入；记录窗口、重置与覆盖。OI/成交额是存量对期间换手，OI/深度是流动性敏感性；薄盘口也放大下跌，不能当必涨条件。</p>
+<p>perp_last、spot_last、mark、index分开，合约/index基差默认<code>perp_last/index−1</code>，必须同时间口径；mark溢价另命名。成交价插针不自动等于mark清算触发。多空账户比是账户数，大户仓位比是特定样本，不等同全场资金方向。</p>
+<p>清算记录position_side、native_side、订单/成交/快照、金额/数量、时间/窗口、事件ID、去重及采样限制。Binance/Aster快照不能当全量逐笔；上涨减仓仅能确认解除，OI净增也可能伴随清算。CMC清算汇总单独来源显示，不能与其包含的原生金额相加；空列表不判断0，需能力与覆盖说明。</p>
+<p>清算区P1：最近区、给定价格范围内最大区、到某价累计潜在规模，必须带覆盖地址集/模型、mark基准、分箱、as_of和过期条件。Hyperliquid已知地址不等全地址；Aster私密仓位不能当可公开枚举。追加保证金、资金费和全仓其他盈亏会改变清算价。永续清算区不是期权Max Pain，也不是最高价；缺数据不画假区。</p>
+<p>集中度证据独立处理，标交易所/托管/LP/桥/销毁/锁仓及实体归因局限。转入所不等卖出，解锁不等即时抛售；标签公开时间不可回填起涨前。持仓巨大但清算少、成交额远大于OI、平台OI相近均先检查单位/重复/延迟/采样，不能计算“刷OI比例”。</p>
+<h2 id="7-api20269">7. API选型、截至2026年9月的能力与扩展</h2>
+<h3 id="71">7.1 原生与聚合分工</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>来源</th>
+<th>P0职责</th>
+<th>认证/状态</th>
+<th>扩展方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Binance Spot/Futures/Alpha</td>
+<td>核心目录、价格、成交、深度、OI、费用</td>
+<td>公共市场接口；前序有样本实测</td>
+<td>独立adapter与规格映射，不把Alpha当现货上市</td>
+</tr>
+<tr>
+<td>Binance Wallet Rising</td>
+<td>链上候选发现</td>
+<td>已有前序核验；正式端点/参数做启动探针</td>
+<td>官方Skills Hub/文档作为契约参考，响应与覆盖存档</td>
+</tr>
+<tr>
+<td>Hyperliquid</td>
+<td>核心Perp DEX，meta/context、OI、funding、K线、L2</td>
+<td>公共Info/WS；namespace独立</td>
+<td>当前目录验证不代表历史覆盖；地址观察P1</td>
+</tr>
+<tr>
+<td>Aster</td>
+<td>核心Perp DEX，V3公共数据</td>
+<td>当前OI样本、8币历史K线/费率已获取</td>
+<td>实际成功路径存adapter配置，历史OI不保证</td>
+</tr>
+<tr>
+<td>CMC免费Key</td>
+<td>广度目录、代币级OI/费率核对、可得清算</td>
+<td>2026-09-23已验证4币市场列表及3币清算，含Aster/HL OI；批量所接口/长期稳定未测</td>
+<td>原生优先高频，聚合低频校验/补缺；不双算</td>
+</tr>
+<tr>
+<td>OKX</td>
+<td>P0少量跨场验证，完整扫描P1</td>
+<td>公共API样本已核验</td>
+<td>规格/张数/oiCcy/oiUsd单独映射</td>
+</tr>
+<tr>
+<td>Gate、Bitget</td>
+<td>P1长尾和跨场覆盖</td>
+<td>有前序样本；Bitget关注UTA迁移</td>
+<td>统一adapter契约，不能写死旧Classic字段</td>
+</tr>
+<tr>
+<td>Surf/CoinGlass/实体供应商</td>
+<td>P1按需研究</td>
+<td>非免费核心依赖</td>
+<td>先覆盖/成本验收，不因AI/MCP名义绕过预算</td>
+</tr>
+</tbody>
+</table></div>
+<p>链上K线缺口按明确池子选择一个可用公共来源；不能以增加多个榜单替代OHLCV采集。资产暂无可靠免费行情时进入“候选未扫描”，不中断其他资产开发。</p>
+<h3 id="72-cmc">7.2 CMC首批验收与预算</h3>
+<p>官方2026-06更新及2026-09-23保存文档列出：</p>
+<ul>
+<li><code>GET https://pro-api.coinmarketcap.com/v5/cryptocurrency/derivatives/market-pairs/list/latest</code>：代币级跨所交易对，文档Free，按crypto_id优先查询；支持cex/dex/all。</li>
+<li><code>/v5/exchange/derivatives/market-pairs/list/latest</code>：按所批量，适合摊薄目录成本。</li>
+<li><code>/v5/exchange/derivatives/list</code>：所整体信息，不是某币总持仓。</li>
+<li><code>/v5/derivatives/liquidations/cryptocurrency/list/latest</code>：按币汇总1H/4H/24H多空清算；用户提供的免费Key已实际返回BTC/HYPE/RAVE三币记录。</li>
+</ul>
+<p>不使用先前无Key探针中的额外<code>/public-api</code>前缀作为正式契约；以官方上述base+path带<code>X-CMC_PRO_API_KEY</code>只读验证。先前无Key403只能说明那次请求鉴权失败，不证明标准路径所有能力已验收。</p>
+<p>文档配额为免费Basic 15,000 credits/月、50 requests/min；衍生品接口通常每250 market向上计1credit、缓存60秒，额外转换计费另核对。以真实账户usage/status.credit_count为准。100币每5分钟逐币查=864,000 credits/30天，不符合免费；假设3所×500pair×30分钟=8,640 credits/月是待核预算示例，非实际覆盖。</p>
+<p>本轮已完成：BTC、HYPE、ASTER、RAVE永续市场查询，BTC/HYPE补页、BTC单页limit=500核对，以及BTC/HYPE/RAVE清算查询。8次请求全部HTTP200且业务error_code=0，响应credit_count合计8；这不是账户总用量或剩余额度。样本中BTC/HYPE/ASTER都有Aster与Hyperliquid记录，RAVE有Aster而本次无Hyperliquid匹配，不外推历史。</p>
+<p>BTC单页返回193行、192个供应商市场身份，其中一组同ID内容冲突；HYPE两页119行、ASTER95行、RAVE52行，去重数分别相同。单页同ID冲突说明不能把此前分页重复全部解释成翻页期间排序漂移。各样本部分记录延迟很长，最旧超过10小时；按每次响应时间计算last_updated年龄，不将HTTP200或60秒缓存视为实时质量保证。详见<a href="12_CMC免费API实测_2026-09-23.html">CMC实测报告</a>。</p>
+<p>关键缺口：响应有USD OI但没有原始持仓数量、真实费率结算周期和已结算标志。CMC funding保存为供应商当前字段，未与原生历史核对前不能填入“已结算费率”或费用累计；quote.price与exchange_reported_quotes.price可能不同，不直接用OI/price还原真实数量。index_basis也不直接等同本系统自定义基差。exclusions按字段处理，不将volume标记一概解释为OI造假。清算记录返回0可记“该供应商该窗口报告0”，未返回资产仍是未知，不称全网无清算。</p>
+<p>仍待验收：按所批量接口及实际成本、真实账户套餐/剩余额度、全资产覆盖、长期稳定、原生逐市场规格/金额交叉核对、供应/市值端点，以及任何历史OI和完整清算能力。只保存脱敏响应与统计，禁止记录请求头Key。连接已验证不等于正式采集服务已经上线。</p>
+<p>预算默认月预警70%、低频降级85%、停止非必要CMC新请求95%，保留余额做诊断；不会自动升级套餐。原生监测继续。配置页说明“免费数据API优先”不等于服务器、存储或网络没有成本。CMC不可用时只降低聚合覆盖，不把币安数据冒充全场。</p>
+<p>在按所批量端点未验收前，CMC启动预算先限5个重点资产，每30分钟各1次市场查询，另每30分钟1次可合并的清算查询。若每次1credit，则30天约8,640 credits，余量用于供应、诊断和突发复核；实际市场分页或清算分批成本增加时自动减币/降频。清算多币已验证3币，扩大到5币仍须核对该次响应与计费。其余资产继续原生采集，不逐币默认轮询CMC。按所批量验收通过后，设置页展示其实际可覆盖币数与总预算，再扩大聚合范围。</p>
+<h3 id="73">7.3 新交易所接入规范</h3>
+<p>每个adapter声明capability：目录/规格、K线周期与历史、trades/depth、OI单位与历史、funding结算/预测、mark/index、清算语义、分页/限频/时间精度。业务规则调用统一模型，不写<code>if venue == ...</code>阈值散落各处；少数源特有语义放转换层。</p>
+<p>流程：注册禁用源 → 公共探针/官方契约快照 → 身份映射 → 原始/统一字段对照 → 缺口和限频测试 → 影子采集 → 与基准对照 → 设置页启用。新增源不自动改历史信号或跨场数量基线；启用时产生coverage_revision，相关窗口暂停/重建。来源失败隔离，重连使用去重与补数，盘口增量失序则重拉快照，不拿断层簿算滑点。</p>
+<p>必须可支持后续追加交易所，而不改总览字段、信号策略和TG模板。CMC仅USD OI且无法可靠还原base时，可补当前美元广度，但不能进入数量变化比较集合；两种覆盖分母分别显示。</p>
+<h2 id="8">8. 参数设置页面与参数登记表</h2>
+<h3 id="81">8.1 设置页布局</h3>
+<p>左侧分组、右侧表单，顶部显示当前版本、生效时间、草稿差异和运行模式；底部固定“保存草稿”“模拟影响”“发布设置”“恢复默认/回滚”。普通设置使用中文标签、单位、默认值、当前值和简短含义；高级参数折叠但可编辑。无效字段就地说明，不能静默截断或改单位。</p>
+<p>分组包括：市场与候选池、参与策略、多周期/目标、OI与费用、流动性与风险、数据源/API、排序/列/图表、TG提醒、历史保留/系统。P0单管理员，浏览只读；后续团队owner/editor/viewer预留user_id与权限字段，不为首版增加复杂组织流程。</p>
+<h3 id="82">8.2 参数初值：可实施但未证明最优</h3>
+<p>下表是唯一的默认参数登记表。资金费API统一存小数，UI百分比乘100；基点1bp=0.01%。窗口单位和周期编码显式保存。属于规则实验的阈值不称科学常数。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>键/设置项</th>
+<th>初始默认</th>
+<th>可调范围/约束</th>
+<th>生效范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>universe.binance_limit</code></td>
+<td>200资产</td>
+<td>50–500，受免费预算限制</td>
+<td>新扫描名单</td>
+</tr>
+<tr>
+<td><code>universe.alpha_limit</code></td>
+<td>100</td>
+<td>0–300</td>
+<td>新扫描名单</td>
+</tr>
+<tr>
+<td><code>universe.rising_limit</code></td>
+<td>100正式/200候选</td>
+<td>0–300正式</td>
+<td>新扫描名单</td>
+</tr>
+<tr>
+<td><code>universe.deep_limit</code></td>
+<td>80资产共享</td>
+<td>10–200，发布前估算负载</td>
+<td>深度预算</td>
+</tr>
+<tr>
+<td><code>universe.min_circ_cap_usd</code></td>
+<td>1,000,000</td>
+<td>≥0，未知值不算通过</td>
+<td>链上入池</td>
+</tr>
+<tr>
+<td><code>universe.min_pool_liquidity_usd</code></td>
+<td>100,000</td>
+<td>≥0；不能替代滑点检查</td>
+<td>链上入池</td>
+</tr>
+<tr>
+<td><code>strategy.enabled</code></td>
+<td>early/confirmed/retest/restart</td>
+<td>独立开关；停用停止新建议</td>
+<td>新计划</td>
+</tr>
+<tr>
+<td><code>strategy.mode</code></td>
+<td>research_live</td>
+<td>demo/replay/research_live；显示环境</td>
+<td>全局与通知</td>
+</tr>
+<tr>
+<td><code>structure.lookback</code></td>
+<td>20根，60根为独立扫描</td>
+<td>10–120已闭合柱</td>
+<td>新episode</td>
+</tr>
+<tr>
+<td><code>structure.min_touches_per_side</code></td>
+<td>2</td>
+<td>2–6；触及至少隔2柱</td>
+<td>新箱体</td>
+</tr>
+<tr>
+<td><code>structure.touch_tolerance_atr</code></td>
+<td>0.5</td>
+<td>0.1–1.0</td>
+<td>新箱体</td>
+</tr>
+<tr>
+<td><code>structure.inside_close_ratio</code></td>
+<td>0.80</td>
+<td>0.60–1.00</td>
+<td>新箱体</td>
+</tr>
+<tr>
+<td><code>structure.max_drift_height_ratio</code></td>
+<td>0.50</td>
+<td>0–1</td>
+<td>新箱体</td>
+</tr>
+<tr>
+<td><code>indicator.atr_period</code></td>
+<td>14/Wilder</td>
+<td>7–50，预热不足不输出</td>
+<td>新计算版本</td>
+</tr>
+<tr>
+<td><code>indicator.ema_periods</code></td>
+<td>20/50</td>
+<td>正整数，提供5倍最长周期预热目标</td>
+<td>背景，不强制新币齐全</td>
+</tr>
+<tr>
+<td><code>breakout.buffer_atr</code></td>
+<td>0.25</td>
+<td>0–1.0，使用结构周期ATR</td>
+<td>新episode</td>
+</tr>
+<tr>
+<td><code>volume.baseline_bars</code></td>
+<td>20</td>
+<td>10–120，排除触发柱</td>
+<td>新episode</td>
+</tr>
+<tr>
+<td><code>volume.confirm_multiple</code></td>
+<td>1.5；强标签2.0</td>
+<td>≥1；强值≥确认值</td>
+<td>新episode</td>
+</tr>
+<tr>
+<td><code>entry.max_extension_atr</code></td>
+<td>0.5</td>
+<td>0.1–2；以触发周期ATR</td>
+<td>允许追价带</td>
+</tr>
+<tr>
+<td><code>entry.valid_trigger_bars</code></td>
+<td>1个触发周期</td>
+<td>1–6；到期不终止持有计划</td>
+<td>新入场机会</td>
+</tr>
+<tr>
+<td><code>retest.search_bars_4h</code></td>
+<td>6</td>
+<td>1–24；确认之后搜寻</td>
+<td>新回踩事件</td>
+</tr>
+<tr>
+<td><code>retest.zone_atr_4h</code></td>
+<td>0.25</td>
+<td>0.1–1.0</td>
+<td>冻结回踩带</td>
+</tr>
+<tr>
+<td><code>exit.revoke_closes</code></td>
+<td>1</td>
+<td>1–3，必须完整收盘</td>
+<td>事件撤销</td>
+</tr>
+<tr>
+<td><code>exit.protection_atr_buffer</code></td>
+<td>0.25</td>
+<td>0.1–1.0，周期随模板</td>
+<td>新计划保护</td>
+</tr>
+<tr>
+<td><code>exit.early_fallback_atr</code></td>
+<td>1.5</td>
+<td>0.5–3.0</td>
+<td>无确认低点时</td>
+</tr>
+<tr>
+<td><code>entry.min_net_r_trial</code></td>
+<td>1.5</td>
+<td>1–5</td>
+<td>新试仓计划</td>
+</tr>
+<tr>
+<td><code>entry.min_net_r_confirmed</code></td>
+<td>1.8</td>
+<td>1–5，默认≥trial</td>
+<td>新确认计划</td>
+</tr>
+<tr>
+<td><code>risk.paper_trial_pct</code></td>
+<td>0.25%</td>
+<td>0.05–1%；本金可空</td>
+<td>纸上/风险测算</td>
+</tr>
+<tr>
+<td><code>risk.paper_confirmed_pct</code></td>
+<td>0.5%</td>
+<td>0.05–2%</td>
+<td>纸上/风险测算</td>
+</tr>
+<tr>
+<td><code>risk.paper_total_pct</code></td>
+<td>2%</td>
+<td>0.1–5%；关联资产按组合核查</td>
+<td>同时开放风险</td>
+</tr>
+<tr>
+<td><code>risk.reduce_at_t1_fraction</code></td>
+<td>0.5</td>
+<td>0–1；0为关闭自动模板提示</td>
+<td>已有/纸上计划</td>
+</tr>
+<tr>
+<td><code>risk.max_slippage_bps</code></td>
+<td>50bp参考</td>
+<td>1–300；双向评估</td>
+<td>新参与建议</td>
+</tr>
+<tr>
+<td><code>risk.max_spread_bps</code></td>
+<td>30bp参考</td>
+<td>1–200；新参与必需</td>
+<td>新参与建议</td>
+</tr>
+<tr>
+<td><code>risk.probe_notional_usd</code></td>
+<td>1,000</td>
+<td>100–100,000</td>
+<td>比较市场流动性</td>
+</tr>
+<tr>
+<td><code>risk.fee_schedule</code></td>
+<td>每执行市场明确配置</td>
+<td>未知则显示成本未知，不默认为0</td>
+<td>净R/回放</td>
+</tr>
+<tr>
+<td><code>oi.windows</code></td>
+<td>内部1H/4H/24H；UI显示1H/4H/1D</td>
+<td>1D=近24小时，不新增窗口或重复采集</td>
+<td>特征与UI</td>
+</tr>
+<tr>
+<td><code>ui.oi_default_periods</code></td>
+<td>4H + 1D</td>
+<td>同格单行，窄屏可选一个周期</td>
+<td>即时UI</td>
+</tr>
+<tr>
+<td><code>oi.baseline_days</code></td>
+<td>90</td>
+<td>30–180</td>
+<td>新统计基线</td>
+</tr>
+<tr>
+<td><code>oi.min_samples_intraday</code></td>
+<td>300</td>
+<td>≥100；小样本隐藏极端分位</td>
+<td>1H/4H分位</td>
+</tr>
+<tr>
+<td><code>oi.min_samples_daily</code></td>
+<td>60</td>
+<td>≥30；显示样本精度</td>
+<td>1D（原24H）背景</td>
+</tr>
+<tr>
+<td><code>oi.increase_percentiles</code></td>
+<td>90/97.5</td>
+<td>75–99，第二值大于第一值</td>
+<td>异常/强异常</td>
+</tr>
+<tr>
+<td><code>oi.decrease_percentile</code></td>
+<td>5</td>
+<td>1–25，必须负变化</td>
+<td>快速解除</td>
+</tr>
+<tr>
+<td><code>funding.cost_percentile</code></td>
+<td>10</td>
+<td>1–25，实际24H费率和为负</td>
+<td>费用异常</td>
+</tr>
+<tr>
+<td><code>evidence.persist_samples</code></td>
+<td>3次/5分钟</td>
+<td>1–6；显示实际累计持续时长</td>
+<td>慢变量防抖</td>
+</tr>
+<tr>
+<td><code>targets.pivot_left_right</code></td>
+<td>2/2</td>
+<td>1–5；确认延迟必计入</td>
+<td>新目标/拐点</td>
+</tr>
+<tr>
+<td><code>targets.merge_atr</code></td>
+<td>0.5；带最小缓冲0.25ATR</td>
+<td>0.1–2</td>
+<td>对应周期目标带</td>
+</tr>
+<tr>
+<td><code>targets.measured_height_multiple</code></td>
+<td>1.0</td>
+<td>0.5–3；仅测算模板</td>
+<td>不伪称历史压力</td>
+</tr>
+<tr>
+<td><code>history.daily_fetch_max</code></td>
+<td>730已发布日</td>
+<td>90–2000，受上游历史限制</td>
+<td>回补</td>
+</tr>
+<tr>
+<td><code>campaign.idle_end_hours</code></td>
+<td>48</td>
+<td>12–168；有活动日线趋势不结束</td>
+<td>campaign</td>
+</tr>
+<tr>
+<td><code>source.oi_refresh_seconds</code></td>
+<td>深度60秒，基础300秒</td>
+<td>最小值服从上游权重</td>
+<td>采集调度</td>
+</tr>
+<tr>
+<td><code>source.oi_stale_seconds</code></td>
+<td>深度180，基础900，CMC1800</td>
+<td>必须标用途；CMC不作高频触发唯一依据</td>
+<td>字段质量</td>
+</tr>
+<tr>
+<td><code>source.price_book_stale_seconds</code></td>
+<td>15 / 10</td>
+<td>可按市场放宽但停止其即时入场用途</td>
+<td>参与/滑点</td>
+</tr>
+<tr>
+<td><code>source.time_alignment_seconds</code></td>
+<td>60</td>
+<td>1–300，窗口与来源分别配置</td>
+<td>跨场比较</td>
+</tr>
+<tr>
+<td><code>source.cmc_interval_minutes</code></td>
+<td>初始30，按预算动态加长</td>
+<td>≥1且通过credit预测</td>
+<td>聚合补充</td>
+</tr>
+<tr>
+<td><code>source.cmc_focus_assets</code></td>
+<td>启动最多5资产</td>
+<td>1–100；增加前重新估算月credits</td>
+<td>未验收批量接口前</td>
+</tr>
+<tr>
+<td><code>source.cmc_monthly_credits</code></td>
+<td>15,000文档参考</td>
+<td>用户实际套餐与usage覆盖默认</td>
+<td>预算</td>
+</tr>
+<tr>
+<td><code>source.cmc_budget_levels</code></td>
+<td>70/85/95%</td>
+<td>递增；最高≤100%</td>
+<td>提醒/降频/停非必要</td>
+</tr>
+<tr>
+<td><code>source.venue_select_minutes</code></td>
+<td>15</td>
+<td>5–60</td>
+<td>主市场候选评估</td>
+</tr>
+<tr>
+<td><code>source.switch_advantage</code></td>
+<td>滑点改善20%，持续3次</td>
+<td>0–80%，1–6次</td>
+<td>切换防抖</td>
+</tr>
+<tr>
+<td><code>ui.default_view/sort</code></td>
+<td>阶段总览/第4节规则</td>
+<td>可选建议参与、建议试仓、全部信号、合约证据</td>
+<td>即时UI</td>
+</tr>
+<tr>
+<td><code>ui.stage_collapsed/empty_groups</code></td>
+<td>活动非空组展开，空组/终态折叠</td>
+<td>按用户持久化，可隐藏空组</td>
+<td>即时UI</td>
+</tr>
+<tr>
+<td><code>ui.stage_terminal_days</code></td>
+<td>7日</td>
+<td>1–30；完整记录在历史页</td>
+<td>终态组范围</td>
+</tr>
+<tr>
+<td><code>ui.auto_reorder</code></td>
+<td>false</td>
+<td>可开启；默认数字更新、排序手动刷新</td>
+<td>即时UI</td>
+</tr>
+<tr>
+<td><code>alerts.cooldown_minutes</code></td>
+<td>同类30分钟</td>
+<td>1–1440；升级/失效可越过</td>
+<td>新通知</td>
+</tr>
+<tr>
+<td><code>alerts.delivery_ttl_minutes</code></td>
+<td>参与15分钟，风险60分钟</td>
+<td>1–240；过期转记录不补发买入</td>
+<td>队列</td>
+</tr>
+<tr>
+<td><code>alerts.quiet_hours</code></td>
+<td>关闭，时区Asia/Shanghai</td>
+<td>用户开启并选择风险是否例外</td>
+<td>通知</td>
+</tr>
+</tbody>
+</table></div>
+<p>入场带：突破模板从触发门槛起至门槛+max_extension_atr×触发周期ATR；现价必须处于带内。回踩模板用被冻结的上下沿缓冲带，且已发生回踩收回确认。保护价必须来自该模板的已确认低点/固定ATR退出规则并冻结，不能为了提高R移动；具体规则与版本在发布时选定，不由页面临时输入目标后反算。</p>
+<p>初版保护规则固定为：early取触发前最近已确认1H摆动低点减0.25ATR1H；不存在可用摆动低点时采用触发收盘价减1.5ATR1H并标ATR保护。confirmed取突破撤销边界下方0.25ATR4H作为盘中保护；retest取已发生回踩段最低价减0.25ATR1H；restart沿用对应提前/确认模板。盘中保护用于交易计划；原4H收盘撤销和箱底失守仍独立记录。</p>
+<p>初始事件规则补齐：记冻结上沿U、下沿L，1次完整4H收盘低于U撤销本次已确认突破，低于L另记箱体失守；early在4H确认前，1次完整1H收盘低于U撤销早期触发。撤销边界默认U，不能事后挪到L。有效参与提醒至触发后一个触发周期收盘（early/retest为1H，confirmed为4H），期间持续检查现价；到期只停止该入场机会，campaign与持有计划仍可延续。回踩搜寻窗口为确认后6根4H，回踩带为U±0.25ATR4H；实际触及后1H收盘收回U、成交达到基线1.5倍才确认，新计划需重新通过净R/成本条件。上述周期数及保护ATR系数进入设置schema，变更只影响新episode；不可把回踩最低点提前用于尚未发生的交易。</p>
+<h3 id="83">8.3 发布、权限与历史一致性</h3>
+<p>普通列宽/排序偏好即时生效。策略/阈值编辑先存草稿，服务端校验单位、范围、依赖和免费配额，模拟显示影响资产数、刷新预算、哪些规则将重置。发布产生不可变<code>config_version</code>和<code>rule_version</code>，返回生效点；新事件使用新版本，已有计划保留原版本直到结束。</p>
+<p>停止某策略时停止新入场提醒，已有计划保护与结束提醒继续；用户显式结束跟踪才终止。必须修改现有计划时创建有原因的plan_revision并发变更提示，不能静默改止损/首报。回滚创建新发布版本引用旧配置，不改历史。</p>
+<p>凭证采用后端密钥引用：CMC环境变量/受限文件或本地密钥库，前端只见“已配置、验证时间、权限状态”，不回显原值。测试连接按钮只执行只读样本并显示字段覆盖/credit，禁打印Authorization或Key。配置导出不含凭证；Telegram Bot Token同样处理，日志脱敏。</p>
+<h2 id="9">9. 技术架构与数据契约</h2>
+<h3 id="91">9.1 模块化单体，先控制复杂度</h3>
+<p>前端Next.js + React + TypeScript；API采用FastAPI/Pydantic；Python asyncio/httpx/WebSocket适配器；PostgreSQL保存业务、时序与任务/通知outbox；SQLAlchemy + Alembic管理迁移；TA-Lib负责基础指标，本地规则负责结构、目标和策略。正式版本在开发启动时选当时维护的稳定版本并提交lock文件，不把2024教程版本当2026最新，也不在运行时浮动升级。</p>
+<p>首版一个代码库，API和worker分进程；worker按模块调度采集、回补、特征、规则、通知。数据库任务表用租约、心跳、超时重领和唯一键防重复；PostgreSQL outbox与业务事件同事务。Redis/Celery/Kafka不作为首版硬依赖，只有实测队列/缓存压力需要才增加。前端REST取快照，SSE收事件/新版本通知，上游WS由worker集中连接，不让每个浏览器直连交易所。</p>
+<pre><code class="language-text">交易所 / CMC / Wallet发现
+           ↓ 只读adapter + 每源限流
+原始响应归档 → 标准化/身份/质量 → PostgreSQL
+                                  ↓
+                         特征 → 规则 → 行动计划
+                                  ↓ 同事务
+                           快照 + 事件 + outbox
+                           ↙               ↘
+                    FastAPI/SSE        TG通知worker
+                       ↓                    ↓
+               Next.js / TradingView    已绑定收件目标
+</code></pre>
+<p>开发默认本机服务，部署目标Linux单机容器；Docker Compose提供web/api/worker/db，密钥与持久卷独立。没有Docker时可原生启动web/api/worker并连接本地PostgreSQL，不强制为写文档安装运行环境。服务端口配置化，保留当前18766预览服务作设计对照，正式应用另端口起步。</p>
+<p>建议目录：<code>apps/web</code>、<code>services/api</code>、<code>services/worker</code>、<code>packages/contracts</code>、<code>engine/adapters</code>、<code>engine/features</code>、<code>engine/strategies</code>、<code>engine/backtest</code>、<code>migrations</code>、<code>infra</code>、<code>tests/fixtures</code>、<code>docs</code>。已有preview为参考，不把单HTML堆叠脚本直接充当正式后端。</p>
+<h3 id="92">9.2 核心持久化对象</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>对象</th>
+<th>关键语义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>assets/instruments/pools/identity_evidence</td>
+<td>稳定身份、乘数、namespace、上市时间与known_at</td>
+</tr>
+<tr>
+<td>raw_events/source_health/coverage_revisions</td>
+<td>原始引用/哈希、时间、错误、能力、字段覆盖和预算</td>
+</tr>
+<tr>
+<td>candles/oi_points/funding_settlements/trade_flow/depth_samples/liquidations</td>
+<td>每市场原始/规范单位，重复键与时序索引</td>
+</tr>
+<tr>
+<td>supply_snapshots/address_evidence</td>
+<td>流通分母、地址标签、来源、已知时间</td>
+</tr>
+<tr>
+<td>feature_snapshots/structures/target_zones</td>
+<td>数值、结构锚点、确认延迟、计算版本和质量</td>
+</tr>
+<tr>
+<td>campaigns/episodes/plans/plan_revisions</td>
+<td>长追踪首报、独立事件、参与/退出计划及版本</td>
+</tr>
+<tr>
+<td>signal_snapshots/signal_events/outcomes</td>
+<td>列表/图表/TG统一证据快照，全部历史和成熟状态</td>
+</tr>
+<tr>
+<td>settings_versions/watchlists/user_preferences</td>
+<td>参数发布、收藏/隐藏/排序、用户隔离</td>
+</tr>
+<tr>
+<td>notification_destinations/subscriptions/outbox/deliveries/bot_updates</td>
+<td>绑定授权、过滤、持久发送与去重、Telegram update offset</td>
+</tr>
+</tbody>
+</table></div>
+<p>价格/数量用Decimal或数据库numeric，API以decimal string输出；时间UTC毫秒，展示层支持本地时区。原始event_time、received_at、known_at分别存。事件不可变，修订新增revision；OHLCV更正触发修订检查，不静默改历史建议。</p>
+<h3 id="93-api">9.3 API契约</h3>
+<p>所有响应包含schema_version、as_of、data_quality、source_refs，分页含snapshot_id/cursor。业务错误稳定error_code+用户可理解信息。公开行情与修改设置/收藏的认证接口分开。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>接口</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /v1/assets</code>、<code>/v1/instruments</code></td>
+<td>目录、市场能力、稳定身份</td>
+</tr>
+<tr>
+<td><code>GET /v1/signals?view=&amp;phase=&amp;action=&amp;group_by=&amp;list_snapshot_id=</code></td>
+<td>推荐/试仓/阶段/平铺视图、去重计数、组内游标和序号；首报、目标、OI4H/1D及口径</td>
+</tr>
+<tr>
+<td><code>GET /v1/signals/{id}?snapshot_id=</code></td>
+<td>冻结版本与最新版本明确区分</td>
+</tr>
+<tr>
+<td><code>GET /v1/assets/{id}/campaigns</code></td>
+<td>完整追踪与历次episode</td>
+</tr>
+<tr>
+<td><code>GET /v1/candles?instrument=&amp;resolution=&amp;from=&amp;to=</code></td>
+<td>同市场OHLCV，closed状态与缺口</td>
+</tr>
+<tr>
+<td><code>GET /v1/signals/{id}/overlays?snapshot_id=</code></td>
+<td>箱体/箭头/参与带/目标/退出，和文本同版本</td>
+</tr>
+<tr>
+<td><code>GET /v1/assets/{id}/derivatives</code>、<code>/venue-coverage</code>、<code>/funding-cost</code></td>
+<td>已覆盖OI、每所证据、标准费用窗口</td>
+</tr>
+<tr>
+<td><code>GET /v1/stream</code></td>
+<td>SSE event_id、sequence、snapshot版本；断线续接或重取快照</td>
+</tr>
+<tr>
+<td><code>GET /v1/settings/schema</code>、<code>/active</code>、<code>/versions</code></td>
+<td>参数中文元数据与版本</td>
+</tr>
+<tr>
+<td><code>POST /v1/settings/drafts</code>、<code>/validate</code>、<code>/publish</code>、<code>/rollback</code></td>
+<td>只对授权管理员，乐观锁expected_version</td>
+</tr>
+<tr>
+<td><code>GET /v1/sources</code>、<code>POST /v1/sources/{id}/probe</code></td>
+<td>覆盖与只读能力测试，探针独立限频</td>
+</tr>
+<tr>
+<td><code>POST /v1/watchlist</code>、<code>PATCH /v1/watchlist/{id}</code></td>
+<td>收藏/备注/隐藏/静音持久化</td>
+</tr>
+<tr>
+<td><code>POST /v1/notifications/telegram/bind-token</code>、<code>/test</code></td>
+<td>绑定与用户主动测试，不批量自动发送</td>
+</tr>
+<tr>
+<td><code>GET /v1/notifications</code>、<code>PATCH /v1/subscriptions/{id}</code></td>
+<td>通知审计与过滤开关</td>
+</tr>
+<tr>
+<td><code>GET /v1/outcomes</code>、<code>POST /v1/research/replays</code></td>
+<td>历史结果/异步回放任务，不挡实时采集</td>
+</tr>
+</tbody>
+</table></div>
+<p>一个Signal DTO至少包含campaign_id、episode_id、plan_id、snapshot_id、config/rule/schema版本、asset及execution_instrument、first_seen/confirmed/recommended时间和价格、action_new/action_existing、phase_id/phase_changed_at/phase_reason、structure及原周期、entry_zone、protection_rule、revoke_rule、targets_1d/1w、net_r、OI金额/数量/覆盖/密度、oi_changes（内部1H/4H/24H，display_label对应1H/4H/1D，含实际起止/quality）、primary_funding、venue_anomalies、support/counter/missing、expires_at、next_review_at。详情、列表和TG不能各自计算一套结论。</p>
+<p>图表切市场生成独立浏览上下文；如果当前市场不同于计划执行市场，显著标“查看另一市场”，默认不叠原计划价格线。只有可核对的换算/独立计划才能显示另一市场点位。</p>
+<h2 id="10-telegram-bot">10. Telegram Bot提醒</h2>
+<h3 id="101">10.1 绑定与运行方式</h3>
+<p>采用官方Bot API。开发/本机默认long polling <code>getUpdates</code>，无需公网；与webhook互斥，单一消费进程保存update_id/offset。部署已有HTTPS公网后可选择webhook，校验<code>X-Telegram-Bot-Api-Secret-Token</code>，去重并快速落库后返回。接口版本变化在官方文档快照中追踪，不硬编码过时限额。</p>
+<p>用户通过BotFather准备Token，在设置页后端保存引用并用getMe测试身份。生成一次性10分钟绑定码，用户在Telegram主动<code>/start &lt;code&gt;</code>绑定本人会话；群/频道需操作者具备相应管理权限并确认目标，验证机器人可发送。无绑定授权的chat_id不发送；改目标/停用有审计。Token不显示在浏览器URL、日志或导出文件中。</p>
+<p>基本命令：<code>/start</code>、<code>/status</code>、<code>/pause</code>、<code>/resume</code>、<code>/watch &lt;明确资产&gt;</code>、<code>/unwatch</code>、<code>/help</code>。同名币让用户选链/CA，不直接按ticker猜。命令与网页使用同一订阅配置，callback权限绑定chat/user，按钮仅看图、收藏、静音，不执行交易。</p>
+<h3 id="102">10.2 默认发送规则与内容</h3>
+<p>订阅默认发送新“建议参与”、新“建议试仓”、已订阅计划的升级/失效/退出、重要来源故障。普通背景异动默认只进网页，可单独订阅。支持市场池、资产、交易所、策略、时间周期、行动类别、收藏限定、数据质量和静音时段。同一campaign多个策略同时触发可合并主计划摘要，保留子事件链接。</p>
+<p>消息模板必须包含：</p>
+<pre><code class="language-text">[研究信号] ABC · 建议试仓 · 1H提前突破
+市场：指定现货/永续；首次发现：时间 / 价格；首报后：百分比
+现价：价格（数据时间）；参与区：下沿–上沿；有效至：时间
+保护退出：价格 / 盘中触发；结构撤销：周期+收盘条件
+日线目标：区间 / 依据；周线目标：区间 / 前置条件
+合约：已覆盖OI金额 / 流通市值占比；数量4H变化 / 1D变化（近24小时）
+费率：主平台 / 已结算费率 / 周期；其他平台异常
+理由：价格和成交确认、合约状态；缺口或反向证据
+计划ID / 快照时间；[打开计划] [收藏] [静音该币]
+</code></pre>
+<p>字段未知写未知，不填0；不带虚构准确率。demo/replay消息强制显著前缀，与真实研究信号独立目标/开关。文本控制在官方sendMessage解析后4096字符内，模板使用HTML转义，完整证据放详情链接。超长拆分必须关联同一delivery组，退出价/行动不能被截掉。</p>
+<p>用户手机不能打开开发机<code>127.0.0.1</code>链接。默认未配置可访问<code>PUBLIC_APP_URL</code>时发送完整文本并隐藏“打开计划”按钮，标明本机模式；有经用户配置的私有网络或正式HTTPS地址后才生成深链接，不能擅自公开服务。</p>
+<h3 id="103">10.3 去重、更新、重试与时效</h3>
+<p>业务事件与outbox同数据库事务；去重键<code>destination_id + event_id + transition_type + plan_revision</code>唯一。持续普通更新冷却30分钟；新增参与、升级、保护退出、结构失效越过普通冷却但每个事件只生成一条。已发消息可编辑补充“已失效”，需要重新提醒的重大变更另发短消息；静默编辑不能代替紧急提醒。</p>
+<p>发送前重新检查：订阅仍启用、事件未被更新撤销、当前价格仍支持该建议、消息未过期。过期参与信号不补发为“现在可买”，只写历史记录。队列默认参与TTL15分钟、风险TTL60分钟；下游恢复时只推最新有效状态，避免积压刷屏。</p>
+<p>成功保存Telegram message_id；429按<code>retry_after</code>等待，5xx/网络失败指数退避加抖动，403等权限故障停该目标并在设置页提示。单chat与全局发送队列独立限速，默认全局10条/秒、单chat1条/秒作为保守调度上限，仍以官方返回限制为准；群聊可能更严，遇429自动收紧。达到重试上限进入dead-letter，可人工重试。</p>
+<p>网络超时可能发生“Telegram已收到但本机未拿到message_id”，Bot API sendMessage没有本产品可用的任意幂等键，不能承诺端到端exactly-once。此类标delivery_unknown，禁止无脑重复发同一参与建议；重试策略要结合TTL和最新状态，显示可能重复的审计原因。</p>
+<p>通知页必须区分：规则产生、用户过滤、冷却抑制、排队、发送成功、失败、未知、过期。TG故障不阻断网页和行情。保护提醒也是软件通知，不保证替代交易所止损单；自动下单不在本期。</p>
+<h2 id="11_1">11. 历史研究、回放与策略验证</h2>
+<p>复盘数据已有9币价格/OI、8币Aster K线/费率及官方校验记录；不把赢家选样当准确率。输入记录raw/as_of/known_at、身份和当时覆盖；按时间顺序、真实确认延迟运行同一规则代码，禁止用未来拐点、后来公布地址调查或当前流通量回填过去。</p>
+<p>加入失败突破、深负费率持续下跌、现货独立上涨、仅单平台异动、低流动性、退市、缺数据及长周期横盘样本。训练/验证按时间和资产分离，同一campaign不跨集合泄漏。比较仅价格、+数量OI、+资金费/基差、+现货主动成交的增量效果，低增量指标可从默认信号撤下。</p>
+<p>报告全部事件分母、提前量、误报/漏报、建议覆盖率、1H/4H/24H及固定持有窗口的MFE/MAE、最大回撤、费用滑点资金费后的纸上收益分布、可成交容量。明确未成熟/数据缺失/未成交；同根K线触及目标与止损用更细数据，否则顺序未知并保守处理。</p>
+<p>发行到峰值、首次可监测到峰值、首报后价格表现、按策略真实可成交模拟收益分别展示。首次确认以前的涨幅不能宣传为信号收益。策略可在research_live中给明确建议并跟踪，但“盈利已验证”只能在独立验证后标注；不凭短期100%胜率加认证徽章。</p>
+<h2 id="12_1">12. 运行目标、存储、权限与故障处理</h2>
+<h3 id="121">12.1 调度与性能目标</h3>
+<p>闭合K线正常到达后90秒内完成评估；新有效参与/退出事件落库到通知出队目标P95≤10秒；列表缓存读取P95≤1秒，以上均为目标待测，不含上游延迟和Telegram网络延迟。展示provider_age、received_age、engine_lag、notification_lag分别归因。</p>
+<p>深度资产盘口/成交优先WS，OI60秒、基础资产OI300秒，目录/候选低频更新，CMC预算控制默认30分钟。费率按结算事件和下一结算时点调度，不对所有币每秒轮询。每源权重预算、并发、退避、熔断、重连/补数独立；达到免费配额降频并展示覆盖变化。用户暂停扫描可选保留已有计划保护监测，默认保留。</p>
+<p>5分钟深度/价格聚合、K线、OI采样与事件数据按时间分区。数据库容量超限预警，不能删除原事件所需证据后仍宣称可复算。</p>
+<h3 id="122">12.2 保存周期与备份</h3>
+<p>原始盘口增量默认不全量长期保存：保留诊断最近7天与事件前后窗口；规则必要的聚合深度样本90天。原始采集响应30天压缩归档，事件引用片段和哈希至少1年；标准K线/OI/funding至少1年，重要campaign/plan/notification/config历史至少2年。参数可缩短，但必须显示对回放能力的影响。</p>
+<p>PostgreSQL每日备份、保留7日+4周；版本迁移前备份并做恢复演练。大历史文件用本地压缩Parquet/JSONL分区，数据库留引用，未来可接对象存储。市场数据归档与用户凭证分开；不把密钥写入原始响应、错误堆栈或日志URL。</p>
+<h3 id="123">12.3 身份与运行边界</h3>
+<p>本机开发默认loopback，不隐式公网暴露。正式多人部署需登录、session、CSRF/权限隔离，设置/源启停/订阅修改需管理员或对应owner；公开只读行情与私有收藏分开缓存。密钥仅后端读取，API返回脱敏状态。没有账户交易权限、私钥、签名或下单端点。</p>
+<p>停电/worker崩溃恢复从数据库checkpoint补数，sequence去重后重算必要窗口；不能重复发首次信号。源更正数据产生revision，通知解释更正，不删除旧结果。上游和CMC不一致时保留两份及差异，暂停依赖冲突字段的组合标签，纯技术数据正常时仍可继续。</p>
+<h2 id="13_1">13. 实施顺序与交付门槛</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>里程碑</th>
+<th>交付</th>
+<th>必须通过后再继续</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M0 工程与数据契约</td>
+<td>应用骨架、数据库迁移、配置schema、adapter接口、密钥引用、CMC验证报告</td>
+<td>本地可启动；无明文密钥；样例字段/单位一致</td>
+</tr>
+<tr>
+<td>M1 真实数据基础</td>
+<td>Binance+HL+Aster核心、Wallet/Alpha目录、CMC补充、OKX小范围复核，质量页</td>
+<td>K线/数量/费用对照、覆盖去重、限频与断线恢复</td>
+</tr>
+<tr>
+<td>M2 信号和计划</td>
+<td>四策略、首报/campaign/episode、目标/保护、稳定快照、回放引擎</td>
+<td>无未来数据；失败/缺失/过期场景明确；列表文本可复算</td>
+</tr>
+<tr>
+<td>M3 总览与图表</td>
+<td>单行双视图、序号/排序、目标区、可见箱体和触发箭头、联动副图、设置发布</td>
+<td>图文同快照、多周期不改原事件、窄屏/排序稳定</td>
+</tr>
+<tr>
+<td>M4 TG与运行</td>
+<td>绑定、订阅、outbox、重试/TTL/静音、通知记录、备份恢复</td>
+<td>测试目标经用户确认；不发过期参与、不重复首报，故障有审计</td>
+</tr>
+<tr>
+<td>M5 前向研究</td>
+<td>小池持续运行、完整信号样本、成本后回放、规则对照</td>
+<td>初始7天运行质量通过；绩效不凭7天短样本宣称已验证</td>
+</tr>
+<tr>
+<td>P1 扩展</td>
+<td>Gate/Bitget、更多链/池、公开地址清算区、形态研究、TG图片</td>
+<td>每源独立验收与预算，不影响核心数据</td>
+</tr>
+</tbody>
+</table></div>
+<p>M0即创建完整页面路由与schema，设置/TG不等到最后才临时设计。M1可边积累数据边实现M2；没有合格历史的币使用可用技术规则，不等待全网历史齐全。每阶段交付可运行纵向路径，避免先堆所有交易所再无限延后可见产品。</p>
+<p>当前授权是完成方案及准备实现；本文不是已完成代码或自动部署记录。下一步依此实施，不需要重新讨论已确认的市场范围、图表版本和单行布局；真实能力缺口用降级状态与测试结果处理。</p>
+<h2 id="14">14. 最终验收矩阵</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>编号</th>
+<th>场景</th>
+<th>通过条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AC01</td>
+<td>明确行动</td>
+<td>满足规则且现价可执行时显示建议参与/试仓；超价带后自动变更，非一律观察</td>
+</tr>
+<tr>
+<td>AC02</td>
+<td>早期与确认</td>
+<td>1H提前触发、4H确认分别记录，不能提前回填4H时间</td>
+</tr>
+<tr>
+<td>AC03</td>
+<td>首报</td>
+<td>升级/重启/切源不改首次记录，同市场首报后%可复算</td>
+</tr>
+<tr>
+<td>AC04</td>
+<td>长趋势</td>
+<td>新episode保留campaign首报，失效旧事件不复活</td>
+</tr>
+<tr>
+<td>AC05</td>
+<td>单行总览</td>
+<td>默认OI金额与占比、主费率、首报、行动、日周目标均有位置，缺失可读</td>
+</tr>
+<tr>
+<td>AC06</td>
+<td>序号排序</td>
+<td>服务端分页稳定、跨页序号正确、并列有稳定键，新行情不跳行</td>
+</tr>
+<tr>
+<td>AC07</td>
+<td>主市场</td>
+<td>同金额滑点/深度选源，来源切换有防抖，异常DEX仍提示</td>
+</tr>
+<tr>
+<td>AC08</td>
+<td>数量与金额</td>
+<td>数量不变价格涨20%，数量变化0/金额20%；不称新增20%资金</td>
+</tr>
+<tr>
+<td>AC09</td>
+<td>聚合</td>
+<td>乘数/反向/类别正确，多空与多供应商不双算；覆盖变更暂停比较</td>
+</tr>
+<tr>
+<td>AC10</td>
+<td>比例分母</td>
+<td>无可靠流通量则不计算占比，不替FDV；历史分母用当时已知值</td>
+</tr>
+<tr>
+<td>AC11</td>
+<td>费率</td>
+<td>1H/4H/8H及周期变化按真实结算累加，预测不混入历史</td>
+</tr>
+<tr>
+<td>AC12</td>
+<td>清算</td>
+<td>原生采样与CMC汇总分层，不相加、不将空表当0；涨价减仓不自动叫爆空</td>
+</tr>
+<tr>
+<td>AC13</td>
+<td>图表结构</td>
+<td>箱体可见、成交量不遮挡、准确箭头指触发K线，区间与箱体名称真实</td>
+</tr>
+<tr>
+<td>AC14</td>
+<td>图文一致</td>
+<td>表/详情/TG/图层同snapshot；切周期不变原信号，切市场不混点位</td>
+</tr>
+<tr>
+<td>AC15</td>
+<td>日周目标</td>
+<td>有来源/周期/前置条件/确认时间，未知或历史不足不造数，测算单独标</td>
+</tr>
+<tr>
+<td>AC16</td>
+<td>风险与退出</td>
+<td>盘中保护、收盘撤销、箱底失守各自可回放；跳空与成本显式处理</td>
+</tr>
+<tr>
+<td>AC17</td>
+<td>新源扩展</td>
+<td>用新adapter通过注册进入既有表格/策略/TG，无须复制业务逻辑</td>
+</tr>
+<tr>
+<td>AC18</td>
+<td>设置发布</td>
+<td>schema验证、预算模拟、版本化、既有计划冻结、回滚不改历史</td>
+</tr>
+<tr>
+<td>AC19</td>
+<td>CMC免费预算</td>
+<td>Key实测能力报告、credit计数、70/85/95策略、原生降级继续</td>
+</tr>
+<tr>
+<td>AC20</td>
+<td>TG绑定</td>
+<td>未绑定不发送、测试明确目标、配置与日志不出现Token/Key</td>
+</tr>
+<tr>
+<td>AC21</td>
+<td>TG可靠性</td>
+<td>重复事件、429、5xx、未知发送、权限失效、过期积压均可诊断</td>
+</tr>
+<tr>
+<td>AC22</td>
+<td>TG链接</td>
+<td>本地URL不误发为手机可用公网链接；无PUBLIC_APP_URL有完整文本</td>
+</tr>
+<tr>
+<td>AC23</td>
+<td>重启恢复</td>
+<td>原始/特征/事件/通知幂等，历史缺口补数不重复首报</td>
+</tr>
+<tr>
+<td>AC24</td>
+<td>回测真实</td>
+<td>负样本/时间留出/确认延迟/成本/退市齐全，价格表现与交易收益分开</td>
+</tr>
+<tr>
+<td>AC25</td>
+<td>现有状态诚实</td>
+<td>demo/replay/research_live醒目标识，试验参数无虚构胜率</td>
+</tr>
+<tr>
+<td>AC26</td>
+<td>数据健康</td>
+<td>延迟/零值/缺失/无映射/覆盖变化分开，单源失败不拖垮其他源</td>
+</tr>
+<tr>
+<td>AC27</td>
+<td>可操作性</td>
+<td>用户能从一行找到当前建议、参与价、退出条件与日/周目标，并在图中核对</td>
+</tr>
+<tr>
+<td>AC28</td>
+<td>1D数量OI</td>
+<td>UI的1D与原24H字段完全一致，只显示一次；同覆盖数量可复算、缺失原因明确，不等日K收盘或增加重复请求</td>
+</tr>
+<tr>
+<td>AC29</td>
+<td>建议独立列表</td>
+<td>仅纳入当前有效participate/trial对应列表；超价、撤销、到期、必需数据过期即时移出，空态明确</td>
+</tr>
+<tr>
+<td>AC30</td>
+<td>阶段分组</td>
+<td>每资产每快照只归一组，计数按全量筛选去重、组内序号分页稳定；折叠持久、转组不重置首报或重发TG</td>
+</tr>
+</tbody>
+</table></div>
+<p>实现任务及依赖见配套《11_实施任务与验收矩阵_v1.0》。旧37项OI讨论逐条继续覆盖，新增决策与设置/通知条目见《09_需求讨论覆盖清单_v1.0》。</p>
+<h2 id="15">15. 资料依据与交付边界</h2>
+<ul>
+<li><a href="https://coinmarketcap.com/api/documentation/pro-api-reference/derivatives">CMC衍生品官方文档</a>、<a href="https://coinmarketcap.com/api/documentation/changelog">更新记录</a>、<a href="https://coinmarketcap.com/api/pricing/">价格</a>。2026-09-23官方快照位于<code>docs/research/oi-2026-09-23/sources</code>；本轮带Key探针位于<code>docs/api/cmc-auth-check-2026-09-23</code>。</li>
+<li><a href="https://core.telegram.org/bots/api">Telegram Bot API</a>。本轮重新下载的HTML、抓取时间和SHA-256位于<code>docs/api/official-2026-09-23</code>，核对了getUpdates/webhook互斥、secret_token、retry_after、update_id与消息长度。</li>
+<li><a href="https://github.com/binance/binance-public-data">Binance公共归档</a>、<a href="https://github.com/binance/binance-skills-hub">Binance Skills Hub</a>、<a href="https://github.com/asterdex/api-docs">Aster官方API</a>、<a href="https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/info-endpoint">Hyperliquid Info API</a>。原有24份官方文档继续保留，接入时独立检查当前版本，不能只凭旧文档认定可用。</li>
+<li><a href="research/oi-2026-09-23/复盘报告.md">9币复盘报告</a>。原始历史数据与质量检查用于机制研究，不能将外部操纵叙述直接当训练真值。</li>
+<li>图表固定版本证据：<a href="07_ChartingLibrary_32.1.0_采用与验收.md">采用记录</a>。其中v0.6页面状态为历史，本期以本文及新验收记录为准。</li>
+<li>本轮免费Key只读验证：<a href="12_CMC免费API实测_2026-09-23.html">CMC实测报告</a>。密钥原文不进入文档、前端或归档响应。</li>
+</ul>
+<p>本轮交付的是最终实施需求、参数登记、架构/API/通知契约、任务与验收矩阵、官方资料及CMC真实响应检查。现有<code>signals-a.html</code>仍是v0.7合成预览；新行动列、首报、主费率、日周目标、设置页和TG将在正式代码阶段实现，不能把规划当作已上线能力。</p><div class="footer">ERJI · 来源、参数与能力状态可复核。旧版本保留为历史。</div></main></div></body></html>
