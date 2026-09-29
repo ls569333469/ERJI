@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=78"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "erji-radar"
+version = "0.1.0"
+description = "ERJI research market radar: read-only market ingestion and evidence"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn>=0.34,<1", "httpx>=0.28,<1",
+  "SQLAlchemy>=2.0,<3", "alembic>=1.15,<2", "psycopg[binary]>=3.2,<4",
+  "pydantic-settings>=2.8,<3", "numpy>=2.2,<3", "TA-Lib>=0.6,<0.7", "websockets>=15,<17"
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[tool.setuptools.packages.find]
+include = ["engine*", "services*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+

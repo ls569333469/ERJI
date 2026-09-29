@@ -1,0 +1,101 @@
+name: erji
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+x-backend: &backend
+  logging: *logging
+  build:
+    context: .
+    dockerfile: infra/Dockerfile.api
+  environment: &backend-env
+    ERJI_DATABASE_URL: postgresql+psycopg://erji:${ERJI_DB_PASSWORD:?Set ERJI_DB_PASSWORD in .env}@db:5432/erji
+    ERJI_MODE: research_live
+    ERJI_REQUIRE_AUTH: "true"
+    ERJI_COOKIE_PATH: /erji
+    ERJI_ADMIN_TOKEN_FILE: /run/secrets/admin-token.txt
+    ERJI_CMC_KEY_FILE: ${ERJI_CMC_KEY_FILE:-/run/secrets/CMC.txt}
+    ERJI_BYKARANTELI_KEY_FILE: ${ERJI_BYKARANTELI_KEY_FILE:-/run/secrets/bykaranteli.txt}
+    ERJI_TELEGRAM_TOKEN_FILE: ${ERJI_TELEGRAM_TOKEN_FILE:-}
+    ERJI_WEB_ORIGIN: ${ERJI_WEB_ORIGIN:-http://127.0.0.1:18770}
+  volumes:
+    - ${ERJI_SECRET_DIR:?Set private ERJI_SECRET_DIR}:/run/secrets:ro
+  restart: unless-stopped
+services:
+  db:
+    logging: *logging
+    image: postgres:18.3-bookworm
+    environment:
+      POSTGRES_USER: erji
+      POSTGRES_DB: erji
+      POSTGRES_PASSWORD: ${ERJI_DB_PASSWORD:?Set ERJI_DB_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U erji -d erji"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  migrate:
+    <<: *backend
+    command: ["python","-m","alembic","upgrade","head"]
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+  api:
+    <<: *backend
+    command: ["python","-m","uvicorn","services.api.main:app","--host","0.0.0.0","--port","18771"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:18771/v1/health',timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  worker-live:
+    <<: *backend
+    command: ["python","-m","services.worker.main","--role","live"]
+    depends_on:
+      api:
+        condition: service_healthy
+  worker-jobs:
+    <<: *backend
+    command: ["python","-m","services.worker.main","--role","jobs"]
+    depends_on:
+      api:
+        condition: service_healthy
+  worker-streams:
+    <<: *backend
+    command: ["python","-m","services.worker.main","--role","streams"]
+    depends_on:
+      api:
+        condition: service_healthy
+  worker-notify:
+    <<: *backend
+    profiles: [notifications]
+    command: ["python","-m","services.worker.main","--role","notify"]
+    depends_on:
+      api:
+        condition: service_healthy
+  web:
+    logging: *logging
+    environment:
+      ERJI_API_ORIGIN: http://api:18771
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.web
+      args:
+        NEXT_PUBLIC_BASE_PATH: /erji
+    ports:
+      - "127.0.0.1:18770:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  pgdata:
+

@@ -1,0 +1,24 @@
+# Initial memory caps from the approved plan; CPU budgets require host preflight.
+# Compose automatically merges these with compose.yml when explicitly passed.
+services:
+  db:
+    mem_limit: 512m
+    cpus: ${ERJI_DB_CPUS:?Set CPU budget after host preflight}
+  api:
+    mem_limit: 512m
+    cpus: ${ERJI_API_CPUS:?Set CPU budget after host preflight}
+  web:
+    mem_limit: 384m
+    cpus: ${ERJI_WEB_CPUS:?Set CPU budget after host preflight}
+  worker-live:
+    mem_limit: 384m
+    cpus: ${ERJI_LIVE_CPUS:?Set CPU budget after host preflight}
+  worker-jobs:
+    mem_limit: 1024m
+    cpus: ${ERJI_JOBS_CPUS:?Set CPU budget after host preflight}
+  worker-streams:
+    mem_limit: 384m
+    cpus: ${ERJI_STREAMS_CPUS:?Set CPU budget after host preflight}
+  migrate:
+    mem_limit: 512m
+    cpus: ${ERJI_API_CPUS:?Set CPU budget after host preflight}

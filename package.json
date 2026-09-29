@@ -1,0 +1,10 @@
+{
+  "name": "erji", "version": "0.1.0", "private": true,
+  "workspaces": ["apps/web"],
+  "scripts": {
+    "dev": "npm run dev --workspace apps/web",
+    "build": "npm run build --workspace apps/web",
+    "typecheck": "npm run typecheck --workspace apps/web",
+    "contracts": "openapi-typescript packages/contracts/openapi.json -o apps/web/src/lib/api.generated.ts"
+  }
+}
