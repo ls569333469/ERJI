@@ -104,7 +104,7 @@ def subscriptions(venue):
 
 async def stream_venue(venue,stop_after=None,shard=0,shards=1):
     from websockets.asyncio.client import connect
-    base={'binance':'wss://fstream.binance.com','aster':'wss://fstream.asterdex.com','binance_spot':'wss://stream.binance.com:9443'}[venue]
+    base={'binance':'wss://fstream.binance.com','aster':'wss://fstream.asterdex.com','binance_spot':'wss://data-stream.binance.vision:443'}[venue]
     backoff=1;started=now_ms()
     while stop_after is None or now_ms()-started<stop_after*1000:
         selected=sorted(await asyncio.to_thread(subscriptions,venue),key=lambda i:i.id)[shard*128:(shard+1)*128] if shards>1 else await asyncio.to_thread(subscriptions,venue)

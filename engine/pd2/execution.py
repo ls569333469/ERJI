@@ -24,7 +24,7 @@ class ExecutionAdapter(PublicAdapter):
                 observed=int(data.get("T") or data.get("E") or received)
                 bids,asks=data["bids"],data["asks"]
             elif venue in ("binance_spot","binance_alpha"):
-                base="https://api.binance.com/api/v3/depth" if venue=="binance_spot" else "https://www.binance.com/bapi/defi/v1/public/alpha-trade/fullDepth"
+                base="https://data-api.binance.vision/api/v3/depth" if venue=="binance_spot" else "https://www.binance.com/bapi/defi/v1/public/alpha-trade/fullDepth"
                 data,ref,received=await self.request(batch,"GET",base,params={"symbol":native,"limit":100})
                 if venue=="binance_alpha":data=data["data"]
                 observed=int(data.get("E") or data.get("T") or received);bids,asks=data["bids"],data["asks"]

@@ -30,7 +30,7 @@ def kline(batch,iid,res,row,ref,received):
 class BinanceCashAdapter(PublicAdapter):
     def __init__(self,alpha=False):
         super().__init__();self.alpha=alpha;self.venue='binance_alpha' if alpha else 'binance_spot'
-        self.base='https://www.binance.com/bapi/defi/v1/public/alpha-trade' if alpha else 'https://api.binance.com/api/v3'
+        self.base='https://www.binance.com/bapi/defi/v1/public/alpha-trade' if alpha else 'https://data-api.binance.vision/api/v3'
         self.catalog=[];self.catalog_at=0;self.tokens={}
     async def data(self,batch,path,params=None):
         data,ref,received=await self.request(batch,'GET',self.base+path,params=params)

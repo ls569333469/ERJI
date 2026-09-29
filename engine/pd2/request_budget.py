@@ -15,7 +15,7 @@ def budget_spec(url, kwargs):
     host=urlsplit(url).hostname or 'unknown'
     path=urlsplit(url).path
     weight=1;cap=300;gap=250
-    if 'binance.com' in host:
+    if host == 'data-api.binance.vision' or host == 'binance.com' or host.endswith('.binance.com'):
         cap=600
         if 'ticker/24hr' in path:weight=80
         elif path.endswith('/depth'):weight=5
