@@ -56,7 +56,33 @@ def pivots(bars, key, left=2, right=2):
             "index":i,"source_bar_ids":[b["open_time"] for b in bars[i-left:i+right+1]]})
     return points
 
-def technical(bars, resolution, now, tick="0.00000001", config=None):
+# Bounded cache keyed by closed-bar values, revisions, parameters and availability.
+# Quote ticks reuse calculations; callers receive copies so frozen snapshots cannot mutate it.
+from collections import OrderedDict
+import json
+from threading import RLock
+_analysis_cache=OrderedDict()
+_analysis_lock=RLock()
+
+def technical(bars,resolution,now,tick="0.00000001",config=None):
+    rows=closed_bars(bars,now)
+    settings=config.model_dump() if config and hasattr(config,'model_dump') else vars(config) if config else {}
+    key=sha256(json.dumps([rows,resolution,str(tick),settings],sort_keys=True,default=str).encode()).hexdigest()
+    with _analysis_lock:
+        cached=_analysis_cache.get(key)
+        if cached is not None:_analysis_cache.move_to_end(key)
+    if cached is None:
+        cached=_technical(rows,resolution,now,tick,config)
+        with _analysis_lock:
+            _analysis_cache[key]=deepcopy(cached)
+            while len(_analysis_cache)>256:_analysis_cache.popitem(last=False)
+    result=deepcopy(cached)
+    if result.get('status') in ('fresh','stale'):
+        stale=now-result['closed_at']>DURATIONS[resolution]+180000
+        result['status']='stale' if stale else 'fresh';result['reason']='最近闭合K线过期' if stale else None
+    return result
+
+def _technical(bars, resolution, now, tick="0.00000001", config=None):
     rows=closed_bars(bars,now)
     # Do not silently calculate through a missing interval.
     duration=DURATIONS[resolution]
@@ -83,6 +109,21 @@ def technical(bars, resolution, now, tick="0.00000001", config=None):
     left=getattr(config,"pivot_left",2);right=getattr(config,"pivot_right",2)
     factor=D(str(getattr(config,"zone_atr_multiplier",.25)))
     tops,bottoms=pivots(rows,"high",left,right),pivots(rows,"low",left,right)
+    # Independent standard AVWAP: a pivot becomes usable only after right-bar confirmation.
+    # OHLCV typical-price approximation; missing base volume disables it, never use USD volume as base.
+    for i,point in enumerate(series):
+        for name,anchors in (('avwap_high',tops),('avwap_low',bottoms)):
+            usable=[a for a in anchors if a['index']+right<=i]
+            point[name]=None
+            if usable:
+                segment=rows[usable[-1]['index']:i+1]
+                if all(b.get('base_volume') is not None for b in segment):
+                    volume_sum=sum(D(b['base_volume']) for b in segment)
+                    if volume_sum>0:
+                        point[name]=str(sum((D(b['high'])+D(b['low'])+D(b['close']))/3*D(b['base_volume']) for b in segment)/volume_sum)
+        period=getattr(config,'trailing_period',22)
+        multiple=D(str(getattr(config,'trailing_atr_multiple',3)))
+        point['chandelier_reference']=str(max(D(b['high']) for b in rows[i-period+1:i+1])-multiple*D(str(atr[i]))) if i+1>=period and np.isfinite(atr[i]) else None
     direction="unknown"
     if len(tops)>=2 and len(bottoms)>=2:
         dh=D(tops[-1]["price"])-D(tops[-2]["price"]);dl=D(bottoms[-1]["price"])-D(bottoms[-2]["price"])

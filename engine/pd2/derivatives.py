@@ -155,7 +155,11 @@ def context_for(market, now):
     from engine.pd2.providers import quote_usd_rate
     native=[]
     with Session() as s:
-        for inst,st in s.execute(select(Instrument,MarketState).join(MarketState).where(Instrument.asset_id==market.asset_id)):
+        from engine.pd2.universe_policy import membership
+        aliases, _ = membership(s)
+        canonical = aliases.get(market.asset_id, market.asset_id)
+        matched = [asset for asset, key in aliases.items() if key == canonical]
+        for inst,st in s.execute(select(Instrument,MarketState).join(MarketState).where(Instrument.asset_id.in_(matched))):
             p=st.payload;fx=quote_usd_rate(inst.quote_asset,s,now);oi=p.get("oi_notional_quote");at=p.get("oi_as_of")
             if oi is None or not fx or at is None:continue
             native.append({"instrument_id":inst.id,"venue":inst.venue,"native_pair":inst.spec.get("base_asset",inst.native_symbol.removesuffix(inst.quote_asset))+"/"+inst.quote_asset,"notional_usd":str(D(str(oi))*fx),"quantity":p.get("oi_base"),"observed_at":at,"quantity_status":"native_base_quantity"})
@@ -163,6 +167,8 @@ def context_for(market, now):
         main=(selection.payload if selection else {}).get("selected_perpetual")
         if main and main!=market.instrument_id:
             fund=[{"time":r.settled_at,"rate":str(r.rate),"interval_seconds":r.interval_seconds} for r in s.scalars(select(FundingPoint).where(FundingPoint.instrument_id==main,FundingPoint.settled_at<=now,FundingPoint.settled_at>=now-2*86400000).order_by(FundingPoint.settled_at))]
+        funding_row=s.get(MarketState,main or market.instrument_id)
+        funding_payload=funding_row.payload if funding_row else {}
     cross=aggregate_oi(native,cross,now)
     from engine.pd2.oi_aggregate import history_changes
     cross["changes"]=history_changes(market.asset_id,cross,now)
@@ -190,5 +196,6 @@ def context_for(market, now):
         short=sum(D(str(e.get("notional_usd") or 0)) for e in recent if e["liquidated_side"]=="short")
         long=sum(D(str(e.get("notional_usd") or 0)) for e in recent if e["liquidated_side"]=="long")
         facts.append({"kind":"recorded_liquidations","text":f"近1H来源样本：空头清算 {short:.0f} USD，多头清算 {long:.0f} USD","action_impact":"已发生清算证据，不代表未来买盘或全市场总量"})
-    return {"cross_market_oi":cross,"funding_reference_instrument":main or market.instrument_id,"settled_costs":costs,"oi_baseline":oi_daily_baseline(samples,market.oi_base),
+    return {"cross_market_oi":cross,"funding_reference_instrument":main or market.instrument_id,
+      "funding_reference":{"instrument_id":main or market.instrument_id,"rate":funding_payload.get('funding_rate'),'interval_seconds':funding_payload.get('funding_interval_seconds'),'settled_at':funding_payload.get('funding_settled_at'),'selection':'execution_liquidity_comparison' if main else 'current_market_fallback'},"settled_costs":costs,"oi_baseline":oi_daily_baseline(samples,market.oi_base),
       "liquidation_model":model,"visible_positions":positions,"liquidation_summary":liquidation_summary,"native_tape":tape,"facts":facts,"as_of":now}

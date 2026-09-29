@@ -82,34 +82,46 @@ def save_batch(batch):
             s.execute(insert(Asset).values(id=item["asset_id"],symbol=item.get("spec",{}).get("display_symbol",item.get("spec",{}).get("base_asset",item["asset_id"]))[:40],identity_status="native_catalog",known_at=now_ms()).on_conflict_do_nothing(index_elements=["id"]))
             s.merge(Instrument(**item))
         s.flush()
+        if batch.metadata.get('catalog_complete'):
+            current={i['id'] for i in batch.instruments}
+            for old in s.scalars(select(Instrument).where(Instrument.venue==batch.venue,Instrument.id.notin_(current))):
+                old.spec={**old.spec,'status':'delisted_or_ineligible','catalog_checked_at':now_ms()}
         candle_keys=[(r["instrument_id"],r["resolution"],r["open_time"]) for r in candles]
         existing={}
         if candle_keys:
             for start in range(0,len(candle_keys),300):
                 existing.update({(c.instrument_id,c.resolution,c.open_time):c for c in s.scalars(select(Candle).where(tuple_(Candle.instrument_id,Candle.resolution,Candle.open_time).in_(candle_keys[start:start+300])))})
-        candle_updates=[]
+        candle_updates=[];revision_events=[]
         for item in candles:
             low,high=Decimal(item["low"]),Decimal(item["high"])
             if low>high or not low<=Decimal(item["open"])<=high or not low<=Decimal(item["close"])<=high: continue
             key=(item["instrument_id"],item["resolution"],item["open_time"])
             old=existing.get(key)
+            if old and old.is_closed and item['is_closed'] and all(getattr(old,k)==(Decimal(item[k]) if item.get(k) is not None else None) for k in ('open','high','low','close','base_volume','quote_volume')):
+                continue
             revision=old.revision if old else 1
             if old and old.is_closed and any(getattr(old,k)!=(Decimal(item[k]) if item[k] is not None else None) for k in ("open","high","low","close","base_volume")):
                 revision+=1
-                emit(s,"candle_revision",{"instrument_id":item["instrument_id"],"resolution":item["resolution"],"open_time":item["open_time"],"revision":revision,"previous_raw_ref":old.raw_ref,"raw_ref":item["raw_ref"]})
+                revision_events.append({"instrument_id":item["instrument_id"],"resolution":item["resolution"],"open_time":item["open_time"],"revision":revision,"previous_raw_ref":old.raw_ref,"raw_ref":item["raw_ref"]})
             if old and old.is_closed and not item["is_closed"]: continue
             candle_updates.append({**item,"revision":revision})
         for offset in range(0,len(candle_updates),500):
             query=insert(Candle).values(candle_updates[offset:offset+500])
             s.execute(query.on_conflict_do_update(index_elements=["instrument_id","resolution","open_time"],set_={c.name:getattr(query.excluded,c.name) for c in Candle.__table__.columns if not c.primary_key}))
-        for item in batch.oi: s.merge(OiPoint(**item))
+        points=list({(r['instrument_id'],r['event_time']):r for r in batch.oi}.values())
+        for offset in range(0,len(points),500):
+            query=insert(OiPoint).values(points[offset:offset+500])
+            s.execute(query.on_conflict_do_update(index_elements=['instrument_id','event_time'],set_={c.name:getattr(query.excluded,c.name) for c in OiPoint.__table__.columns if not c.primary_key},where=OiPoint.received_at<=query.excluded.received_at))
         for item in batch.funding: s.merge(FundingPoint(**item))
-        for item in batch.states:
-            old=s.get(MarketState,item["instrument_id"])
-            if old and old.as_of>item["as_of"]: continue
-            s.merge(MarketState(instrument_id=item["instrument_id"],as_of=item["as_of"],payload={**(old.payload if old else {}),**item}))
+        states={r['instrument_id']:r for r in batch.states}
+        old_states={r.instrument_id:r for r in s.scalars(select(MarketState).where(MarketState.instrument_id.in_(states)).order_by(MarketState.instrument_id).with_for_update())}
+        for item in states.values():
+            old=old_states.get(item['instrument_id'])
+            merged=merge_market_payload(old.payload if old else {},item)
+            s.merge(MarketState(instrument_id=item["instrument_id"],as_of=merged['as_of'],payload=merged))
+        for event in revision_events:emit(s,'candle_revision',event)
         if batch.candle_only:
-            emit(s,"candle_update",{"source":batch.venue,"count":len(candle_updates)})
+            if candle_updates:emit(s,"candle_update",{"source":batch.venue,"count":len(candle_updates),'closed_instruments':sorted({r['instrument_id'] for r in candle_updates if r['is_closed']})})
             return
         health=s.get(SourceHealth,batch.venue)
         health.state="partial" if batch.errors else "ok"
@@ -119,21 +131,42 @@ def save_batch(batch):
         health.capabilities={**SOURCE_CAPABILITIES[batch.venue],"latest_gaps":batch.errors,**batch.metadata}
         emit(s,"market_update",{"source":batch.venue,"instruments":[x["instrument_id"] for x in batch.states]})
 
-def list_markets():
+def merge_market_payload(old,item):
+    """WS prices and REST OI have independent clocks; neither discards the other."""
+    merged={**old,**item}
+    if (old.get('as_of') or 0)>(item.get('as_of') or 0):
+        for k in ('price','price_kind','as_of','received_at','index_price','predicted_funding_rate','next_funding_time'):
+            if k in old:merged[k]=old[k]
+    if (old.get('oi_as_of') or 0)>(item.get('oi_as_of') or 0):
+        for k in ('oi_base','oi_notional_quote','oi_quote_asset','oi_as_of','oi_status'):
+            if k in old:merged[k]=old[k]
+    if (old.get('funding_settled_at') or 0)>(item.get('funding_settled_at') or 0):
+        for k in ('funding_rate','funding_interval_seconds','funding_settled_at','funding_status','funding_kind'):
+            if k in old:merged[k]=old[k]
+    return merged
+
+
+def list_markets(instrument_ids=None,light=False):
     now=now_ms();result=[]
-    config=runtime_config();max_age=max(180_000,config.collector_interval_seconds*3*1000)
+    config=runtime_config();max_age=max(360_000,config.collector_interval_seconds*3*1000)
     with Session() as s:
         health=s.get(SourceHealth,"binance")
         universe=health.capabilities if health else {}
         selected_ids=set(universe.get("selected_ids",[]))
-        counts=dict(s.execute(select(Candle.instrument_id,func.count()).where(Candle.resolution=="240").group_by(Candle.instrument_id)).all())
+        from engine.pd2.universe_policy import membership
+        aliases, admitted = membership(s)
+        count_query=select(Candle.instrument_id,func.count()).where(Candle.resolution=="240")
+        if instrument_ids is not None:count_query=count_query.where(Candle.instrument_id.in_(instrument_ids))
+        counts=dict(s.execute(count_query.group_by(Candle.instrument_id)).all())
         # Batch the baselines instead of 3 SQL queries for each market.
-        states=list(s.execute(select(Instrument,MarketState).join(MarketState,Instrument.id==MarketState.instrument_id).order_by(Instrument.asset_id,Instrument.venue)))
+        query=select(Instrument,MarketState).join(MarketState,Instrument.id==MarketState.instrument_id)
+        if instrument_ids is not None: query=query.where(Instrument.id.in_(instrument_ids))
+        states=list(s.execute(query.order_by(Instrument.asset_id,Instrument.venue)))
         ends={inst.id:st.payload.get("oi_as_of") for inst,st in states}
         baselines={}
         for period,duration in [("1H",3600_000),("4H",14400_000),("24H",86400_000)]:
             pairs=[(iid,end-duration) for iid,end in ends.items() if end]
-            if not pairs: continue
+            if not pairs or light: continue
             from sqlalchemy import values, column, String, BigInteger
             targets=values(column("iid",String),column("target",BigInteger),name="targets").data(pairs)
             nearest=(select(OiPoint.instrument_id,OiPoint.event_time,OiPoint.base_quantity,OiPoint.mark_price,OiPoint.notional_quote)
@@ -168,9 +201,10 @@ def list_markets():
                 funding_rate=p.get("funding_rate"),funding_kind="settled",funding_interval_seconds=interval,funding_settled_at=rate_time,
                 funding_quality=Quality(status="fresh" if funding_ok else ("stale" if rate_time else "not_applicable" if inst.market_type in ("spot","dex_pool") else "missing")),candles_count=count,
                 volume_24h_quote=p.get("volume_24h_quote"),universe_rank=p.get("universe_rank"),
-                in_universe=(inst.id in selected_ids if inst.venue=="binance" and selected_ids else True),
+                in_universe=aliases.get(inst.asset_id,inst.asset_id) in admitted,
                 deep_history=p.get("deep_history",inst.venue!="binance")))
     from engine.pd2.providers import valuation_for,valuation_inputs
+    if light:return MarketList(as_of=now,rows=result,universe={})
     with Session() as valuation_session:
         inputs=valuation_inputs(result,valuation_session)
         for market in result:
@@ -179,26 +213,38 @@ def list_markets():
             market.valuation_status=v["status"];market.coverage=v
     return MarketList(as_of=now,rows=result,universe={k:v for k,v in universe.items() if k not in ("selected_ids","deep_ids","latest_gaps")})
 
-def candle_targets():
-    """Only the bounded deep pool receives history; resume from persisted candle watermarks."""
-    config=runtime_config()
+def candle_targets(venue="binance"):
+    """All admitted markets rotate; cold starts use native timeframes, then only tails."""
+    from engine.pd2.universe_policy import primary_eligible
+    from engine.pd2.collection_schedule import due
     with Session() as s:
-        source=s.get(SourceHealth,"binance")
-        eligible=(source.capabilities if source else {}).get("selected_ids",[])
-        active=list(s.scalars(select(Campaign.reference_instrument_id).join(Episode).where(Episode.phase.notin_(["invalidated","ended"]))))
-        watermarks=dict(s.execute(select(Candle.instrument_id,func.max(Candle.received_at)).where(Candle.resolution=="240").group_by(Candle.instrument_id)).all())
-        background=sorted(eligible,key=lambda iid:(watermarks.get(iid,0),iid))
-        selected=list(dict.fromkeys(active+background[:config.deep_asset_limit]))
-        instruments=list(s.scalars(select(Instrument).where(Instrument.id.in_(selected),Instrument.venue=="binance")))
-        latest={(i,r):t for i,r,t in s.execute(select(Candle.instrument_id,Candle.resolution,func.max(Candle.open_time)).where(Candle.instrument_id.in_(selected)).group_by(Candle.instrument_id,Candle.resolution))}
+        instruments=[i for i in s.scalars(select(Instrument).where(Instrument.venue==venue)) if primary_eligible(i)]
+        chosen=set(due(venue,[i.native_symbol for i in instruments],kind="candles"))
+        selected=[i for i in instruments if i.native_symbol in chosen]
+        ids=[i.id for i in selected]
+        latest={(i,r):(t,received) for i,r,t,received in s.execute(select(Candle.instrument_id,Candle.resolution,func.max(Candle.open_time),func.max(Candle.received_at)).where(Candle.instrument_id.in_(ids)).group_by(Candle.instrument_id,Candle.resolution))}
+        ranked=select(Candle.instrument_id,Candle.resolution,Candle.open_time,func.row_number().over(partition_by=(Candle.instrument_id,Candle.resolution),order_by=Candle.open_time.desc()).label('rn')).where(Candle.instrument_id.in_(ids)).subquery()
+        opens={}
+        for iid,res,at in s.execute(select(ranked.c.instrument_id,ranked.c.resolution,ranked.c.open_time).where(ranked.c.rn<=300).order_by(ranked.c.open_time)):
+            opens.setdefault((iid,res),[]).append(at)
         now=now_ms();targets=[]
-        rank={iid:n for n,iid in enumerate(selected)}
-        for inst in sorted(instruments,key=lambda i:rank[i.id]):
-            for resolution,interval,duration in [("60","1h",3600_000),("240","4h",14400_000),("1D","1d",86400_000),("1W","1w",604800_000)]:
-                watermark=latest.get((inst.id,resolution))
-                limit=300 if watermark is None else min(300,max(2,(now-watermark)//duration+2))
-                targets.append((inst.id,inst.native_symbol,resolution,interval,limit))
+        periods=[("60","1h",3600000),("240","4h",14400000),("1D","1d",86400000),("1W","1w",604800000)]
+        cfg=runtime_config()
+        for res in ("15","30"):
+            if res in cfg.analysis.timeframes:periods.append((res,res+"m",int(res)*60000))
+        for inst in selected:
+            for resolution,interval,duration in periods:
+                watermark,received=latest.get((inst.id,resolution),(None,0))
+                times=opens.get((inst.id,resolution),[])
+                gap=next((a+duration for a,b in zip(times,times[1:]) if b-a>duration),None)
+                if gap is not None:
+                    targets.append((inst.id,inst.native_symbol,resolution,interval,min(1500,max(2,(now-gap)//duration+2)),gap));continue
+                # Longer native periods are reconciled at close; 1H tails every 5m.
+                if watermark is not None and resolution not in ("60","15","30") and watermark+duration>now and received+duration>now:continue
+                limit=300 if watermark is None else min(1500,max(2,(now-watermark)//duration+2))
+                targets.append((inst.id,inst.native_symbol,resolution,interval,limit,watermark))
         return targets
+
 
 def read_events(after,limit=200):
     with Session() as s:

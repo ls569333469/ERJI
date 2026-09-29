@@ -125,12 +125,9 @@ def candles(instrument:str,resolution:Literal["15","30","60","120","240","480","
         return CandleList(as_of=now_ms(),rows=[CandleDTO.model_validate(r) for r in rows],has_more=more,next_before=rows[0].open_time if rows else None,quality=Quality(status="fresh" if rows else "missing",reason=None if rows else "该周期历史尚未采集"))
 
 @app.get("/v1/signals")
-def signals(view:Literal["stages","recommended","trial","all","derivatives"]="stages",page:int|None=Query(None,ge=1),page_size:int=Query(50,ge=1,le=200),q:str="",sort:Literal["first","oi","space"]="first",list_snapshot:str|None=None):
-    from engine.pd2.service import decision_list
-    result=decision_list(view)
-    if page is None:return result
-    from engine.pd2.pagination import paginate
-    return paginate(result,view,q,sort,page,page_size,list_snapshot)
+def signals(view:Literal["stages","recommended","trial","all","derivatives","buy","waiting","risk","history"]="stages",page:int=Query(1,ge=1),page_size:int=Query(25,ge=1,le=100),q:str="",sort:Literal["first","oi","space"]="first",list_snapshot:str|None=None):
+    from engine.pd2.signal_projection import read
+    return read(view,q,sort,page,page_size,list_snapshot)
 
 @app.get("/v1/structure-signals/{episode_id}")
 def structure_signal(episode_id:str):

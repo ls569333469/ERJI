@@ -6,6 +6,8 @@ GROUPS = [
     ("up_unwind", "上涨伴随减仓", "价格上涨、仓位解除，核对费用与清算证据", "blue"),
     ("down_build", "下跌伴随增仓", "价格下降、未平仓规模增加，关注反向压力", "amber"),
     ("down_unwind", "下跌伴随减仓", "价格与持仓数量同时下降，核对是否有清算", "red"),
+    ("price_move", "价格异动", "价格明显变化，数量持仓相对平稳", "blue"),
+    ("oi_move", "持仓异动", "数量持仓明显变化，价格相对平稳", "amber"),
     ("mixed", "变化较小 / 方向未明", "尚无明显的价格与持仓组合", "gray"),
     ("insufficient", "等待可比数据", "当前窗口缺少有效起点，暂不解释方向", "gray"),
     ("stale", "数据已过期", "等待行情恢复后重新判断", "gray"),
@@ -27,8 +29,12 @@ def describe_market(market, period):
         return {"group":"insufficient","summary":"缺少同窗口价格与持仓端点，方向待判断","reason":change.quality.status if change else "missing"}
     price,oi=change.price_change_pct,change.value_pct
     # Display noise filter only, not an anomaly threshold or a buy/sell rule.
-    if abs(price)<D("0.5") or abs(oi)<D("0.5"):
-        return {"group":"mixed","summary":"至少一项变化小于 0.5%，暂不归入方向组合","reason":"small_change"}
+    if abs(price)<D("0.5") and abs(oi)<D("0.5"):
+        return {"group":"mixed","summary":"两项变化均小于 0.5%，暂不归入方向组合","reason":"small_change"}
+    if abs(oi)<D("0.5"):
+        return {"group":"price_move","summary":"价格异动，数量OI相对平稳","reason":"price_only"}
+    if abs(price)<D("0.5"):
+        return {"group":"oi_move","summary":"数量OI异动，价格相对平稳；不直接代表买入","reason":"oi_only"}
     if price>0 and oi>0:
         return {"group":"up_build","summary":"价格与持仓同步增加；尚需确认突破结构","reason":"paired_samples"}
     if price>0 and oi<0:

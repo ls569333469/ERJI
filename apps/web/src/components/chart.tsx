@@ -45,11 +45,12 @@ export function Chart({instrument,episode,snapshotId,onSnapshot}:{instrument:str
  const [error,setError]=useState("");const [loading,setLoading]=useState(true);const [analysis,setAnalysis]=useState<Analysis>();
  const [snapshot,setSnapshot]=useState<DecisionSnapshot|null>(null);const [derivatives,setDerivatives]=useState<DerivativeHistory>();
  const [resolution,setResolution]=useState("240");const [preset,setPreset]=useState<"technical"|"derivatives">("technical");
- const [layers,setLayers]=useState({structure:true,targets:true,bollinger:false,fibonacci:false,liquidations:false,positions:false});
+ const [layers,setLayers]=useState({structure:true,targets:true,bollinger:false,avwap:false,trailing:false,fibonacci:false,liquidations:false,positions:false});
  const [range,setRange]=useState<{from:number;to:number}>();const [hoverTime,setHoverTime]=useState<number>();
  const overlayRef=useRef<StructureOverlay|null>(null);const analysisRef=useRef<Analysis|undefined>(undefined);
  const snapshotRef=useRef<DecisionSnapshot|null>(null);const shapes=useRef<string[]>([]);const drawSeq=useRef(0);
  const [studyState,setStudyState]=useState<string[]>([]);const macdId=useRef<string|null>(null);const bbId=useRef<string|null>(null);
+ const avwapId=useRef<string|null>(null),trailingId=useRef<string|null>(null);
  const backendIds=useRef<string[]>([]);const onSnapshotRef=useRef(onSnapshot);onSnapshotRef.current=onSnapshot;
  const [layerInfo,setLayerInfo]=useState<Level[]>([]);const layersRef=useRef(layers);layersRef.current=layers;
  const draw=useCallback(async()=>{
@@ -60,7 +61,7 @@ export function Chart({instrument,episode,snapshotId,onSnapshot}:{instrument:str
   const options={lock:true,disableSave:true,disableUndo:true};
   const add=async(p:Promise<string|null>)=>{const id=await p;if(id){if(seq!==drawSeq.current){try{chart.removeEntity(id)}catch{}return;}shapes.current.push(id);}};
   const horizontal=async(label:string,price:string,color:string,dashed=false)=>{
-   await add(chart.createShape({time:end,price:Number(price)},{...options,shape:"horizontal_line",text:label,overrides:{linecolor:color,linewidth:1,linestyle:dashed?2:0,showPrice:true,showLabel:true,textcolor:color}}));
+   await add(chart.createShape({time:end,price:Number(price)},{...options,shape:"horizontal_line",text:label,overrides:{linecolor:color,linewidth:1,linestyle:dashed?2:0,showPrice:true,showLabel:true,horzLabelsAlign:label.includes("目标")||label.includes("主攻")?"right":"left",vertLabelsAlign:label.includes("目标")?"bottom":"top",textcolor:color}}));
   };
   const levels:Level[]=[];
   try{
@@ -201,11 +202,12 @@ export function Chart({instrument,episode,snapshotId,onSnapshot}:{instrument:str
    }catch(e){if(!disposed){setError((e as Error).message);setLoading(false);}}
   }
   setError("");setLoading(true);setStudyState([]);void start();
-  return()=>{disposed=true;drawSeq.current++;widgetRef.current=undefined;shapes.current=[];backendIds.current=[];macdId.current=null;bbId.current=null;stream.close();for(const timer of timers.values())clearInterval(timer);if(widget){try{widget.activeChart().onIntervalChanged().unsubscribeAll(owner);widget.activeChart().onVisibleRangeChanged().unsubscribeAll(owner);widget.activeChart().crossHairMoved().unsubscribeAll(owner)}catch{}widget.remove();}};
+  return()=>{disposed=true;drawSeq.current++;widgetRef.current=undefined;shapes.current=[];backendIds.current=[];macdId.current=null;bbId.current=null;avwapId.current=null;trailingId.current=null;stream.close();for(const timer of timers.values())clearInterval(timer);if(widget){try{widget.activeChart().onIntervalChanged().unsubscribeAll(owner);widget.activeChart().onVisibleRangeChanged().unsubscribeAll(owner);widget.activeChart().crossHairMoved().unsubscribeAll(owner)}catch{}widget.remove();}};
  },[instrument,episode,snapshotId,draw]);
  useEffect(()=>{void draw();const chart=widgetRef.current?.activeChart();if(!chart)return;
   if(macdId.current)chart.getStudyById(macdId.current).setVisible(preset==="technical");
   void (async()=>{try{if(layers.bollinger&&!bbId.current){bbId.current=await chart.createStudy("ERJI 布林带",true,true);if(bbId.current)backendIds.current.push(bbId.current);}if(bbId.current)chart.getStudyById(bbId.current).setVisible(layers.bollinger)}catch(e){setError((e as Error).message)}})();
+  void (async()=>{try{for(const [enabled,ref,name] of [[layers.avwap,avwapId,"ERJI 锚定均价"],[layers.trailing,trailingId,"ERJI 跟踪保护参考"]] as const){if(enabled&&!ref.current){ref.current=await chart.createStudy(name,true,true);if(ref.current)backendIds.current.push(ref.current);}if(ref.current)chart.getStudyById(ref.current).setVisible(enabled)}}catch(e){setError((e as Error).message)}})();
   if(studyState.length)void api("/preferences/chart",{method:"PUT",body:JSON.stringify({payload:{resolution,preset,layers}})});
  },[layers,preset,studyState,resolution,draw]);
  async function locate(mode:"first"|"current"|"targets"){
@@ -225,11 +227,11 @@ export function Chart({instrument,episode,snapshotId,onSnapshot}:{instrument:str
   <div className="chart-decision"><b>{snapshot?.action.label||"当前技术结构"}</b><span>{snapshot?.trade_thesis.headline||"根据已闭合K线计算；没有符合模板的计划时不生成买入建议。"}</span>{snapshot&&<small>{snapshotId?"历史冻结快照":"当前快照"} · {clock(snapshot.as_of)}</small>}</div>
   <div className="timeframe-matrix">{assessments?.map(a=><div key={a.timeframe}><b>{labels[a.timeframe]||a.timeframe}</b><span>{direction[a.direction]}</span><span>{momentum[a.momentum]}{a.macd_cross_confirmed?" · 新金叉已确认":""}</span><small>{a.status==="fresh"?"收盘 "+clock(a.closed_at):a.reason}</small></div>)}</div>
   <div className="chart-toolbar"><div role="group" aria-label="图表视图"><button className={preset==="technical"?"active":""} onClick={()=>setPreset("technical")}>技术分析</button><button className={preset==="derivatives"?"active":""} onClick={()=>setPreset("derivatives")}>合约分析</button></div>
-   {([["structure","结构 / 参与 / 保护"],["targets","日周目标"],["bollinger","布林带"],["fibonacci","回撤辅助"],["liquidations","已发生清算"],["positions","HL可见仓位风险价"]] as const).map(([key,label])=><label key={key}><input type="checkbox" checked={layers[key]} onChange={e=>setLayers({...layers,[key]:e.target.checked})}/>{label}</label>)}
+   {([["structure","结构 / 参与 / 保护"],["targets","日周目标"],["bollinger","布林带"],["avwap","锚定均价"],["trailing","跟踪保护参考"],["fibonacci","回撤辅助"],["liquidations","已发生清算"],["positions","HL可见仓位风险价"]] as const).map(([key,label])=><label key={key}><input type="checkbox" checked={layers[key]} onChange={e=>setLayers({...layers,[key]:e.target.checked})}/>{label}</label>)}
    {episode&&<button onClick={()=>void locate("first")}>首次信号</button>}<button onClick={()=>void locate("current")}>当前趋势</button><button onClick={()=>void locate("targets")}>查看全部目标</button><button onClick={()=>void saveDrawings()}>保存我的绘图</button><small>{drawingMessage}</small>
   </div>
   <div className="chart-container">{loading&&!error&&<div className="chart-loading">正在加载K线及默认指标…</div>}{error&&<div className="chart-error">{error}</div>}<div ref={root} className="chart-root"/></div>
-  <div className="chart-caption">自动显示：{studyState.join(" · ")||"加载中"}。EMA/MACD/布林带绘制后台已闭合序列，覆盖当前分析窗口；预热或窗口外留空。成交量按本市场数量单位，链上池为USD成交额。{snapshotId?"指标、信号依据和K线均冻结在该快照时刻。":"盘中K线变化不等于已收盘信号。"}</div>
+  <div className="chart-caption">自动显示：{studyState.join(" · ")||"加载中"}。EMA/MACD/布林带绘制后台已闭合序列，覆盖当前分析窗口；预热或窗口外留空。锚定均价采用确认高低点后的K线成交量近似，缺数量成交量留空；跟踪保护参考不替代原计划保护价。成交量按本市场数量单位，链上池为USD成交额。{snapshotId?"指标、信号依据和K线均冻结在该快照时刻。":"盘中K线变化不等于已收盘信号。"}</div>
   {preset==="derivatives"&&<div className="derivative-panels">
    <HistoryPanel title={"数量 OI · "+(derivatives?.quantity_unit||"")} rows={(derivatives?.oi||[]).map(x=>({time:x.time,value:x.quantity}))} range={range} hoverTime={hoverTime} onHover={setHoverTime} status={derivatives?.oi_status}/>
    <HistoryPanel title={"OI 名义金额 · "+(derivatives?.quote_asset||"")} rows={(derivatives?.oi||[]).map(x=>({time:x.time,value:x.notional_quote}))} range={range} hoverTime={hoverTime} onHover={setHoverTime} status={derivatives?.oi_status}/>

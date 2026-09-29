@@ -12,6 +12,10 @@ class ExecutionAdapter(PublicAdapter):
             if not inst:return
             venue,native=inst.venue,inst.native_symbol
             multiplier=inst.multiplier
+        from engine.pd2.storage import get
+        cached=get(venue,'execution_book',instrument_id)
+        if cached.get('status')=='fresh' and 0<=now_ms()-cached.get('received_at',0)<5000:
+            return
         batch=Batch(venue)
         try:
             if venue in ("binance","aster"):

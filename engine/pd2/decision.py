@@ -90,5 +90,5 @@ def decide(evidence,phase,quote,now,execution=None,style="aggressive",max_quote_
         detail="；".join((execution or {}).get("reasons",["盘口与成本尚无可用结果"]))
         return answer("no_chase" if execution and execution.get("status")=="low_net_r" else "paused","暂不参与",detail)
     early=phase=="early_trigger"
-    return answer("trial" if early else "participate","建议提前布局（1H触发）" if early else "建议现在布局（结构确认）",
+    return answer("trial" if early else "participate","建议买入 · 小仓买入" if early else "建议买入 · 买入条件已确认",
         "当前位于参与区，触发、流动性和扣费后盈亏比均符合本模板；保护价 "+str(stop))

@@ -3,7 +3,7 @@ from decimal import Decimal as D
 from hashlib import sha256
 import json
 ALIASES={'binance':'binance','aster':'aster','aster-dex':'aster','hyperliquid':'hyperliquid','okx':'okx'}
-def aggregate_oi(native,vendor,now,max_age=180000):
+def aggregate_oi(native,vendor,now,max_age=360000):
     result=[];excluded=list(vendor.get('excluded',[]));native_keys=set();native_venues=set()
     for r in native:
         if r.get('notional_usd') is None or not 0<=now-r.get('observed_at',0)<=max_age:continue

@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "algorithm_version": "pd2-structure-v1",
-  "updated_on": "2026-09-24",
+  "updated_on": "2026-09-29",
   "pine_runtime": {
     "enabled": false,
     "status": "not_implemented_research_optional",
@@ -34,7 +34,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "趋势位置",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "macd",
@@ -61,7 +62,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "动能及收盘交叉",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "atr",
@@ -86,7 +88,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "波动与价带宽度",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "adx",
@@ -111,7 +114,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "趋势强度",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "rsi",
@@ -136,7 +140,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "动量位置",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "bollinger",
@@ -162,7 +167,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "波动收缩扩张",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "confirmed_pivot",
@@ -189,7 +195,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "真实支撑阻力",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "box_projection",
@@ -212,7 +219,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "箱体突破条件测算",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "fibonacci",
@@ -241,7 +249,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "已确认下跌段反弹参考",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "chandelier",
@@ -267,7 +276,8 @@
       "confirmation": "closed bar; pivots delayed by right bars",
       "repaint": "new revisions; original snapshot immutable",
       "meaning": "只向有利方向移动保护",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "community_0",
@@ -289,7 +299,8 @@
       "confirmation": "script_specific_requires_validation",
       "repaint": "see research notes",
       "meaning": "方法或展示参考，完整社区脚本未启用",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "community_1",
@@ -311,7 +322,8 @@
       "confirmation": "script_specific_requires_validation",
       "repaint": "see research notes",
       "meaning": "方法或展示参考，完整社区脚本未启用",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "community_2",
@@ -333,7 +345,8 @@
       "confirmation": "script_specific_requires_validation",
       "repaint": "see research notes",
       "meaning": "方法或展示参考，完整社区脚本未启用",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "community_3",
@@ -355,7 +368,8 @@
       "confirmation": "script_specific_requires_validation",
       "repaint": "see research notes",
       "meaning": "方法或展示参考，完整社区脚本未启用",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "community_4",
@@ -377,7 +391,8 @@
       "confirmation": "script_specific_requires_validation",
       "repaint": "see research notes",
       "meaning": "方法或展示参考，完整社区脚本未启用",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "community_5",
@@ -399,7 +414,8 @@
       "confirmation": "script_specific_requires_validation",
       "repaint": "see research notes",
       "meaning": "方法或展示参考，完整社区脚本未启用",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "community_6",
@@ -421,7 +437,8 @@
       "confirmation": "script_specific_requires_validation",
       "repaint": "see research notes",
       "meaning": "方法或展示参考，完整社区脚本未启用",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "community_7",
@@ -443,7 +460,8 @@
       "confirmation": "script_specific_requires_validation",
       "repaint": "see research notes",
       "meaning": "方法或展示参考，完整社区脚本未启用",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "anchored_vwap",
@@ -459,7 +477,8 @@
       "numerical_validation": "not_executed",
       "strategy_validation": "not_executed",
       "meaning": "可选研究方法；未作为参与条件",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "fixed_range_volume_profile",
@@ -475,7 +494,8 @@
       "numerical_validation": "not_executed",
       "strategy_validation": "not_executed",
       "meaning": "可选研究方法；未作为参与条件",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "rounding_bottom",
@@ -491,7 +511,8 @@
       "numerical_validation": "not_executed",
       "strategy_validation": "not_executed",
       "meaning": "可选研究方法；未作为参与条件",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "wyckoff_state_machine",
@@ -507,7 +528,8 @@
       "numerical_validation": "not_executed",
       "strategy_validation": "not_executed",
       "meaning": "可选研究方法；未作为参与条件",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
     },
     {
       "id": "pinets_runner",
@@ -523,7 +545,174 @@
       "numerical_validation": "not_executed",
       "strategy_validation": "not_executed",
       "meaning": "可选研究方法；未作为参与条件",
-      "probability": null
+      "probability": null,
+      "production_chart_validation": "pending"
+    },
+    {
+      "id": "avwap_confirmed_pivots",
+      "name": "确认枢轴锚定均价",
+      "state": "adapted",
+      "source": "ERJI independent standard formula",
+      "source_version": "p25-v1",
+      "source_sha256": "8778b7ccb954b18fbae6dec1881ebbbe2256472443e17b5d8cac5fd74d65245c",
+      "license": "own_implementation",
+      "enabled": true,
+      "formal_strategy": false,
+      "numerical_validation": "local_formula_and_causality_tests_passed; not_original_Pine_parity",
+      "chart_integration": "backend_series_and_optional_chart_study",
+      "production_chart_validation": "pending",
+      "warmup": {
+        "minimum_bars": 5,
+        "initial_fetch": 300
+      },
+      "probability": null,
+      "source_hash_scope": "ERJI independent implementation engine/pd2/analysis.py",
+      "local_chart_validation": "2026-09-29 browser passed; production pending"
+    },
+    {
+      "id": "chandelier_reference",
+      "name": "Chandelier跟踪参考",
+      "state": "adapted",
+      "source": "ERJI independent standard formula",
+      "source_version": "p25-v1",
+      "source_sha256": "8778b7ccb954b18fbae6dec1881ebbbe2256472443e17b5d8cac5fd74d65245c",
+      "license": "own_implementation",
+      "enabled": true,
+      "formal_strategy": false,
+      "numerical_validation": "local_formula_and_causality_tests_passed; not_original_Pine_parity",
+      "chart_integration": "backend_series_and_optional_chart_study",
+      "production_chart_validation": "pending",
+      "warmup": {
+        "minimum_bars": 22,
+        "initial_fetch": 300
+      },
+      "probability": null,
+      "source_hash_scope": "ERJI independent implementation engine/pd2/analysis.py",
+      "local_chart_validation": "2026-09-29 browser passed; production pending"
+    }
+  ],
+  "implementation_scope": "P25 standard methods independently implemented; community Pine scripts are not executed",
+  "community_delivery": [
+    {
+      "id": "macd_htf",
+      "name": "MACD with HTF Panels",
+      "url": "https://cn.tradingview.com/script/pUwmpOyc-MACD-with-HTF-Panels-theUltimator5/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "independent MACD and multi-timeframe matrix",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "redk",
+      "name": "RedK Multi-Modal TrailingStop",
+      "url": "https://cn.tradingview.com/script/ZxCXrnij-RedK-Multi-Modal-TrailingStop-RedK-MMTStop/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "independent Chandelier reference and frozen-plan ratchet",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "iq_beams",
+      "name": "IQ Trend Beams",
+      "url": "https://cn.tradingview.com/script/SG7Vk6uH-IQ-Trend-Beams-TradingIQ/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "existing confirmed level lifecycle; original model pending",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "sr_breaks",
+      "name": "LuxAlgo S/R Levels with Breaks",
+      "url": "https://www.tradingview.com/script/JDFoWQbL-Support-and-Resistance-Levels-with-Breaks-LuxAlgo/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "independent confirmed pivots, break/retest states",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "avwap",
+      "name": "Anchored VWAP Auto High & Low",
+      "url": "https://tw.tradingview.com/script/72stxVxI-Anchored-VWAP-Auto-High-Low/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "independent confirmed-pivot OHLCV AVWAP; differs from original anchors",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "fib_mtf",
+      "name": "Fibonacci levels MTF",
+      "url": "https://www.tradingview.com/script/6BL47X8Q-Fibonacci-levels-MTF/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "existing confirmed-swing retracement; not higher-timeframe single-candle ratios",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "ribbon",
+      "name": "Trend Target Ribbon",
+      "url": "https://cn.tradingview.com/script/tnQ7FvvW-Trend-Target-Ribbon-BOSWaves/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "plan entry/stop/targets overlay; ALMA strategy pending",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "wyckoff",
+      "name": "Wyckoff",
+      "url": "https://cn.tradingview.com/script/tJzKloJn-Wyckoff-theUltimator5/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "second-batch research; not enabled",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "dual_phase",
+      "name": "Dual-Phase Reversal",
+      "url": "https://cn.tradingview.com/script/cmFOrVlp-Dual-Phase-Reversal-by-DGT/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "second-batch research; not enabled",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "byo",
+      "name": "BYO Pattern V1",
+      "url": "https://cn.tradingview.com/script/e2S2v4fl-BYO-Pattern-V1-Trendoscope/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "second-batch research; Zigzag and dependencies pending",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
+    },
+    {
+      "id": "backtester",
+      "name": "Universal Signal Backtester",
+      "url": "https://cn.tradingview.com/script/Y5CIZ9CB-Universal-Signal-Backtester-LuxAlgo/",
+      "source_state": "full_source_and_dependencies_not_verified",
+      "source_sha256": null,
+      "original_script_installed": false,
+      "integration": "ERJI replay and outcome subsystem; original Pine not executed",
+      "production_validation": "pending",
+      "strategy_validation": "unvalidated"
     }
   ]
 }

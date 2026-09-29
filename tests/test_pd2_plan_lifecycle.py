@@ -18,7 +18,7 @@ def test_templates_persist_positive_freeze_expire_and_never_revive(isolated,monk
     asset='PD2_TEST_'+template;instrument='test:'+asset;episode=asset;campaign=asset
     market=SimpleNamespace(asset_id=asset,instrument_id=instrument,venue='binance',quote_asset='USD',price=D('1'),quality=SimpleNamespace(status='fresh'),as_of=now)
     market.model_dump=lambda **kw:{'price':str(market.price),'asset_id':asset,'symbol':asset,'instrument_id':instrument,'quote_asset':'USD'}
-    monkeypatch.setattr(service,'list_markets',lambda:SimpleNamespace(rows=[market]))
+    monkeypatch.setattr(service,'list_markets',lambda *args:SimpleNamespace(rows=[market]))
     monkeypatch.setattr(service,'load_bars',lambda *a,**kw:{'60':[],'240':[],'1D':[],'1W':[]})
     level={'id':'resistance','kind':'resistance','low':'1.4','high':'1.5','timeframe':'240','method':'confirmed_pivot','known_at':now-1000,'label':'测试确认高点'}
     monkeypatch.setattr(service,'technical',lambda bars,tf,*a:{'timeframe':tf,'status':'fresh','direction':'up','levels':[level] if tf=='240' else [],'latest':{'close':'1'},'series':[],'volume_multiple':'2'})

@@ -1,7 +1,8 @@
-import asyncio, hashlib, json, time, ssl
+import asyncio, hashlib, json, time, ssl, weakref
 from dataclasses import dataclass, field
 from decimal import Decimal
 import httpx
+from urllib.request import getproxies
 
 def now_ms(): return time.time_ns()//1_000_000
 def public_error(error):
@@ -29,22 +30,30 @@ class Batch:
     metadata: dict = field(default_factory=dict)
     candle_only: bool = False
 
+_loops=weakref.WeakKeyDictionary()
+def shared_http_slots():
+    loop=asyncio.get_running_loop()
+    if loop not in _loops: _loops[loop]=asyncio.Semaphore(4)
+    return _loops[loop]
+
 class PublicAdapter:
     venue: str
     def __init__(self):
-        self.client=httpx.AsyncClient(timeout=20, follow_redirects=False, verify=ssl.create_default_context(), transport=httpx.AsyncHTTPTransport(retries=2,verify=ssl.create_default_context()))
+        self.client=httpx.AsyncClient(timeout=20, follow_redirects=False, verify=ssl.create_default_context(), transport=httpx.AsyncHTTPTransport(retries=0,verify=ssl.create_default_context(),proxy=getproxies().get('https')))
         self.lock=asyncio.Lock()
         self.slots=asyncio.Semaphore(4)
         self.last_request=0.0
         self.blocked_until=0.0
     async def close(self): await self.client.aclose()
     async def request(self,batch,method,url,**kwargs):
-        async with self.slots:
+        from engine.pd2.request_budget import request_slot, feedback
+        async with request_slot(url, kwargs), shared_http_slots(), self.slots:
             async with self.lock:
                 await asyncio.sleep(max(0,self.blocked_until-time.monotonic(),0.25-(time.monotonic()-self.last_request)))
                 self.last_request=time.monotonic()
             try:
                 response=await self.client.request(method,url,**kwargs)
+                await asyncio.to_thread(feedback,url,response.status_code,response.headers)
                 if response.status_code in (418,429):
                     try: delay=float(response.headers.get("Retry-After","60"))
                     except ValueError: delay=60

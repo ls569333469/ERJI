@@ -19,17 +19,19 @@ def test_universe_includes_alts_by_volume_excludes_ineligible_markets():
 def test_budget_deduplicates_native_assets_and_breaks_ties_stably():
     catalog=[spec("B"),spec("A"),spec("A",symbol="ALT_A_USDT")]
     selected,count,_=select_binance_universe(catalog,[{"symbol":s["symbol"],"quoteVolume":"100"} for s in catalog],1)
-    assert count==2 and len(selected)==1 and selected[0]["baseAsset"]=="A"
+    assert count==2 and len(selected)==2 and selected[0]["baseAsset"]=="A"
 
-def test_invalid_volume_never_enters_pool():
+def test_missing_activity_does_not_remove_eligible_catalog_assets():
     selected,_,_=select_binance_universe([spec("A"),spec("B")],[{"symbol":"AUSDT","quoteVolume":"NaN"},{"symbol":"BUSDT","quoteVolume":"-5"}],150)
-    assert selected==[]
+    assert {s["baseAsset"] for s in selected}=={"A","B"}
 
 @pytest.mark.parametrize("values",[{"asset_limit":1001},{"asset_limit":9},{"deep_asset_limit":501}])
 def test_scan_budgets_are_enforced(values):
     with pytest.raises(ValidationError): RuntimeConfig(**values)
 
-def test_native_units_and_failure_isolation():
+def test_native_units_and_failure_isolation(monkeypatch):
+    monkeypatch.setattr("engine.pd2.collection_schedule.due",lambda venue,natives,**kw:natives)
+    monkeypatch.setattr("engine.pd2.collection_schedule.history_seeded",lambda venue:{"1000PEPEUSDT","DOGEUSDT"})
     async def scenario():
         adapter=BinanceUniverseAdapter();calls=[]
         async def request(batch,method,url,**kwargs):

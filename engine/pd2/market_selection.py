@@ -34,7 +34,8 @@ def select_main(asset,config,now=None):
     with Session.begin() as s:
         instruments=list(s.scalars(select(Instrument).where(Instrument.asset_id==asset)))
         for i in instruments:
-            if i.spec.get("crypto_eligible") is False:continue
+            from engine.pd2.universe_policy import primary_eligible
+            if not primary_eligible(i):continue
             history=dict(s.execute(select(Candle.resolution,func.count()).where(Candle.instrument_id==i.id,Candle.is_closed==True,Candle.resolution.in_(["60","240"])).group_by(Candle.resolution)).all())
             if any(history.get(r,0)<60 for r in ("60","240")):continue
             cached=s.get(DataCapability,f'{i.venue}:execution_book:{i.id}')

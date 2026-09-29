@@ -21,7 +21,8 @@ class BinanceUniverseAdapter(PublicAdapter):
 
     async def collect(self, config):
         batch = Batch(self.venue)
-        if not self.selection or now_ms()-self.selected_at >= 3600_000 or self.selection_limit != config.asset_limit:
+        catalog_changed=False
+        if not self.selection or now_ms()-self.selected_at >= 1800_000 or self.selection_limit != config.asset_limit:
             catalog, _, _ = await self.request(batch, "GET", self.base+"/exchangeInfo")
             tickers, _, received = await self.request(batch, "GET", self.base+"/ticker/24hr")
             selected, count, volumes = select_binance_universe(catalog["symbols"], tickers, 100000)
@@ -29,15 +30,22 @@ class BinanceUniverseAdapter(PublicAdapter):
                 raise ValueError("empty_active_catalog")
             self.selection, self.catalog_count, self.volumes = selected, count, volumes
             self.selected_at, self.selection_limit = received, config.asset_limit
+            catalog_changed=True
+        from engine.pd2.collection_schedule import due
+        due_symbols=set(due(self.venue,[x['symbol'] for x in self.selection]))
+        if not due_symbols and not catalog_changed:
+            batch.metadata={'idle':True};return batch
         marks, mark_ref, mark_received = await self.request(batch, "GET", self.base+"/premiumIndex")
         marks = {m["symbol"]:m for m in marks}
+        from engine.pd2.collection_schedule import history_seeded
+        seeded=history_seeded(self.venue)
         deep_ids = set(select_deep_ids(self.selection, config.deep_asset_limit, config.symbols))
-        batch.metadata = {"mode":"binance_volume", "requested_assets":config.asset_limit,
+        batch.metadata = {"mode":"binance_full_catalog", "catalog_complete":catalog_changed, "requested_assets":config.asset_limit,
                           "eligible_assets":self.catalog_count, "selected_assets":len(self.selection),
-                          "selection_as_of":self.selected_at, "selection_interval_seconds":3600,
+                          "selection_as_of":self.selected_at, "selection_interval_seconds":1800,
                           "deep_asset_limit":config.deep_asset_limit, "deep_ids":sorted(deep_ids),
                           "selected_ids":["binance:perp:"+s["symbol"] for s in self.selection],
-                          "scope":"Binance active USDT crypto perpetuals by 24h quote volume"}
+                          "scope":"Binance eligible USDT/USDC crypto perpetuals; all assets"}
 
         async def market(spec, rank):
             native, symbol = spec["symbol"], spec["baseAsset"]
@@ -48,13 +56,13 @@ class BinanceUniverseAdapter(PublicAdapter):
                 return
             # 1000PEPE etc retain the exchange's base unit and identity. No heuristic stripping.
             batch.instruments.append({"id":iid,"asset_id":symbol,"venue":"binance","native_symbol":native,
-                "market_type":"linear_perpetual","quote_asset":"USDT","multiplier":"1",
+                "market_type":"linear_perpetual","quote_asset":spec["quoteAsset"],"multiplier":"1",
                 "spec":{"base_asset":symbol,"price_precision":spec.get("pricePrecision"),
                         "tick_size":next((f["tickSize"] for f in spec.get("filters",[]) if f["filterType"]=="PRICE_FILTER"),None),
                         "source":"exchangeInfo","unit_policy":"native_exchange_unit"}})
             state = {"instrument_id":iid,"price":decimal_text(mark["markPrice"]),"price_kind":"mark",
                      "as_of":int(mark.get("time") or mark_received),"received_at":mark_received,"raw_ref":mark_ref,
-                     "oi_quote_asset":"USDT","oi_status":"missing","funding_kind":"settled","funding_status":"missing",
+                     "oi_quote_asset":spec["quoteAsset"],"oi_status":"missing","funding_kind":"settled","funding_status":"missing",
                      "volume_24h_quote":decimal_text(self.volumes[native]),"universe_rank":rank,
                      "deep_history":iid in deep_ids}
             try:
@@ -63,13 +71,22 @@ class BinanceUniverseAdapter(PublicAdapter):
                 timestamp = int(oi.get("time") or received)
                 notional = decimal_text(Decimal(quantity)*Decimal(state["price"]))
                 batch.oi.append({"instrument_id":iid,"event_time":timestamp,"base_quantity":quantity,
-                    "notional_quote":notional,"quote_asset":"USDT","mark_price":state["price"],
+                    "notional_quote":notional,"quote_asset":spec["quoteAsset"],"mark_price":state["price"],
                     "received_at":received,"raw_ref":ref})
                 state.update(oi_base=quantity,oi_notional_quote=notional,oi_as_of=timestamp,oi_status="fresh")
             except Exception as error:
                 batch.errors.append(native+":oi:"+type(error).__name__)
+            if native not in seeded:
+                try:
+                    records,href,hreceived=await self.request(batch,'GET','https://fapi.binance.com/futures/data/openInterestHist',params={'symbol':native,'period':'5m','limit':300})
+                    for point in records:
+                        q=Decimal(point['sumOpenInterest']);n=Decimal(point['sumOpenInterestValue']);at=int(point['timestamp'])
+                        if q<=0 or n<0 or at>hreceived:continue
+                        batch.oi.append(dict(instrument_id=iid,event_time=at,base_quantity=decimal_text(q),notional_quote=decimal_text(n),quote_asset=spec['quoteAsset'],mark_price=decimal_text(n/q),received_at=hreceived,raw_ref=href))
+                    if records:batch.metadata.setdefault('oi_history_seeded',[]).append(native)
+                except Exception as error:batch.errors.append(native+':oi_history:'+type(error).__name__)
             cached = self.funding_cache.get(native)
-            if not cached or now_ms()-cached[0]>=900_000:
+            if not cached or now_ms()>=cached[1].get("funding_settled_at",0)+(cached[1].get("funding_interval_seconds") or 3600)*1000+60000:
                 try:
                     records, ref, received = await self.request(batch,"GET",self.base+"/fundingRate",params={"symbol":native,"limit":4})
                     records.sort(key=lambda r:int(r["fundingTime"]))
@@ -90,9 +107,9 @@ class BinanceUniverseAdapter(PublicAdapter):
 
         # The base adapter bounds parallel HTTP requests to four and paces starts to four/s.
         full=self.selection
-        current=[(full[i%len(full)],i%len(full)+1) for i in range(self.cursor,self.cursor+min(config.asset_limit,len(full)))]
-        for spec in full:
-            batch.instruments.append({"id":"binance:perp:"+spec["symbol"],"asset_id":spec["baseAsset"],"venue":"binance","native_symbol":spec["symbol"],"market_type":"linear_perpetual","quote_asset":"USDT","multiplier":"1","spec":{"base_asset":spec["baseAsset"],"price_precision":spec.get("pricePrecision"),"tick_size":next((f["tickSize"] for f in spec.get("filters",[]) if f["filterType"]=="PRICE_FILTER"),None),"source":"exchangeInfo","unit_policy":"native_exchange_unit"}})
+        current=[(spec,index+1) for index,spec in enumerate(full) if spec["symbol"] in due_symbols]
+        for spec in (full if catalog_changed else []):
+            batch.instruments.append({"id":"binance:perp:"+spec["symbol"],"asset_id":spec["baseAsset"],"venue":"binance","native_symbol":spec["symbol"],"market_type":"linear_perpetual","quote_asset":spec["quoteAsset"],"multiplier":"1","spec":{"base_asset":spec["baseAsset"],"price_precision":spec.get("pricePrecision"),"tick_size":next((f["tickSize"] for f in spec.get("filters",[]) if f["filterType"]=="PRICE_FILTER"),None),"source":"exchangeInfo","unit_policy":"native_exchange_unit"}})
         await asyncio.gather(*(market(spec,rank) for spec,rank in current))
         self.cursor=(self.cursor+len(current))%len(full)
         batch.instruments=list({v["id"]:v for v in batch.instruments}.values())
@@ -102,9 +119,10 @@ class BinanceUniverseAdapter(PublicAdapter):
     async def collect_candles(self, targets):
         batch = Batch(self.venue, candle_only=True)
         async def collect(target):
-            iid, native, resolution, interval, limit = target
+            iid, native, resolution, interval, limit = target[:5]
+            start = target[5] if len(target)>5 else None
             try:
-                rows, ref, received = await self.request(batch,"GET",self.base+"/klines",params={"symbol":native,"interval":interval,"limit":limit})
+                rows, ref, received = await self.request(batch,"GET",self.base+"/klines",params={"symbol":native,"interval":interval,"limit":limit,**({"startTime":start} if start is not None else {})})
                 for row in rows:
                     batch.candles.append({"instrument_id":iid,"resolution":resolution,"open_time":int(row[0]),
                         "close_time":int(row[6])+1,"is_closed":int(row[6])+1<=received,

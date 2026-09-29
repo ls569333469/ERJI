@@ -227,3 +227,16 @@ class SnapshotDataset(Base):
     id: Mapped[str]=mapped_column(String(64),primary_key=True)
     created_at: Mapped[int]=mapped_column(BigInteger)
     payload: Mapped[dict]=mapped_column(JSON)
+
+
+class CurrentSignal(Base):
+    """Worker-owned list projection; heavy immutable evidence stays in snapshots."""
+    __tablename__ = 'current_signals'
+    id: Mapped[str] = mapped_column(String(180), primary_key=True)
+    asset_id: Mapped[str] = mapped_column(String(100), index=True)
+    instrument_id: Mapped[str] = mapped_column(ForeignKey('instruments.id'))
+    action: Mapped[str] = mapped_column(String(30), index=True)
+    first_seen_at: Mapped[int] = mapped_column(BigInteger, index=True)
+    computed_at: Mapped[int] = mapped_column(BigInteger)
+    valid_until: Mapped[int] = mapped_column(BigInteger, index=True)
+    payload: Mapped[dict] = mapped_column(JSON)

@@ -13,8 +13,8 @@ def test_live_db_health_and_strategy_boundary(client):
     assert data["strategy_status"]=="pd2_decisions"
     assert data["execution_status"]=="native_book_cost_gated"
     data=client.get("/v1/signals?view=recommended").json()
-    assert len(data["groups"])==8
-    assert all(r["action"]["code"]=="participate" for r in data["rows"])
+    assert len(data["groups"])==4
+    assert all(r["action_code"] in ("participate","trial") for r in data["rows"])
 
 def test_market_oi_day_label_reuses_24h(client):
     rows=client.get("/v1/markets").json()["rows"]

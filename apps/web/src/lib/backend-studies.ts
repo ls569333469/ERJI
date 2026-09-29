@@ -7,7 +7,9 @@ export function backendStudies(PineJS:Pine,current:()=>Analysis|undefined){
  const definitions=[
   {name:'ERJI 趋势 EMA',overlay:true,plots:[['ema20','EMA20','#3089ab'],['ema50','EMA50','#c58e3f']]},
   {name:'ERJI MACD',overlay:false,plots:[['macd','MACD','#408bc1'],['signal','Signal','#d69741'],['histogram','Histogram','#189b83']]},
-  {name:'ERJI 布林带',overlay:true,plots:[['bb_upper','上轨','#9287bb'],['bb_middle','中轨','#ababbd'],['bb_lower','下轨','#9287bb']]}
+  {name:'ERJI 布林带',overlay:true,plots:[['bb_upper','上轨','#9287bb'],['bb_middle','中轨','#ababbd'],['bb_lower','下轨','#9287bb']]},
+  {name:'ERJI 锚定均价',overlay:true,plots:[['avwap_high','确认高点锚定','#a377bc'],['avwap_low','确认低点锚定','#2b9993']]},
+  {name:'ERJI 跟踪保护参考',overlay:true,plots:[['chandelier_reference','Chandelier参考（非原计划止损）','#c56877']]}
  ];
  return Promise.resolve(definitions.map(d=>({name:d.name,metainfo:{
   _metainfoVersion:53,id:d.name+'@tv-basicstudies-1',description:d.name,shortDescription:d.name,

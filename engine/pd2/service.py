@@ -26,6 +26,14 @@ def load_bars(s,instrument,now,limit=400):
         result[resolution]=[candle_dict(c) for c in reversed(rows)]
     for period in ("120","480","720"):
         result[period]=aggregate(result["60"],period,now)
+    # New complete high-timeframe bars can become available from the 1H stream
+    # before the next native reconciliation. Never overwrite an already closed native bar.
+    for period in ('240','1D','1W'):
+        by_time={b['open_time']:b for b in result[period]}
+        for bar in aggregate(result['60'],period,now):
+            old=by_time.get(bar['open_time'])
+            if bar['is_closed'] and (not old or not old['is_closed']):by_time[bar['open_time']]=bar
+        result[period]=[by_time[t] for t in sorted(by_time)]
     # Provider weekly boundaries are checked; non-Monday weeks are never used as UTC weeks.
     weeks=result["1W"]
     if weeks and any((b["open_time"]-345600000)%604800000 for b in weeks):
@@ -102,11 +110,11 @@ def headline(action,assessment,opportunity,evidence):
       "validation_status":"unvalidated","probability":None}
 
 def refresh_plans(instrument_ids=None):
-    now=now_ms();config=runtime_config();markets={m.instrument_id:m for m in list_markets().rows}
+    now=now_ms();config=runtime_config();markets={m.instrument_id:m for m in list_markets(instrument_ids).rows}
     from engine.pd2.portfolio import portfolio,plan_risk
     portfolio_risk=portfolio()["risk"]
     with Session.begin() as s:
-        s.execute(text("SELECT pg_advisory_xact_lock(1877203)"))
+        s.execute(text("SELECT pg_advisory_xact_lock(hashtext(current_schema() || :scope))"),{'scope':':decisions:'+','.join(sorted(instrument_ids or ['all']))})
         query=select(Episode,Campaign).join(Campaign)
         if instrument_ids is not None:query=query.where(Campaign.reference_instrument_id.in_(instrument_ids))
         pairs=list(s.execute(query))
@@ -204,13 +212,13 @@ def refresh_plans(instrument_ids=None):
             snap={"plan_id":plan.id,"episode_id":episode.id,"instrument_id":m.instrument_id,"asset_id":m.asset_id,
               "rule_version":VERSION,"config_version":frozen["config_version"],"as_of":now,"known_at":now,
               "phase":phase,"phase_label":PHASES[phase],"position_sizing":sizing,"action":action,"trade_thesis":thesis,"evidence":current_e,
-              "valid_until":min(now+90000,(quote.get("as_of",now) if quote else now)+config_at_plan.execution.quote_max_age_seconds*1000),"execution":cost,"timeframe_assessments":assessments,"opportunity_plan":opportunity,
+              "valid_until":min(now+90000,(quote.get("as_of",now) if quote else now)+config_at_plan.execution.quote_max_age_seconds*1000,(book.get("received_at",0)+config_at_plan.execution.depth_max_age_seconds*1000) if book else now),"execution":cost,"timeframe_assessments":assessments,"opportunity_plan":opportunity,
               "original_opportunity":frozen["opportunity"],"candles_at_snapshot":bars,"derivative_history_at_snapshot":derivative_history(m.instrument_id,now),"original_protection":original["protection"],
               "current_protection":protection,"first_seen_at":campaign.first_seen_at,"first_seen_price":str(campaign.first_seen_price),
               "market":m.model_dump(mode="json"),"market_comparison":(selection.payload if (selection:=s.get(UserPreference,"main_market:"+m.asset_id)) else {"selected":m.instrument_id,"status":"comparison_pending"}),"validation_status":"unvalidated","probability":None,
               "weekly_cross_gate":weekly_cross_gate(bars.get("1W",[]),now),"derivatives":derivative_context}
             snap["id"]=plan.id+":"+str(now)
-            if previous and now-latest.as_of<15000 and action==previous.get("action") and phase==previous.get("phase"):
+            if previous and now-latest.as_of<3000 and action==previous.get("action") and phase==previous.get("phase"):
                 continue
             from engine.pd2.snapshots import freeze_datasets
             stored=freeze_datasets(s,snap)
@@ -226,7 +234,10 @@ def refresh_plans(instrument_ids=None):
     return {"snapshots":count}
 
 def decision_list(view="stages"):
-    now=now_ms();result=[];seen=set();current_markets={m.instrument_id:m for m in list_markets().rows}
+    # Background projection builder only; HTTP reads the persisted compact table.
+    with Session() as session:
+        ids=list(session.scalars(select(Campaign.reference_instrument_id).distinct()))
+    now=now_ms();result=[];seen=set();current_markets={m.instrument_id:m for m in list_markets(ids).rows if m.venue in ('binance','binance_spot','binance_alpha','wallet_rising')}
     with Session() as s:
         q=select(SignalSnapshot).distinct(SignalSnapshot.plan_id).order_by(SignalSnapshot.plan_id,SignalSnapshot.as_of.desc())
         latest=list(s.scalars(q))
@@ -235,18 +246,18 @@ def decision_list(view="stages"):
         latest.sort(key=lambda r:(priority.get(r.payload["action"]["code"] if 0<=now-r.as_of<=90000 and (r.payload["action"]["code"] not in ("participate","trial") or now<=r.payload.get("valid_until",r.as_of+15000)) else "paused",9),-r.as_of))
         for snapshot in latest:
             p=snapshot.payload;asset=p["asset_id"]
-            if asset in seen or p["instrument_id"] not in current_markets:continue
+            if p["instrument_id"] not in current_markets:continue
             seen.add(asset);fresh=0<=now-p["as_of"]<=90000 and (p["action"]["code"] not in ("participate","trial") or now<=p.get("valid_until",p["as_of"]+15000))
             action=p["action"] if fresh or p["action"]["code"]=="ended" else {"code":"paused","label":"数据暂停","reason":"报价或决策已过期，等待后台重新确认"}
             result.append({"id":p["episode_id"],"snapshot_id":snapshot.id,"plan_id":p["plan_id"],
               "asset_id":asset,"instrument_id":p["instrument_id"],"phase":p["phase"],"phase_label":p["phase_label"],
               "action":action,"first_seen_at":p["first_seen_at"],"first_seen_price":p["first_seen_price"],
               "since_first_pct":str((D(p["market"]["price"])/D(p["first_seen_price"])-1)*100) if fresh and p["market"].get("price") else None,
-              "fresh":fresh,"market":p["market"],"evidence":p["evidence"],"trade_thesis":p["trade_thesis"] if fresh else {**p["trade_thesis"],"headline":"暂停参与；报价或决策已过期，原计划保护继续"},
+              "fresh":fresh,"decision_as_of":p['as_of'],"valid_until":p.get("valid_until",p["as_of"]+15000),"market":p["market"],"evidence":p["evidence"],"trade_thesis":p["trade_thesis"] if fresh else {**p["trade_thesis"],"headline":"暂停参与；报价或决策已过期，原计划保护继续"},
               "opportunity_plan":p["opportunity_plan"],"derivatives":p.get("derivatives"),"execution":p["execution"],"timeframe_assessments":p["timeframe_assessments"]})
         # Pending structures remain visible before a plan can exist.
         for episode,campaign in s.execute(select(Episode,Campaign).join(Campaign).order_by(Campaign.first_seen_at.desc())):
-            if campaign.asset_id in seen or episode.evidence.get("trigger"):continue
+            if (campaign.asset_id in seen and episode.phase not in ('ended','invalidated')) or episode.evidence.get("trigger"):continue
             market=s.get(MarketState,campaign.reference_instrument_id)
             if not market or campaign.reference_instrument_id not in current_markets:continue
             display_market=current_markets[campaign.reference_instrument_id]
@@ -259,6 +270,8 @@ def decision_list(view="stages"):
               "fresh":0<=now-market.as_of<=180000,"market":display_market.model_dump(mode="json"),"evidence":episode.evidence})
         heartbeat=s.get(WorkerHeartbeat,"signals")
         scan={**(heartbeat.details if heartbeat else {}),"as_of":heartbeat.updated_at if heartbeat else None}
+    from engine.pd2.signal_projection import publish
+    publish(result)
     all_rows=result
     if view in ("recommended","trial"):
         desired="trial" if view=="trial" else "participate"

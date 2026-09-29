@@ -4,6 +4,7 @@ from pathlib import Path
 from datetime import datetime,timezone
 from decimal import Decimal as D
 import httpx
+from urllib.request import getproxies
 from sqlalchemy import select
 from engine.config import settings
 from engine.db import Session
@@ -38,7 +39,7 @@ def read_key(path):
 
 class Supplemental:
     def __init__(self):
-        self.client=httpx.AsyncClient(timeout=20,follow_redirects=False,verify=ssl.create_default_context())
+        self.client=httpx.AsyncClient(timeout=20,follow_redirects=False,verify=ssl.create_default_context(),proxy=getproxies().get('https'))
         self.lock=asyncio.Lock()
     async def close(self):await self.client.aclose()
     async def request(self,provider,capability,subject,path,params=None,ttl=300000,refresh=1800000,priority="normal"):
@@ -72,9 +73,11 @@ class Supplemental:
             return get(provider,capability,subject)
         base="https://pro-api.coinmarketcap.com" if provider=="cmc" else "https://bykaranteli.com"
         headers={"X-CMC_PRO_API_KEY":key} if provider=="cmc" else {"Authorization":"Bearer "+key}
-        async with self.lock:
+        from engine.pd2.request_budget import request_slot, feedback
+        async with self.lock, request_slot(base+path, {}):
             try:
                 response=await self.client.get(base+path,params=params,headers=headers)
+                await asyncio.to_thread(feedback,base+path,response.status_code,response.headers)
                 if response.status_code==429:
                     try:retry=float(response.headers.get("retry-after","60"))
                     except ValueError:retry=60
@@ -100,15 +103,23 @@ class Supplemental:
         return get(provider,capability,subject)
 
     async def cmc(self):
+        from engine.pd2.storage import account_usage
+        account=await self.request('cmc','account','global','/v1/key/info',ttl=900000,refresh=900000,priority='critical')
+        if account.get('status')=='fresh' and account.get('payload'):account_usage('cmc',account['payload'],account['received_at'])
         from engine.pd2.identity import REVIEWED,save_map
         mapping=await self.request("cmc","identity_catalog","reviewed","/v1/cryptocurrency/map",{"symbol":",".join(REVIEWED),"listing_status":"active"},ttl=21600000,refresh=21600000)
         if mapping.get("payload"):save_map(mapping["payload"])
         with Session() as s:
             links=list(s.scalars(select(IdentityLink).where(IdentityLink.provider=="cmc",IdentityLink.status=="verified")))
-        ids=sorted(set([v.external_id for v in links]+["825","3408"]))
-        for start in range(0,len(ids),100):
-            chosen=ids[start:start+100]
-            result=await self.request("cmc","quotes",__import__("hashlib").sha256(",".join(chosen).encode()).hexdigest()[:32],"/v2/cryptocurrency/quotes/latest",{"id":",".join(chosen),"convert":"USD"},ttl=86400000,priority="critical")
+        from engine.models import CurrentSignal
+        with Session() as s:active=set(s.scalars(select(CurrentSignal.asset_id).where(CurrentSignal.action!='ended')))
+        active_ids=set(v.external_id for v in links if v.asset_id in active)|{'825','3408'}
+        background=set(v.external_id for v in links)-active_ids
+        quote_tasks=[]
+        for ids,interval,priority in ((sorted(active_ids),1800000,'critical'),(sorted(background),21600000,'background')):
+            quote_tasks.extend((ids[start:start+100],interval,priority) for start in range(0,len(ids),100))
+        for chosen,interval,priority in quote_tasks:
+            result=await self.request("cmc","quotes",__import__("hashlib").sha256(",".join(chosen).encode()).hexdigest()[:32],"/v2/cryptocurrency/quotes/latest",{"id":",".join(chosen),"convert":"USD"},ttl=86400000,refresh=interval,priority=priority)
             if not result.get("payload"):continue
             for ident,entry in (result["payload"].get("data") or {}).items():
                 quote=entry.get("quote",{}).get("USD",{})
@@ -129,8 +140,8 @@ class Supplemental:
         specs=[("symbols","/api/public/symbols",{"top":1000},21600000),
           ("coverage","/api/public/coverage",None,21600000),
           ("oi_history","/api/public/venues/oi-history",None,21600000),
-          ("pressure","/api/public/pressure",{"limit":200},7200000),("oi","/api/public/oi",None,7200000),
-          ("funding","/api/public/funding-arb",None,7200000),("slippage","/api/public/slippage",None,7200000),
+          ("pressure","/api/public/pressure",{"limit":200},600000),("oi","/api/public/oi",None,600000),
+          ("funding","/api/public/funding-arb",None,600000),("slippage","/api/public/slippage",None,7200000),
           ("markets","/api/public/venues/markets",None,3600000),
           ("liquidation_leaderboard","/api/public/liquidation-leaderboard",{"window":"24h","limit":200},3600000),
           ("whales","/api/public/hyperliquid-whales",{"events":1},1800000),
@@ -146,7 +157,9 @@ class Supplemental:
         config=runtime_config();catalog=get('bykaranteli','map_catalog','global')
         if catalog.get('received_at',0)+21600000<=now_ms():
             try:
-                response=await self.client.get('https://bykaranteli.com/liqmap');response.raise_for_status()
+                from engine.pd2.request_budget import request_slot
+                async with request_slot('https://bykaranteli.com/liqmap',{}):
+                    response=await self.client.get('https://bykaranteli.com/liqmap');response.raise_for_status()
                 symbols=map_symbols(response.text)
                 with Session() as s:
                     native=set(s.scalars(select(Instrument.asset_id).where(Instrument.venue=='binance',Instrument.market_type=='linear_perpetual',Instrument.quote_asset=='USDT')))
@@ -162,15 +175,15 @@ class Supplemental:
             pace=s.get(UserPreference,'map_rotation');last=(pace.payload if pace else {}).get('last',0)
             active=set(s.scalars(select(Instrument.asset_id).join(Campaign,Campaign.reference_instrument_id==Instrument.id).join(Episode).where(Instrument.venue=='binance',Episode.phase.notin_(['ended','invalidated']))))
         now=now_ms();spacing=max(60000,86400000//len(symbols))
+        # Active maps have their own deadline, independent of the daily background rotation.
+        active_due=sorted((x for x in active & set(symbols) if x not in records or now-records[x].received_at>=1800000),key=lambda x:records[x].received_at if x in records else 0)
+        for symbol in active_due[:2]:
+            await self.request('bykaranteli','liqmap',symbol,'/api/liqmap/public',{'symbol':symbol},ttl=300000,refresh=1800000,priority='critical')
         if now-last<spacing:return
         due=sorted([x for x in symbols if x not in records or (records[x].next_refresh_at or 0)<=now],key=lambda x:((records[x].received_at if x in records else 0),x))
         if not due:return
         chosen=due[0]
         await self.request('bykaranteli','liqmap',chosen,'/api/liqmap/public',{'symbol':chosen},ttl=300000,refresh=86400000,priority='background')
-        for symbol in sorted(active & set(symbols))[:2]:
-            item=records.get(symbol)
-            if not item or now-item.received_at>=1800000:
-                await self.request('bykaranteli','liqmap',symbol,'/api/liqmap/public',{'symbol':symbol},ttl=300000,refresh=1800000,priority='critical')
         with Session.begin() as s:
             s.merge(UserPreference(key='map_rotation',updated_at=now,payload={'last':now,'catalog_count':len(symbols),'queued':len(due),'oldest_wait_ms':max([now-r.received_at for r in records.values()] or [0]),'daily_spacing_ms':spacing}))
 

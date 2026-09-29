@@ -1,5 +1,5 @@
 from decimal import Decimal as D
-from sqlalchemy import select,text
+from sqlalchemy import select,text,func
 from engine.db import Session
 from engine.models import Candle,Episode,Campaign,WorkerHeartbeat
 from engine.repository import list_markets,emit
@@ -7,14 +7,16 @@ from engine.adapters.base import now_ms
 from engine.contracts import PHASES
 from engine.strategies.structures import candidate,evaluate,closed,target,VERSION
 
-def scan_signals():
-    now=now_ms();data=list_markets()
-    markets=[m for m in data.rows if m.candles_count>=60]
+def scan_signals(instrument_ids=None):
+    now=now_ms();data=list_markets(instrument_ids,light=True)
+    markets=[m for m in data.rows if m.candles_count>=60 and m.in_universe and m.venue in ("binance","binance_spot","binance_alpha","wallet_rising")]
     counts={"scanned":0,"matched":0,"stale":0}
     with Session.begin() as s:
         s.execute(text("SELECT pg_advisory_xact_lock(1877103)"))
         bars={}
-        for c in s.scalars(select(Candle).where(Candle.instrument_id.in_([m.instrument_id for m in markets]),Candle.is_closed==True).order_by(Candle.open_time)):
+        ranked=select(Candle.instrument_id,Candle.resolution,Candle.open_time,func.row_number().over(partition_by=(Candle.instrument_id,Candle.resolution),order_by=Candle.open_time.desc()).label('rn')).where(Candle.instrument_id.in_([m.instrument_id for m in markets]),Candle.is_closed==True).subquery()
+        recent=select(Candle).join(ranked,(Candle.instrument_id==ranked.c.instrument_id)&(Candle.resolution==ranked.c.resolution)&(Candle.open_time==ranked.c.open_time)).where(ranked.c.rn<=300).order_by(Candle.open_time)
+        for c in s.scalars(recent):
             bars.setdefault((c.instrument_id,c.resolution),[]).append({"open_time":c.open_time,"close_time":c.close_time,"is_closed":c.is_closed,
                 "open":str(c.open),"high":str(c.high),"low":str(c.low),"close":str(c.close),"quote_volume":str(c.quote_volume) if c.quote_volume is not None else None})
         for m in markets:
@@ -63,7 +65,10 @@ def scan_signals():
                 if evidence.get("trigger"):evidence["targets_frozen_at"]=now
             active.evidence=evidence
             counts["matched"]+=1
-        s.merge(WorkerHeartbeat(role="signals",updated_at=now,state="ok",details={**counts,"rule_version":VERSION,"mode":"structure_signals","entry_execution":"delegated_pd2_frozen_plan"}))
+        old=s.get(WorkerHeartbeat,'signals')
+        previous=old.details if old else {}
+        summary={**counts,'last_full_scan_at':now} if instrument_ids is None else {**previous,'last_event_scan_at':now,'last_event_markets':counts['scanned'],'last_event_matches':counts['matched']}
+        s.merge(WorkerHeartbeat(role="signals",updated_at=now,state="ok",details={**summary,"rule_version":VERSION,"mode":"structure_signals","entry_execution":"delegated_pd2_frozen_plan"}))
     return counts
 
 def action_for(evidence,phase,price,fresh):
@@ -92,7 +97,7 @@ def signal_list(view="stages"):
             e=episode.evidence;m=markets.get(campaign.reference_instrument_id)
             if not m or campaign.asset_id in seen:continue
             seen.add(campaign.asset_id)
-            fresh=m.quality.status=="fresh" and 0<=now-e.get("evaluated_at",0)<180_000 
+            fresh=m.quality.status=="fresh" and 0<=now-e.get("evaluated_at",0)<180_000
             action=action_for(e,episode.phase,m.price,fresh)
             result.append({"id":episode.id,"asset_id":campaign.asset_id,"instrument_id":m.instrument_id,"phase":episode.phase,"phase_label":PHASES[episode.phase],
                 "action":action,"first_seen_at":campaign.first_seen_at,"first_seen_price":str(campaign.first_seen_price),

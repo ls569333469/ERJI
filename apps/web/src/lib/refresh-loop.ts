@@ -5,9 +5,10 @@ export function createRefreshLoop<T>(
   reject:(error:Error)=>void,
   busy:(value:boolean)=>void,
   interval=15000,
-  minGap=3000,
+  minGap=1000,
 ) {
   let disposed=false, running=false, lastFinished=0;
+  let visible=true, polling=true;
   let timer:ReturnType<typeof setTimeout>|undefined;
   let controller:AbortController|undefined;
   const schedule=(delay:number)=>{
@@ -15,7 +16,7 @@ export function createRefreshLoop<T>(
     timer=setTimeout(()=>void refresh(),delay);
   };
   async function refresh(force=false) {
-    if(disposed||running)return;
+    if(disposed||running||!visible)return;
     if(!force&&lastFinished&&Date.now()-lastFinished<minGap){
       schedule(minGap-(Date.now()-lastFinished));return;
     }
@@ -28,11 +29,13 @@ export function createRefreshLoop<T>(
       if(!disposed)reject(error instanceof Error?error:new Error(String(error)));
     } finally {
       running=false;lastFinished=Date.now();
-      if(!disposed){busy(false);schedule(interval);}
+      if(!disposed){busy(false);if(polling&&visible)schedule(interval);}
     }
   }
   return {
     refresh,
+    setPolling(value:boolean){polling=value;if(!polling&&timer!==undefined)clearTimeout(timer);else if(polling&&visible&&!running)schedule(interval);},
+    setVisible(value:boolean){visible=value;if(!visible&&timer!==undefined)clearTimeout(timer);else if(visible)void refresh(true);},
     dispose(){disposed=true;if(timer!==undefined)clearTimeout(timer);controller?.abort();},
   };
 }

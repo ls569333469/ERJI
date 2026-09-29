@@ -45,3 +45,15 @@ test('SSE burst after completion is coalesced into one refresh with a minimum ga
   for(let n=0;n<30;n++)void loop.refresh();
   assert.equal(calls,1);t.mock.timers.tick(3000);await flush();assert.equal(calls,2);loop.dispose();
 });
+
+test('connected SSE stops fallback polls; hidden tab stops all requests and visible refreshes once',async t=>{
+  t.mock.timers.enable({apis:['setTimeout','Date'],now:100000});
+  let calls=0;const loop=createRefreshLoop(async()=>++calls,()=>{},()=>{},()=>{});
+  await loop.refresh();loop.setPolling(false);
+  t.mock.timers.tick(60000);await flush();assert.equal(calls,1);
+  await loop.refresh();assert.equal(calls,2);
+  loop.setVisible(false);loop.setPolling(true);
+  t.mock.timers.tick(60000);await loop.refresh(true);assert.equal(calls,2);
+  loop.setVisible(true);await flush();assert.equal(calls,3);
+  t.mock.timers.tick(15000);await flush();assert.equal(calls,4);loop.dispose();
+});

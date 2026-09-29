@@ -6,24 +6,29 @@ class LinearPerpAdapter(PublicAdapter):
         super().__init__();self.venue=venue
         self.base="https://fapi.binance.com" if venue=="binance" else "https://fapi.asterdex.com"
         self.prefix="/fapi/v1" if venue=="binance" else "/fapi/v3"
-        self.catalog=None;self.catalog_at=0
+        self.catalog=None;self.catalog_at=0;self.funding_cache={}
     async def collect(self,symbols,history=False):
         batch=Batch(self.venue)
-        if self.catalog is None or now_ms()-self.catalog_at>21600000:
+        catalog_changed=False
+        if self.catalog is None or now_ms()-self.catalog_at>1800000:
             doc,_,_=await self.request(batch,"GET",self.base+self.prefix+"/exchangeInfo")
             self.catalog_at=now_ms()
+            catalog_changed=True
             self.catalog={x["symbol"]:x for x in doc["symbols"] if x.get("status")=="TRADING" and x.get("contractType")=="PERPETUAL" and x.get("symbolType",0)==0 and not ({"STOCK","COMMODITY","FOREX","INDEX"}&set(x.get("underlyingSubType",[])))}
         dynamic=not isinstance(symbols,(list,tuple))
         if dynamic:
             from engine.pd2.scheduling import rotation
             cfg=symbols
             natives=[k for k,v in self.catalog.items() if v.get("quoteAsset")=="USDT"]
-            selected=rotation(self.venue,natives,min(cfg.deep_asset_limit,12))
+            from engine.pd2.universe_policy import auxiliary_symbols
+            from engine.pd2.collection_schedule import due
+            allowed=auxiliary_symbols(self.venue)
+            selected=due(self.venue,[n for n in natives if n in allowed])
             symbols=[self.catalog[k]["baseAsset"] for k in selected]
-            for k in natives:
+            for k in natives if catalog_changed else []:
                 v=self.catalog[k];asset=v["baseAsset"]
                 batch.instruments.append({"id":f"{self.venue}:perp:{k}","asset_id":asset if asset in ("BTC","ETH","SOL","HYPE","ASTER","RAVE") else self.venue+":"+asset,"venue":self.venue,"native_symbol":k,"market_type":"linear_perpetual","quote_asset":"USDT","multiplier":"1","spec":{"base_asset":asset,"price_precision":v.get("pricePrecision"),"source":"exchangeInfo","status":v.get("status")}})
-            batch.metadata={"catalog_count":len(natives),"scanned_count":len(selected),"selected_ids":[x["id"] for x in batch.instruments]}
+            batch.metadata={"catalog_complete":catalog_changed,"catalog_count":len(natives),"scanned_count":len(selected),"selected_ids":[x["id"] for x in batch.instruments]}
         for symbol in symbols:
             native=symbol+"USDT";spec=self.catalog.get(native)
             if not spec or spec.get("baseAsset")!=symbol: continue
@@ -44,6 +49,9 @@ class LinearPerpAdapter(PublicAdapter):
                 batch.oi.append(item);state.update(oi_base=quantity,oi_notional_quote=item["notional_quote"],oi_as_of=event_time,oi_status="fresh")
             except Exception as e: batch.errors.append(native+":oi:"+type(e).__name__)
             try:
+                cached=self.funding_cache.get(native)
+                if cached and now_ms()<cached[0]:
+                    state.update(cached[1]);batch.states.append(state);continue
                 records,ref,_=await self.request(batch,"GET",self.base+self.prefix+"/fundingRate",params={"symbol":native,"limit":4})
                 records=sorted(records,key=lambda r:int(r["fundingTime"]))
                 for index,row in enumerate(records):
@@ -52,7 +60,10 @@ class LinearPerpAdapter(PublicAdapter):
                 if records:
                     last=batch.funding[-1];state.update(funding_rate=last["rate"],funding_interval_seconds=last["interval_seconds"],funding_settled_at=last["settled_at"],funding_status="fresh")
             except Exception as e: batch.errors.append(native+":funding:"+type(e).__name__)
+            if state.get("funding_status")=="fresh":
+                self.funding_cache[native]=(state['funding_settled_at']+(state.get('funding_interval_seconds') or 3600)*1000+60000,{k:v for k,v in state.items() if k.startswith("funding_")})
             batch.states.append(state)
+            if dynamic: continue  # auxiliary evidence only; no duplicate chart history
             for resolution,interval in [("60","1h"),("240","4h"),("1D","1d"),("1W","1w")]:
                 try:
                     rows,ref,received=await self.request(batch,"GET",self.base+self.prefix+"/klines",params={"symbol":native,"interval":interval,"limit":300 if history else 2})
