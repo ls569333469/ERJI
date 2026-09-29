@@ -170,10 +170,11 @@ def list_markets():
                 volume_24h_quote=p.get("volume_24h_quote"),universe_rank=p.get("universe_rank"),
                 in_universe=(inst.id in selected_ids if inst.venue=="binance" and selected_ids else True),
                 deep_history=p.get("deep_history",inst.venue!="binance")))
-    from engine.pd2.providers import valuation_for
+    from engine.pd2.providers import valuation_for,valuation_inputs
     with Session() as valuation_session:
+        inputs=valuation_inputs(result,valuation_session)
         for market in result:
-            v=valuation_for(market,valuation_session,now)
+            v=valuation_for(market,valuation_session,now,inputs)
             market.circulating_cap=v["cap"];market.oi_cap_ratio=v["ratio"];market.oi_notional_usd=v["usd"]
             market.valuation_status=v["status"];market.coverage=v
     return MarketList(as_of=now,rows=result,universe={k:v for k,v in universe.items() if k not in ("selected_ids","deep_ids","latest_gaps")})

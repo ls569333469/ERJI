@@ -183,12 +183,25 @@ def seed_verified_identity():
                 s.add(IdentityLink(asset_id=asset,provider="cmc",external_id=external,status="verified",
                     evidence={"method":"documented_identity","source":"PD1 CMC Sep23 and canonical established assets","multiplier":"1"},known_at=now_ms()))
 
-def valuation_for(market,session,now):
-    link=session.get(IdentityLink,(market.asset_id,"cmc"))
+def valuation_inputs(markets, session):
+    """Two bounded queries per snapshot, including negative identity lookups."""
+    from engine.models import DataCapability
+    assets={m.asset_id for m in markets}
+    links={r.asset_id:r for r in session.scalars(select(IdentityLink).where(
+        IdentityLink.asset_id.in_(assets),IdentityLink.provider=="cmc"))}
+    keys={"cmc:valuation:"+str(r.external_id) for r in links.values() if r.status=="verified"}
+    keys.update(("cmc:valuation:825","cmc:valuation:3408"))
+    records={r.key:r for r in session.scalars(select(DataCapability).where(DataCapability.key.in_(keys)))}
+    return links,records
+
+
+def valuation_for(market,session,now,inputs=None):
+    link=inputs[0].get(market.asset_id) if inputs is not None else session.get(IdentityLink,(market.asset_id,"cmc"))
     if not link or link.status!="verified":return {"status":"unmapped","cap":None,"ratio":None,"usd":None}
     def current(cap,subject,age):
         from engine.models import DataCapability
-        r=session.get(DataCapability,f"cmc:{cap}:{subject}")
+        key=f"cmc:{cap}:{subject}"
+        r=inputs[1].get(key) if inputs is not None else session.get(DataCapability,key)
         return r.payload if r and r.status=="fresh" and r.observed_at and 0<=now-r.observed_at<=age else None
     supply=current("valuation",link.external_id,86400000)
     fx={"USD":D(1)}

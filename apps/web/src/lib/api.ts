@@ -5,13 +5,20 @@ export type MarketList = components["schemas"]["MarketList"];
 export type Candle = components["schemas"]["CandleDTO"];
 export type CandleList = components["schemas"]["CandleList"];
 export async function api<T>(path:string, options?:RequestInit):Promise<T> {
-  const response=await fetch(appPath("/v1"+path),{...options,headers:{"Content-Type":"application/json","X-ERJI-Client":"local-ui","X-ERJI-CSRF":typeof document!=="undefined"?decodeURIComponent(document.cookie.split("; ").find(x=>x.startsWith("erji_csrf="))?.split("=")[1]||""):"",...options?.headers},cache:"no-store"});
+  const timeout=AbortSignal.timeout(45000);
+  const signal=options?.signal?AbortSignal.any([options.signal,timeout]):timeout;
+  try {
+  const response=await fetch(appPath("/v1"+path),{...options,signal,headers:{"Content-Type":"application/json","X-ERJI-Client":"local-ui","X-ERJI-CSRF":typeof document!=="undefined"?decodeURIComponent(document.cookie.split("; ").find(x=>x.startsWith("erji_csrf="))?.split("=")[1]||""):"",...options?.headers},cache:"no-store"});
   if(response.status===401&&typeof window!=="undefined"&&!window.location.pathname.startsWith(appPath("/login"))){window.location.assign(appPath("/login"));}
   if(!response.ok) {
     const body=await response.json().catch(()=>({}));
     throw new Error(typeof body.detail==="string"?body.detail:body.message||"服务暂不可用（"+response.status+"）");
   }
-  return response.json();
+  return await response.json();
+  } catch(error) {
+    if(timeout.aborted&&!options?.signal?.aborted)throw new Error("读取数据超时，已保留上次结果；稍后自动重试，也可手动刷新。");
+    throw error;
+  }
 }
 export function money(value:string|number|null|undefined) {
   if(value==null)return "—";
