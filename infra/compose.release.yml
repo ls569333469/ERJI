@@ -1,0 +1,13 @@
+services:
+  api:
+    image: erji-api:b4b799c6c011
+  worker-live:
+    image: erji-api:b4b799c6c011
+  worker-jobs:
+    image: erji-api:b4b799c6c011
+  worker-streams:
+    image: erji-api:b4b799c6c011
+  migrate:
+    image: erji-api:b4b799c6c011
+  web:
+    image: erji-web:b4b799c6c011
