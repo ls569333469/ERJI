@@ -11,6 +11,7 @@ __pycache__/
 *.log
 *.egg-info/
 *.tsbuildinfo
+apps/web/next-env.d.ts
 apps/web/public/charting_library/
 !apps/web/public/charting_library/.gitkeep
 
