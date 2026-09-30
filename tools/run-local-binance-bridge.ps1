@@ -30,8 +30,21 @@ try {
     $localDbUrl = $dbUrl -replace '@[^/]+/erji$', ("@127.0.0.1:" + $Port + "/erji")
     $forward = "127.0.0.1:$($Port):$($ip):5432"
     $tunnel = Start-Process -FilePath "ssh.exe" -ArgumentList ($sshArgs + @("-o","ExitOnForwardFailure=yes","-o","ServerAliveInterval=15","-o","ServerAliveCountMax=3","-N","-L",$forward,$server)) -PassThru -WindowStyle Hidden
-    Start-Sleep -Seconds 2
-    if ($tunnel.HasExited) { throw "SSH database tunnel failed" }
+    $ready = $false
+    for ($attempt = 0; $attempt -lt 20; $attempt++) {
+        if ($tunnel.HasExited) { throw "SSH database tunnel failed" }
+        try {
+            $client = [System.Net.Sockets.TcpClient]::new()
+            try {
+                $client.Connect("127.0.0.1", $Port)
+                $ready = $true
+                break
+            }
+            finally { $client.Dispose() }
+        }
+        catch [System.Net.Sockets.SocketException] { Start-Sleep -Milliseconds 500 }
+    }
+    if (-not $ready) { throw "SSH database tunnel did not become ready" }
     $env:ERJI_DATABASE_URL = $localDbUrl
     $env:ERJI_REQUIRE_AUTH = "false"
     $env:ERJI_MODE = "research_live"
