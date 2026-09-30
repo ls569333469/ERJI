@@ -38,3 +38,16 @@ def test_expired_lease_reclaimed_and_old_owner_cannot_complete(isolated,monkeypa
     with isolated() as s:assert s.get(Task,second['id']).state=='leased'
     tasks.finish(second)
     with isolated() as s:assert s.get(Task,second['id']).state=='complete'
+
+
+def test_bulk_merge_preserves_fields_and_deduplicates(isolated):
+    from engine.repository import _bulk_merge
+    with isolated.begin() as s:
+        rows=[dict(id='BULK_TEST_'+str(i),symbol='OLD',identity_status='verified',known_at=1) for i in range(205)]
+        _bulk_merge(s,Asset,rows)
+        _bulk_merge(s,Asset,[{'id':'BULK_TEST_0','symbol':'NEW'},
+                            {'id':'BULK_TEST_0','known_at':2}])
+    with isolated() as s:
+        row=s.get(Asset,'BULK_TEST_0')
+        assert row.symbol=='NEW' and row.known_at==2 and row.identity_status=='verified'
+        assert s.get(Asset,'BULK_TEST_204').symbol=='OLD'

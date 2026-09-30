@@ -73,15 +73,36 @@ def unique_candles(rows):
         unique[key]=row
     return list(unique.values())
 
+def _bulk_merge(session, model, rows):
+    """Preserve partial-update semantics without one SELECT per remote row."""
+    keys=[c.name for c in model.__table__.primary_key.columns]
+    unique={}
+    for row in rows:
+        key=tuple(row[k] for k in keys)
+        unique[key]={**unique.get(key,{}),**row}
+    groups={}
+    for key in sorted(unique):
+        row=unique[key]
+        groups.setdefault(tuple(sorted(row)),[]).append(row)
+    for columns,items in groups.items():
+        for offset in range(0,len(items),100):
+            query=insert(model).values(items[offset:offset+100])
+            updates={k:getattr(query.excluded,k) for k in columns if k not in keys}
+            query=(query.on_conflict_do_update(index_elements=keys,set_=updates) if updates
+                   else query.on_conflict_do_nothing(index_elements=keys))
+            session.execute(query)
+
 def save_batch(batch):
     candles=unique_candles(batch.candles)
     with Session.begin() as s:
-        for raw in batch.raw: s.merge(RawEvent(**raw))
-        s.flush()
+        _bulk_merge(s,RawEvent,batch.raw)
+        assets={}
         for item in batch.instruments:
-            s.execute(insert(Asset).values(id=item["asset_id"],symbol=item.get("spec",{}).get("display_symbol",item.get("spec",{}).get("base_asset",item["asset_id"]))[:40],identity_status="native_catalog",known_at=now_ms()).on_conflict_do_nothing(index_elements=["id"]))
-            s.merge(Instrument(**item))
-        s.flush()
+            assets.setdefault(item['asset_id'],dict(id=item['asset_id'],symbol=item.get('spec',{}).get('display_symbol',item.get('spec',{}).get('base_asset',item['asset_id']))[:40],identity_status='native_catalog',known_at=now_ms()))
+        asset_rows=[assets[k] for k in sorted(assets)]
+        for offset in range(0,len(asset_rows),100):
+            s.execute(insert(Asset).values(asset_rows[offset:offset+100]).on_conflict_do_nothing(index_elements=['id']))
+        _bulk_merge(s,Instrument,batch.instruments)
         if batch.metadata.get('catalog_complete'):
             current={i['id'] for i in batch.instruments}
             for old in s.scalars(select(Instrument).where(Instrument.venue==batch.venue,Instrument.id.notin_(current))):
@@ -112,7 +133,7 @@ def save_batch(batch):
         for offset in range(0,len(points),500):
             query=insert(OiPoint).values(points[offset:offset+500])
             s.execute(query.on_conflict_do_update(index_elements=['instrument_id','event_time'],set_={c.name:getattr(query.excluded,c.name) for c in OiPoint.__table__.columns if not c.primary_key},where=OiPoint.received_at<=query.excluded.received_at))
-        for item in batch.funding: s.merge(FundingPoint(**item))
+        _bulk_merge(s,FundingPoint,batch.funding)
         states={r['instrument_id']:r for r in batch.states}
         old_states={r.instrument_id:r for r in s.scalars(select(MarketState).where(MarketState.instrument_id.in_(states)).order_by(MarketState.instrument_id).with_for_update())}
         for item in states.values():

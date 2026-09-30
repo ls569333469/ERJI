@@ -38,12 +38,18 @@ def evaluate_path(bars,entry,target,stop,start,end,cost=None,entry_expires=None)
     if rows[-1]['close_time']<end-3600000:return result('incomplete_horizon')
     return result('expired' if filled else 'unfilled',rows[-1]['close_time'],rows[-1].get('close') if filled else None)
 
+def first_recommendation(session, plan_id):
+    return session.scalar(select(SignalSnapshot).where(
+        SignalSnapshot.plan_id==plan_id,
+        SignalSnapshot.payload['action']['code'].as_string().in_(('participate','trial')),
+    ).order_by(SignalSnapshot.as_of,SignalSnapshot.id).limit(1))
+
 def update_outcomes():
     now=now_ms();count=0
     with Session.begin() as s:
         for plan in s.scalars(select(Plan)):
             target=plan.payload.get('original_t1')
-            recommendation=next((r for r in s.scalars(select(SignalSnapshot).where(SignalSnapshot.plan_id==plan.id).order_by(SignalSnapshot.as_of)) if r.payload['action']['code'] in ('participate','trial')),None)
+            recommendation=first_recommendation(s,plan.id)
             for horizon in plan.payload['config']['validation']['horizons_hours']:
                 old=s.get(PlanOutcome,(plan.id,horizon))
                 if old and old.state not in ('immature','not_recommended'):continue
