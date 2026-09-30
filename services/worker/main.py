@@ -8,6 +8,15 @@ from engine.adapters.wallet import WalletAdapter
 from engine.repository import bootstrap,runtime_config,save_batch,save_failure,heartbeat,candle_targets
 log=logging.getLogger("erji.worker")
 
+def binance_bridge_active():
+    from engine.adapters.base import now_ms
+    from engine.db import Session
+    from engine.models import WorkerHeartbeat
+
+    with Session() as session:
+        row=session.get(WorkerHeartbeat,"bridge_binance")
+        return bool(row and row.state in ("ok","partial") and now_ms()-row.updated_at<120000)
+
 async def supervise(name, fn, once):
     while True:
         try:
@@ -29,7 +38,23 @@ async def run(role,once=False):
     finally:lease.close()
 
 async def run_locked(role,once=False):
+    if role=="binance-bridge":
+        # A remote collector must never upgrade or initialize an older production schema.
+        from alembic.config import Config
+        from alembic.script import ScriptDirectory
+        from alembic.runtime.migration import MigrationContext
+        from engine.db import engine
+        from pathlib import Path
+        root=Path(__file__).resolve().parents[2]
+        cfg=Config(str(root/'alembic.ini'))
+        cfg.set_main_option('script_location',str(root/'migrations'))
+        with engine.connect() as connection:
+            current=set(MigrationContext.configure(connection).get_current_heads())
+        if current!=set(ScriptDirectory.from_config(cfg).get_heads()):
+            raise RuntimeError("bridge_schema_mismatch: deploy database migrations before connecting bridge")
     bootstrap()
+    if role=="binance-bridge":
+        await run_binance_bridge(once);return
     if role=="streams":
         from engine.pd2.native_streams import run_streams
         await run_streams();return
@@ -53,6 +78,9 @@ async def run_locked(role,once=False):
             while True:
                 started=asyncio.get_running_loop().time()
                 try:
+                    if adapter.venue=="binance" and await asyncio.to_thread(binance_bridge_active):
+                        if once:return
+                        await asyncio.sleep(delay);continue
                     config=await asyncio.to_thread(runtime_config)
                     if config.collector_enabled:
                         batch=await adapter.collect(config) if adapter.venue=="binance" else await adapter.collect(config,history=False)
@@ -72,6 +100,56 @@ async def run_locked(role,once=False):
         finally:await adapter.close()
     await asyncio.gather(*(source_loop(a) for a in adapters))
 
+async def run_binance_bridge(once=False):
+    """Local-only Binance USD-M collector writing to the shared ERJI database.
+
+    The process is intentionally separate from the server worker-live role so a
+    machine with Binance access can provide only the blocked futures source.
+    """
+    from engine.pd2.collection_schedule import acknowledge, acknowledge_batch
+
+    adapter=BinanceUniverseAdapter()
+    try:
+        while True:
+            try:
+                config=await asyncio.to_thread(runtime_config)
+                if config.collector_enabled:
+                    batch=await adapter.collect(config)
+                    if not batch.metadata.get("idle"):
+                        await asyncio.to_thread(save_batch,batch)
+                        await asyncio.to_thread(acknowledge_batch,batch)
+                    targets=await asyncio.to_thread(candle_targets,adapter.venue)
+                    candle_batch=await adapter.collect_candles(targets) if targets else None
+                    if candle_batch:
+                        await asyncio.to_thread(save_batch,candle_batch)
+                        success={(row['instrument_id'],row['resolution']) for row in candle_batch.candles}
+                        completed={target[1] for target in targets if all(
+                            (item[0],item[2]) in success for item in targets if item[0]==target[0]
+                        )}
+                        if completed:
+                            await asyncio.to_thread(acknowledge,adapter.venue,completed,'candles')
+                    await asyncio.to_thread(heartbeat,"bridge_binance","partial" if batch.errors or (candle_batch and candle_batch.errors) else "ok",{
+                        "updated":len(batch.states),"candles":len(candle_batch.candles) if candle_batch else 0,
+                        "gaps":len(batch.errors)+(len(candle_batch.errors) if candle_batch else 0),
+                        "schedule":"per_asset_deadlines","transport":"local_bridge"})
+                    if once and (batch.errors or (candle_batch and candle_batch.errors)):
+                        raise RuntimeError("bridge_incomplete_collection")
+                else:
+                    await asyncio.to_thread(heartbeat,"bridge_binance","disabled",{})
+            except Exception as error:
+                try:
+                    await asyncio.to_thread(save_failure,"binance",public_error(error))
+                except Exception:
+                    log.warning("binance bridge health database unavailable")
+                log.warning("binance bridge unavailable: %s",type(error).__name__)
+                # The launcher recreates the SSH tunnel and role lease on failure.
+                raise
+            if once:return
+            await asyncio.sleep(5)
+    finally:
+        await adapter.close()
+
+
 async def run_candles(once=False):
     from engine.pd2.collection_schedule import acknowledge
     async def source(factory):
@@ -79,7 +157,8 @@ async def run_candles(once=False):
         try:
             while True:
                 cfg=await asyncio.to_thread(runtime_config)
-                targets=await asyncio.to_thread(candle_targets,adapter.venue) if cfg.collector_enabled else []
+                bridged=adapter.venue=="binance" and await asyncio.to_thread(binance_bridge_active)
+                targets=await asyncio.to_thread(candle_targets,adapter.venue) if cfg.collector_enabled and not bridged else []
                 if targets:
                     batch=await adapter.collect_candles(targets)
                     await asyncio.to_thread(save_batch,batch)
@@ -219,7 +298,7 @@ async def run_expanded(once=False):
 
 
 if __name__=="__main__":
-    parser=argparse.ArgumentParser();parser.add_argument("--role",choices=["live","jobs","notify","streams"],default="live");parser.add_argument("--once",action="store_true")
+    parser=argparse.ArgumentParser();parser.add_argument("--role",choices=["live","jobs","notify","streams","binance-bridge"],default="live");parser.add_argument("--once",action="store_true")
     args=parser.parse_args();logging.basicConfig(level=logging.INFO,format="%(asctime)s %(message)s")
     logging.getLogger("httpx").setLevel(logging.WARNING)
     try: asyncio.run(run(args.role,args.once))
