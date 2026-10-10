@@ -1,6 +1,6 @@
 import httpx,ssl,json,re
 from pathlib import Path
-urls={'byk-liqmap':'https://bykaranteli.com/liqmap','binance-skills':'https://raw.githubusercontent.com/binance/binance-skills-hub/master/README.md'}
+urls={'binance-skills':'https://raw.githubusercontent.com/binance/binance-skills-hub/master/README.md'}
 with httpx.Client(verify=ssl.create_default_context(),timeout=20,follow_redirects=True) as c:
  for name,url in urls.items():
   try:

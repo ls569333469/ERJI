@@ -11,8 +11,6 @@ source=Settings(_env_file="D:/Axiangmu/erji/.env")
 SCHEMA="erji_pd2_20260924"
 url=make_url(source.database_url).update_query_dict({"options":"-csearch_path="+SCHEMA})
 os.environ["ERJI_DATABASE_URL"]=url.render_as_string(hide_password=False)
-os.environ["ERJI_CMC_KEY_FILE"]="F:/key/CMC.txt"
-os.environ["ERJI_BYKARANTELI_KEY_FILE"]="F:/key/bykaranteli.txt"
 os.environ["ERJI_WEB_ORIGIN"]="http://127.0.0.1:18800"
 os.environ["ERJI_API_ORIGIN"]="http://127.0.0.1:18801"
 parser=argparse.ArgumentParser()

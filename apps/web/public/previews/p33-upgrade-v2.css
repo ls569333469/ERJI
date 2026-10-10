@@ -1,0 +1,62 @@
+.opportunity-table{min-width:1120px}
+.opportunity-table th:nth-child(1){width:115px}.opportunity-table th:nth-child(2){width:225px}.opportunity-table th:nth-child(3){width:125px}.opportunity-table th:nth-child(4){width:185px}.opportunity-table th:nth-child(5){width:158px}.opportunity-table th:nth-child(6){width:185px}.opportunity-table th:nth-child(7){width:165px}.opportunity-table th:nth-child(8){width:95px}
+.opportunity-table td{vertical-align:middle;padding:14px 11px}
+.opportunity-table th{font-size:11px}
+.opportunity-table small{font-size:10px}
+.opportunity-reason{font-size:12px}
+.summary-price{font-weight:700;font-variant-numeric:tabular-nums}
+.summary-price small{font-weight:400}
+.summary-main{font-size:13px;font-weight:750}
+.summary-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.summary-goal{color:var(--green)}
+.detail-row>td{padding:0!important}
+.detail{padding:18px 22px 24px}
+.detail-tabs{gap:27px;margin-bottom:18px}
+.detail-tabs button{font-size:12px}
+.detail-overview{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:34px;align-items:start}
+.overview-column{min-width:0}
+.overview-section+ .overview-section{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+.overview-section h3{font-size:14px;margin:0 0 12px;color:#253c4d}
+.overview-data .fact{min-height:34px;align-items:center;font-variant-numeric:tabular-nums}
+.overview-data .fact b{font-size:12px}
+.overview-verdict{border-left:3px solid var(--green);padding:9px 12px;background:#edf6f2;margin-bottom:12px}
+.overview-verdict b{font-size:12px;color:var(--green)}
+.overview-verdict p{margin:4px 0 0;color:#425568;font-size:11px}
+.overview-note{font-size:11px;color:#526477;line-height:1.6;margin:12px 0 0}
+.overview-context .timeline{margin-top:18px}
+.overview-context .tracking-note{margin-top:4px}
+.detail-body{grid-template-columns:minmax(0,1fr) minmax(290px,.82fr)}
+.detail-body h3{font-size:13px}
+.detail-body p,.detail-body li{font-size:11px}
+.detail .facts{margin-top:12px}
+.fact{font-size:11px}
+.detail-explainer{background:#f0f5f8;border-left:3px solid #8ba9ba;padding:10px 12px;color:#465a68;font-size:11px;line-height:1.6}
+.evidence-list{display:grid;gap:7px;margin:0;padding:0;list-style:none}
+.evidence-list li{margin:0;padding:7px 9px;background:#fff;border:1px solid var(--line)}
+.evidence-list b{margin-right:7px}
+.evidence-list .ok b{color:var(--green)}.evidence-list .wait b{color:var(--amber)}.evidence-list .missing b{color:var(--red)}
+.chart-body{display:block}
+.chart-topline{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 10px;border-bottom:1px solid var(--line)}
+.chart-topline b{font-size:12px;margin-right:auto}
+.chart-mode,.chart-layer{display:flex;align-items:center;gap:5px}
+.chart-topline button{border:1px solid var(--line);background:#fff;padding:5px 9px;color:#536477}
+.chart-topline button.active{background:#e9f7f1;border-color:#a6d6bf;color:var(--green);font-weight:700}
+.layer-menu{position:relative}
+.layer-menu>button{white-space:nowrap}
+.layer-options{position:absolute;right:0;top:100%;width:200px;z-index:4;background:#fff;border:1px solid var(--line);box-shadow:0 8px 24px #15283a24;padding:7px}
+.layer-options label{display:flex;gap:8px;align-items:center;padding:7px 8px;font-size:11px;cursor:pointer}
+.layer-options label:hover{background:#f4f7f8}
+.layer-options input{accent-color:var(--green)}
+.chart-extras{display:flex;gap:15px;align-items:center;flex-wrap:wrap;padding:8px 10px;border-top:1px solid var(--line);font-size:10px;color:#5b6b7b}
+.chart-extras b{color:#334454}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;padding:6px 10px 0;color:#607181;font-size:10px}
+.chart-legend span:before{content:'';display:inline-block;width:14px;height:3px;background:var(--swatch);margin-right:5px;vertical-align:middle}
+.chart-wrap canvas{height:390px}
+.not-available{color:#a56824!important}
+.timeline .event.preview-future:before{background:#d3dce3}
+.timeline .event.current:before{background:var(--green)}
+.tracking-note{font-size:11px;background:#edf4fb;padding:10px;border-left:3px solid #5486c1}
+.tracking-demo{display:flex;gap:8px;margin-top:12px}
+.tracking-demo button{border:1px solid var(--line);background:white;padding:7px 10px;color:#37526e}
+.tracking-demo button.active{background:#e9f7f1;color:var(--green);border-color:#a6d6bf}
+@media(min-width:1500px){.opportunity-table{min-width:1120px}}

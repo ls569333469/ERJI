@@ -30,6 +30,9 @@ def test_scan_budgets_are_enforced(values):
     with pytest.raises(ValidationError): RuntimeConfig(**values)
 
 def test_native_units_and_failure_isolation(monkeypatch):
+    # The fixture's prices/OI belong to one historical timestamp. A live local
+    # WS cache must not leak today's prices into this isolated adapter test.
+    monkeypatch.setattr('engine.adapters.binance_universe.stored_marks',lambda *a:{})
     monkeypatch.setattr("engine.pd2.collection_schedule.due",lambda venue,natives,**kw:natives)
     monkeypatch.setattr("engine.pd2.collection_schedule.history_seeded",lambda venue:{"1000PEPEUSDT","DOGEUSDT"})
     async def scenario():

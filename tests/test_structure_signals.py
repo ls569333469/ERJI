@@ -50,6 +50,30 @@ def test_breakout_needs_volume_and_close_above_buffer():
     assert confirmed["protection"]=="108.00"
 
 
+def test_pending_structure_exposes_rule_based_invalidation_and_protection_reference():
+    history=[bar(i) for i in range(30)]
+    pending=evaluate(frozen_box(),history,[],30*H4)
+    assert pending["invalidation"]=={"price":"90","timeframe":"240","condition":"close_below","method":"frozen_box_lower"}
+    assert pending["protection_reference"]["price"]=="108.00"
+    assert pending["protection_reference"]["status"]=="estimated"
+    assert pending["trigger_requirements"]["relative_volume_min"]=="1.5"
+
+
+def test_close_above_without_required_volume_is_not_called_confirmed():
+    history=[bar(i) for i in range(30)]
+    pending=evaluate(frozen_box(),history+[bar(30,120,120)],[],31*H4)
+    assert pending["phase"]=="structure_pending"
+    assert pending["pending_state"]=="close_above_volume_unconfirmed"
+    assert pending["unconfirmed_breakouts"][0]["volume_multiple"]=="1.2"
+
+
+def test_target_preserves_method_timeframe_and_confirmation_time():
+    bars=[bar(i,high=v) for i,v in enumerate([100,101,110,101,100]+[100]*20)]
+    result=target(bars,D("101"),"4H")
+    assert result and result["method"]=="confirmed_pivot_atr_zone"
+    assert result["timeframe"]=="4H" and result["known_at"]==bars[4]["close_time"]
+
+
 def test_early_revoke_does_not_resurrect_at_later_four_hour_close():
     history=[bar(i) for i in range(30)]
     one=[bar(i,step=3600000) for i in range(120)]

@@ -20,3 +20,7 @@ apps/web/public/charting_library/
 .dev-deps/
 
 **/.next-erji-*
+
+# Local test databases and all Next.js build variants
+.test-tmp/
+.next*/

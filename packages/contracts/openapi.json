@@ -1,0 +1,4585 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ERJI Market Radar",
+    "version": "0.2.0"
+  },
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/operations": {
+      "get": {
+        "summary": "Operations",
+        "description": "Compact database-only proof that collection and analysis are progressing.",
+        "operationId": "operations_v1_operations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/markets": {
+      "get": {
+        "summary": "Markets",
+        "operationId": "markets_v1_markets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/observations": {
+      "get": {
+        "summary": "Observations",
+        "operationId": "observations_v1_observations_get",
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "1H",
+                "4H",
+                "24H"
+              ],
+              "type": "string",
+              "default": "1H",
+              "title": "Period"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/assets": {
+      "get": {
+        "summary": "Assets",
+        "operationId": "assets_v1_assets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/instruments": {
+      "get": {
+        "summary": "Instruments",
+        "operationId": "instruments_v1_instruments_get",
+        "parameters": [
+          {
+            "name": "asset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Asset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/candles": {
+      "get": {
+        "summary": "Candles",
+        "operationId": "candles_v1_candles_get",
+        "parameters": [
+          {
+            "name": "instrument",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Instrument"
+            }
+          },
+          {
+            "name": "resolution",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "5",
+                "15",
+                "30",
+                "60",
+                "120",
+                "240",
+                "480",
+                "720",
+                "1D",
+                "1W"
+              ],
+              "type": "string",
+              "default": "240",
+              "title": "Resolution"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1500,
+              "minimum": 1,
+              "default": 300,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandleList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/signals": {
+      "get": {
+        "summary": "Signals",
+        "operationId": "signals_v1_signals_get",
+        "parameters": [
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "stages",
+                "recommended",
+                "trial",
+                "all",
+                "derivatives",
+                "buy",
+                "waiting",
+                "risk",
+                "history",
+                "opportunities"
+              ],
+              "type": "string",
+              "default": "stages",
+              "title": "View"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 300,
+              "minimum": 1,
+              "default": 25,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "first",
+                "oi",
+                "space"
+              ],
+              "type": "string",
+              "default": "first",
+              "title": "Sort"
+            }
+          },
+          {
+            "name": "list_snapshot",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "List Snapshot"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/structure-signals/{episode_id}": {
+      "get": {
+        "summary": "Structure Signal",
+        "operationId": "structure_signal_v1_structure_signals__episode_id__get",
+        "parameters": [
+          {
+            "name": "episode_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Episode Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/signals/{signal_id}/overlays": {
+      "get": {
+        "summary": "Overlays",
+        "operationId": "overlays_v1_signals__signal_id__overlays_get",
+        "parameters": [
+          {
+            "name": "signal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Signal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sources": {
+      "get": {
+        "summary": "Sources",
+        "operationId": "sources_v1_sources_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/schema": {
+      "get": {
+        "summary": "Settings Schema",
+        "operationId": "settings_schema_v1_settings_schema_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/active": {
+      "get": {
+        "summary": "Get Settings",
+        "operationId": "get_settings_v1_settings_active_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/drafts": {
+      "post": {
+        "summary": "Draft",
+        "operationId": "draft_v1_settings_drafts_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/drafts/{draft_id}/publish": {
+      "post": {
+        "summary": "Publish",
+        "operationId": "publish_v1_settings_drafts__draft_id__publish_post",
+        "parameters": [
+          {
+            "name": "draft_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Draft Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/versions": {
+      "get": {
+        "summary": "Versions",
+        "operationId": "versions_v1_settings_versions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/watchlist": {
+      "get": {
+        "summary": "Watchlist",
+        "operationId": "watchlist_v1_watchlist_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/watchlist/{asset_id}": {
+      "post": {
+        "summary": "Watch",
+        "operationId": "watch_v1_watchlist__asset_id__post",
+        "parameters": [
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Asset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Unwatch",
+        "operationId": "unwatch_v1_watchlist__asset_id__delete",
+        "parameters": [
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Asset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notifications": {
+      "get": {
+        "summary": "Notifications",
+        "operationId": "notifications_v1_notifications_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/history": {
+      "get": {
+        "summary": "History",
+        "operationId": "history_v1_history_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/stream": {
+      "get": {
+        "summary": "Stream",
+        "operationId": "stream_v1_stream_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/research/events": {
+      "get": {
+        "summary": "Research Events",
+        "operationId": "research_events_v1_research_events_get",
+        "parameters": [
+          {
+            "name": "instrument",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Instrument"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 30,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analysis": {
+      "get": {
+        "summary": "Analysis",
+        "operationId": "analysis_v1_analysis_get",
+        "parameters": [
+          {
+            "name": "instrument",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Instrument"
+            }
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analysis/series": {
+      "get": {
+        "summary": "Analysis Series",
+        "operationId": "analysis_series_v1_analysis_series_get",
+        "parameters": [
+          {
+            "name": "instrument",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Instrument"
+            }
+          },
+          {
+            "name": "resolution",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "60",
+                "240",
+                "1D",
+                "1W"
+              ],
+              "type": "string",
+              "title": "Resolution"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1500,
+              "minimum": 1,
+              "default": 500,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/derivatives/history": {
+      "get": {
+        "summary": "Derivatives History",
+        "operationId": "derivatives_history_v1_derivatives_history_get",
+        "parameters": [
+          {
+            "name": "instrument",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Instrument"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2000,
+              "minimum": 1,
+              "default": 500,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chart/snapshot": {
+      "get": {
+        "summary": "Get Chart Snapshot",
+        "operationId": "get_chart_snapshot_v1_chart_snapshot_get",
+        "parameters": [
+          {
+            "name": "instrument",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Instrument"
+            }
+          },
+          {
+            "name": "episode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Episode"
+            }
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/signals/{episode_id}/snapshots": {
+      "get": {
+        "summary": "Snapshots",
+        "operationId": "snapshots_v1_signals__episode_id__snapshots_get",
+        "parameters": [
+          {
+            "name": "episode_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Episode Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/coverage": {
+      "get": {
+        "summary": "Coverage",
+        "operationId": "coverage_v1_coverage_get",
+        "parameters": [
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subject"
+            }
+          },
+          {
+            "name": "historical",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Historical"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/supplement/{provider}/{capability}": {
+      "get": {
+        "summary": "Supplement",
+        "operationId": "supplement_v1_supplement__provider___capability__get",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "cmc",
+                "bykaranteli"
+              ],
+              "type": "string",
+              "title": "Provider"
+            }
+          },
+          {
+            "name": "capability",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Capability"
+            }
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "global",
+              "title": "Subject"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/validate": {
+      "post": {
+        "summary": "Validate Settings",
+        "operationId": "validate_settings_v1_settings_validate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/rollback/{version}": {
+      "post": {
+        "summary": "Rollback Settings",
+        "operationId": "rollback_settings_v1_settings_rollback__version__post",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Version"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/preferences/{key}": {
+      "get": {
+        "summary": "Preference",
+        "operationId": "preference_v1_preferences__key__get",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Save Preference",
+        "operationId": "save_preference_v1_preferences__key__put",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferenceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notifications/targets": {
+      "post": {
+        "summary": "Bind Target",
+        "operationId": "bind_target_v1_notifications_targets_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BindTargetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notifications/targets/{target_id}": {
+      "delete": {
+        "summary": "Disable Target",
+        "operationId": "disable_target_v1_notifications_targets__target_id__delete",
+        "parameters": [
+          {
+            "name": "target_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Target Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/validation": {
+      "get": {
+        "summary": "Validation Report",
+        "operationId": "validation_report_v1_validation_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/implementation": {
+      "get": {
+        "summary": "Implementation",
+        "operationId": "implementation_v1_implementation_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "summary": "Login",
+        "operationId": "login_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "operationId": "logout_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analysis/registry": {
+      "get": {
+        "summary": "Analysis Registry",
+        "operationId": "analysis_registry_v1_analysis_registry_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portfolio": {
+      "get": {
+        "summary": "Get Portfolio",
+        "operationId": "get_portfolio_v1_portfolio_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Put Portfolio",
+        "operationId": "put_portfolio_v1_portfolio_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortfolioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/strategy-templates": {
+      "get": {
+        "summary": "Strategy Templates",
+        "operationId": "strategy_templates_v1_strategy_templates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/strategy-templates/{rule}/document": {
+      "get": {
+        "summary": "Strategy Template Document",
+        "operationId": "strategy_template_document_v1_strategy_templates__rule__document_get",
+        "parameters": [
+          {
+            "name": "rule",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rule"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/strategy-cases/{case_id}": {
+      "get": {
+        "summary": "Strategy Case",
+        "operationId": "strategy_case_v1_strategy_cases__case_id__get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chart/structures": {
+      "get": {
+        "summary": "Chart Structures",
+        "operationId": "chart_structures_v1_chart_structures_get",
+        "parameters": [
+          {
+            "name": "instrument",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Instrument"
+            }
+          },
+          {
+            "name": "as_of",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "As Of"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/anomaly-observations": {
+      "get": {
+        "summary": "Anomaly Observations",
+        "operationId": "anomaly_observations_v1_anomaly_observations_get",
+        "parameters": [
+          {
+            "name": "archived",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Archived"
+            }
+          },
+          {
+            "name": "pinned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Pinned"
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Since"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "assets",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 100
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Assets"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/anomaly-observations/{ident}/pin": {
+      "put": {
+        "summary": "Observation Pin",
+        "operationId": "observation_pin_v1_anomaly_observations__ident__pin_put",
+        "parameters": [
+          {
+            "name": "ident",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ident"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/anomaly-observations/config": {
+      "get": {
+        "summary": "Observation Config",
+        "operationId": "observation_config_v1_anomaly_observations_config_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Observation Config Update",
+        "operationId": "observation_config_update_v1_anomaly_observations_config_put",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/anomaly-observations/watch/{symbol}": {
+      "post": {
+        "summary": "Observation Manual Watch",
+        "operationId": "observation_manual_watch_v1_anomaly_observations_watch__symbol__post",
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Symbol"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/anomaly-observation-history/{asset}": {
+      "get": {
+        "summary": "Observation History",
+        "operationId": "observation_history_v1_anomaly_observation_history__asset__get",
+        "parameters": [
+          {
+            "name": "asset",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Asset"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analysis-pipeline/{instrument}": {
+      "get": {
+        "summary": "Analysis Pipeline",
+        "operationId": "analysis_pipeline_v1_analysis_pipeline__instrument__get",
+        "parameters": [
+          {
+            "name": "instrument",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Instrument"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/effective": {
+      "get": {
+        "summary": "Effective Configuration",
+        "operationId": "effective_configuration_v1_settings_effective_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/diagnostics/pipeline": {
+      "get": {
+        "summary": "Pipeline Diagnostics",
+        "operationId": "pipeline_diagnostics_v1_diagnostics_pipeline_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisConfig": {
+        "properties": {
+          "style": {
+            "type": "string",
+            "enum": [
+              "aggressive",
+              "confirmed"
+            ],
+            "title": "Style",
+            "default": "aggressive"
+          },
+          "timeframes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 12,
+            "minItems": 1,
+            "title": "Timeframes"
+          },
+          "pivot_left": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Pivot Left",
+            "default": 2
+          },
+          "pivot_right": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Pivot Right",
+            "default": 2
+          },
+          "zone_atr_multiplier": {
+            "type": "number",
+            "maximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Zone Atr Multiplier",
+            "default": 0.25
+          },
+          "trailing_mode": {
+            "type": "string",
+            "enum": [
+              "off",
+              "chandelier"
+            ],
+            "title": "Trailing Mode",
+            "default": "off"
+          },
+          "trailing_period": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 5.0,
+            "title": "Trailing Period",
+            "default": 22
+          },
+          "trailing_atr_multiple": {
+            "type": "number",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Trailing Atr Multiple",
+            "default": 3
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "AnalysisConfig"
+      },
+      "AnomalyReason": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "price",
+              "volume",
+              "oi",
+              "manual"
+            ],
+            "title": "Kind"
+          },
+          "window": {
+            "type": "integer",
+            "title": "Window"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "direction": {
+            "type": "string",
+            "title": "Direction",
+            "default": "up"
+          },
+          "source_at": {
+            "type": "integer",
+            "title": "Source At",
+            "default": 0
+          },
+          "intrabar": {
+            "type": "boolean",
+            "title": "Intrabar",
+            "default": false
+          },
+          "source_from": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source From"
+          },
+          "span_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Span Ms"
+          },
+          "window_kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Window Kind"
+          },
+          "metric_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric Unit"
+          },
+          "metric_direction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric Direction"
+          },
+          "price_direction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Direction"
+          },
+          "price_kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Kind"
+          },
+          "quantity_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity Unit"
+          },
+          "volume_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Volume Unit"
+          },
+          "bar_closed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bar Closed"
+          },
+          "bar_open_time": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bar Open Time"
+          },
+          "baseline_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline Method"
+          },
+          "baseline_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Baseline Count"
+          },
+          "field_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Field Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "window",
+          "value"
+        ],
+        "title": "AnomalyReason"
+      },
+      "BindTargetRequest": {
+        "properties": {
+          "chat_id": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "pattern": "^-?[0-9]+$",
+            "title": "Chat Id"
+          },
+          "authorized": {
+            "type": "boolean",
+            "title": "Authorized",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "chat_id"
+        ],
+        "title": "BindTargetRequest"
+      },
+      "CandleDTO": {
+        "properties": {
+          "instrument_id": {
+            "type": "string",
+            "title": "Instrument Id"
+          },
+          "resolution": {
+            "type": "string",
+            "title": "Resolution"
+          },
+          "open_time": {
+            "type": "integer",
+            "title": "Open Time"
+          },
+          "close_time": {
+            "type": "integer",
+            "title": "Close Time"
+          },
+          "is_closed": {
+            "type": "boolean",
+            "title": "Is Closed"
+          },
+          "open": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Open"
+          },
+          "high": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "High"
+          },
+          "low": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Low"
+          },
+          "close": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Close"
+          },
+          "base_volume": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Volume"
+          },
+          "quote_volume": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote Volume"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "received_at": {
+            "type": "integer",
+            "title": "Received At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "instrument_id",
+          "resolution",
+          "open_time",
+          "close_time",
+          "is_closed",
+          "open",
+          "high",
+          "low",
+          "close",
+          "base_volume",
+          "quote_volume",
+          "revision",
+          "received_at"
+        ],
+        "title": "CandleDTO"
+      },
+      "CandleList": {
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "0.2.0"
+          },
+          "as_of": {
+            "type": "integer",
+            "title": "As Of"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/CandleDTO"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          },
+          "next_before": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Before"
+          },
+          "quality": {
+            "$ref": "#/components/schemas/Quality"
+          }
+        },
+        "type": "object",
+        "required": [
+          "as_of",
+          "rows",
+          "has_more",
+          "next_before",
+          "quality"
+        ],
+        "title": "CandleList"
+      },
+      "DraftRequest": {
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/RuntimeConfig"
+          }
+        },
+        "type": "object",
+        "required": [
+          "config"
+        ],
+        "title": "DraftRequest"
+      },
+      "ExecutionConfig": {
+        "properties": {
+          "probe_notional_usd": {
+            "type": "number",
+            "maximum": 100000.0,
+            "minimum": 10.0,
+            "title": "Probe Notional Usd",
+            "default": 1000
+          },
+          "early_min_net_r": {
+            "type": "number",
+            "maximum": 10.0,
+            "minimum": 0.5,
+            "title": "Early Min Net R",
+            "default": 1.5
+          },
+          "confirmed_min_net_r": {
+            "type": "number",
+            "maximum": 10.0,
+            "minimum": 0.5,
+            "title": "Confirmed Min Net R",
+            "default": 1.8
+          },
+          "taker_fee_rates": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Taker Fee Rates"
+          },
+          "funding_scenario_rate": {
+            "type": "number",
+            "maximum": 0.1,
+            "minimum": 0.0,
+            "title": "Funding Scenario Rate",
+            "default": 0.001
+          },
+          "fee_source": {
+            "type": "string",
+            "title": "Fee Source",
+            "default": "研究情景：常见基础taker档位；不代表用户账户实际费率，可在设置中调整"
+          },
+          "quote_max_age_seconds": {
+            "type": "integer",
+            "maximum": 90.0,
+            "minimum": 1.0,
+            "title": "Quote Max Age Seconds",
+            "default": 90
+          },
+          "depth_max_age_seconds": {
+            "type": "integer",
+            "maximum": 90.0,
+            "minimum": 1.0,
+            "title": "Depth Max Age Seconds",
+            "default": 90
+          },
+          "max_spread_bps": {
+            "type": "number",
+            "maximum": 100.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Max Spread Bps",
+            "default": 30
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ExecutionConfig"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginRequest": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "LoginRequest"
+      },
+      "MarketDTO": {
+        "properties": {
+          "asset_class": {
+            "type": "string",
+            "title": "Asset Class",
+            "default": "unknown"
+          },
+          "asset_class_label": {
+            "type": "string",
+            "title": "Asset Class Label",
+            "default": "分类待核验"
+          },
+          "asset_class_source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Class Source"
+          },
+          "asset_class_as_of": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Class As Of"
+          },
+          "asset_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Name"
+          },
+          "underlying_symbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Underlying Symbol"
+          },
+          "instrument_id": {
+            "type": "string",
+            "title": "Instrument Id"
+          },
+          "asset_id": {
+            "type": "string",
+            "title": "Asset Id"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "venue": {
+            "type": "string",
+            "title": "Venue"
+          },
+          "native_symbol": {
+            "type": "string",
+            "title": "Native Symbol"
+          },
+          "quote_asset": {
+            "type": "string",
+            "title": "Quote Asset"
+          },
+          "price_kind": {
+            "type": "string",
+            "title": "Price Kind"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "as_of": {
+            "type": "integer",
+            "title": "As Of"
+          },
+          "quality": {
+            "$ref": "#/components/schemas/Quality"
+          },
+          "oi_base": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Base"
+          },
+          "oi_notional_quote": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Notional Quote"
+          },
+          "oi_quote_asset": {
+            "type": "string",
+            "title": "Oi Quote Asset"
+          },
+          "oi_changes": {
+            "items": {
+              "$ref": "#/components/schemas/OiChange"
+            },
+            "type": "array",
+            "title": "Oi Changes"
+          },
+          "funding_rate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Funding Rate"
+          },
+          "funding_kind": {
+            "type": "string",
+            "title": "Funding Kind"
+          },
+          "funding_interval_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Funding Interval Seconds"
+          },
+          "funding_settled_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Funding Settled At"
+          },
+          "oi_quality": {
+            "$ref": "#/components/schemas/Quality"
+          },
+          "funding_quality": {
+            "$ref": "#/components/schemas/Quality"
+          },
+          "oi_as_of": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi As Of"
+          },
+          "circulating_cap": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Circulating Cap"
+          },
+          "oi_cap_ratio": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Cap Ratio"
+          },
+          "valuation_status": {
+            "type": "string",
+            "title": "Valuation Status",
+            "default": "unmapped"
+          },
+          "oi_notional_usd": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Notional Usd"
+          },
+          "coverage": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Coverage"
+          },
+          "candles_count": {
+            "type": "integer",
+            "title": "Candles Count",
+            "default": 0
+          },
+          "volume_24h_quote": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Volume 24H Quote"
+          },
+          "universe_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Universe Rank"
+          },
+          "in_universe": {
+            "type": "boolean",
+            "title": "In Universe",
+            "default": true
+          },
+          "deep_history": {
+            "type": "boolean",
+            "title": "Deep History",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "instrument_id",
+          "asset_id",
+          "symbol",
+          "venue",
+          "native_symbol",
+          "quote_asset",
+          "price_kind",
+          "as_of",
+          "quality",
+          "oi_quote_asset",
+          "funding_kind",
+          "oi_quality",
+          "funding_quality"
+        ],
+        "title": "MarketDTO"
+      },
+      "MarketList": {
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "0.2.0"
+          },
+          "as_of": {
+            "type": "integer",
+            "title": "As Of"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode",
+            "default": "research_live"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/MarketDTO"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "strategy_status": {
+            "type": "string",
+            "title": "Strategy Status",
+            "default": "not_enabled"
+          },
+          "universe": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Universe"
+          }
+        },
+        "type": "object",
+        "required": [
+          "as_of",
+          "rows"
+        ],
+        "title": "MarketList"
+      },
+      "NotificationConfig": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": false
+          },
+          "cooldown_seconds": {
+            "type": "integer",
+            "maximum": 86400.0,
+            "minimum": 60.0,
+            "title": "Cooldown Seconds",
+            "default": 1800
+          },
+          "ttl_seconds": {
+            "type": "integer",
+            "maximum": 3600.0,
+            "minimum": 30.0,
+            "title": "Ttl Seconds",
+            "default": 300
+          },
+          "public_app_url": {
+            "type": "string",
+            "title": "Public App Url",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "NotificationConfig"
+      },
+      "ObservationCounts": {
+        "properties": {
+          "today": {
+            "type": "integer",
+            "title": "Today"
+          },
+          "focused": {
+            "type": "integer",
+            "title": "Focused"
+          },
+          "delayed": {
+            "type": "integer",
+            "title": "Delayed"
+          },
+          "active": {
+            "type": "integer",
+            "title": "Active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "today",
+          "focused",
+          "delayed",
+          "active"
+        ],
+        "title": "ObservationCounts"
+      },
+      "ObservationDiscovery": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "title": "ObservationDiscovery"
+      },
+      "ObservationEvent": {
+        "properties": {
+          "at": {
+            "type": "integer",
+            "title": "At"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "reasons": {
+            "items": {
+              "$ref": "#/components/schemas/AnomalyReason"
+            },
+            "type": "array",
+            "title": "Reasons"
+          }
+        },
+        "type": "object",
+        "required": [
+          "at",
+          "reasons"
+        ],
+        "title": "ObservationEvent"
+      },
+      "ObservationList": {
+        "properties": {
+          "as_of": {
+            "type": "integer",
+            "title": "As Of"
+          },
+          "cursor": {
+            "type": "integer",
+            "title": "Cursor"
+          },
+          "incremental": {
+            "type": "boolean",
+            "title": "Incremental"
+          },
+          "next_offset": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Offset"
+          },
+          "asset_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Asset Ids"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/ObservationRow"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "unique_assets": {
+            "type": "integer",
+            "title": "Unique Assets"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/ObservationCounts"
+          },
+          "discovery": {
+            "$ref": "#/components/schemas/ObservationDiscovery"
+          }
+        },
+        "type": "object",
+        "required": [
+          "as_of",
+          "cursor",
+          "incremental",
+          "asset_ids",
+          "rows",
+          "unique_assets",
+          "counts",
+          "discovery"
+        ],
+        "title": "ObservationList"
+      },
+      "ObservationPlan": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "valid_until": {
+            "type": "integer",
+            "title": "Valid Until"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "action",
+          "valid_until"
+        ],
+        "title": "ObservationPlan"
+      },
+      "ObservationRow": {
+        "properties": {
+          "asset_class": {
+            "type": "string",
+            "title": "Asset Class",
+            "default": "unknown"
+          },
+          "asset_class_label": {
+            "type": "string",
+            "title": "Asset Class Label",
+            "default": "分类待核验"
+          },
+          "asset_class_source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Class Source"
+          },
+          "asset_class_as_of": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Class As Of"
+          },
+          "asset_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Name"
+          },
+          "underlying_symbol": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Underlying Symbol"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "asset_id": {
+            "type": "string",
+            "title": "Asset Id"
+          },
+          "instrument_id": {
+            "type": "string",
+            "title": "Instrument Id"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "direction": {
+            "type": "string",
+            "title": "Direction"
+          },
+          "first_at": {
+            "type": "integer",
+            "title": "First At"
+          },
+          "visible_at": {
+            "type": "integer",
+            "title": "Visible At"
+          },
+          "last_at": {
+            "type": "integer",
+            "title": "Last At"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "discovered_at": {
+            "type": "integer",
+            "title": "Discovered At"
+          },
+          "published_at": {
+            "type": "integer",
+            "title": "Published At"
+          },
+          "source_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "observation_status": {
+            "type": "string",
+            "title": "Observation Status"
+          },
+          "analysis_status": {
+            "type": "string",
+            "title": "Analysis Status",
+            "default": "queued"
+          },
+          "data_status": {
+            "type": "string",
+            "title": "Data Status",
+            "default": "delayed"
+          },
+          "trade_status": {
+            "type": "string",
+            "title": "Trade Status",
+            "default": "no_entry"
+          },
+          "rule_version": {
+            "type": "string",
+            "title": "Rule Version",
+            "default": "p37-v1"
+          },
+          "classification": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Classification"
+          },
+          "classification_status": {
+            "type": "string",
+            "title": "Classification Status",
+            "default": "unconfirmed"
+          },
+          "classification_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Classification Version"
+          },
+          "classification_context": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Classification Context"
+          },
+          "task_status": {
+            "type": "string",
+            "title": "Task Status",
+            "default": "not_analyzed"
+          },
+          "pipeline_tiers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Pipeline Tiers"
+          },
+          "analysis_execution_status": {
+            "type": "string",
+            "title": "Analysis Execution Status",
+            "default": "not_analyzed"
+          },
+          "strategy_result": {
+            "type": "string",
+            "title": "Strategy Result",
+            "default": "not_analyzed"
+          },
+          "analysis_result_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Result Id"
+          },
+          "analysis_input_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Input Version"
+          },
+          "analysis_computed_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Computed At"
+          },
+          "analysis_checked_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Checked At"
+          },
+          "demand_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Demand Ids"
+          },
+          "demand_origins": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Demand Origins"
+          },
+          "has_analysis_demand": {
+            "type": "boolean",
+            "title": "Has Analysis Demand",
+            "default": false
+          },
+          "oi_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Status"
+          },
+          "oi_as_of": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi As Of"
+          },
+          "oi_change_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Change Status"
+          },
+          "oi_change_start_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Change Start At"
+          },
+          "oi_change_end_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Change End At"
+          },
+          "first_rule_config": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "First Rule Config"
+          },
+          "next_task": {
+            "type": "string",
+            "title": "Next Task",
+            "default": "持续观察"
+          },
+          "first_price": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Price"
+          },
+          "visible_price": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Visible Price"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "price_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price At"
+          },
+          "price_source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Source"
+          },
+          "source_age_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Age Ms"
+          },
+          "snapshot_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot At"
+          },
+          "snapshot_age_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot Age Ms"
+          },
+          "tracking_interval_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tracking Interval Ms"
+          },
+          "tracking_tier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tracking Tier"
+          },
+          "snapshot_status": {
+            "type": "string",
+            "title": "Snapshot Status",
+            "default": "waiting"
+          },
+          "first_basis": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "First Basis"
+          },
+          "visible_basis": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Visible Basis"
+          },
+          "since_first_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Since First Pct"
+          },
+          "max_up_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Up Pct"
+          },
+          "max_down_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Down Pct"
+          },
+          "rvol": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rvol"
+          },
+          "oi_change": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oi Change"
+          },
+          "changes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Changes"
+          },
+          "reasons": {
+            "items": {
+              "$ref": "#/components/schemas/AnomalyReason"
+            },
+            "type": "array",
+            "title": "Reasons"
+          },
+          "first_reasons": {
+            "items": {
+              "$ref": "#/components/schemas/AnomalyReason"
+            },
+            "type": "array",
+            "title": "First Reasons"
+          },
+          "matrix": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ObservationTrend"
+            },
+            "type": "object",
+            "title": "Matrix"
+          },
+          "analyzed_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analyzed At"
+          },
+          "analysis_instrument_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Instrument Id"
+          },
+          "structure_checked_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structure Checked At"
+          },
+          "structure_check_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structure Check Status"
+          },
+          "structure_last_attempt_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structure Last Attempt At"
+          },
+          "structure_next_retry_at": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structure Next Retry At"
+          },
+          "structure_task_status": {
+            "type": "string",
+            "title": "Structure Task Status",
+            "default": "not_submitted"
+          },
+          "structure_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Structure Error"
+          },
+          "pinned": {
+            "type": "boolean",
+            "title": "Pinned",
+            "default": false
+          },
+          "tracking_gap": {
+            "type": "boolean",
+            "title": "Tracking Gap",
+            "default": false
+          },
+          "trigger_count": {
+            "type": "integer",
+            "title": "Trigger Count",
+            "default": 0
+          },
+          "trend_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trend Label"
+          },
+          "timeline": {
+            "items": {
+              "$ref": "#/components/schemas/ObservationEvent"
+            },
+            "type": "array",
+            "title": "Timeline"
+          },
+          "related_events": {
+            "items": {
+              "$ref": "#/components/schemas/ObservationRow"
+            },
+            "type": "array",
+            "title": "Related Events"
+          },
+          "plans": {
+            "items": {
+              "$ref": "#/components/schemas/ObservationPlan"
+            },
+            "type": "array",
+            "title": "Plans"
+          },
+          "missing_timeframes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing Timeframes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "asset_id",
+          "instrument_id",
+          "symbol",
+          "direction",
+          "first_at",
+          "visible_at",
+          "last_at",
+          "version",
+          "discovered_at",
+          "published_at",
+          "status",
+          "observation_status"
+        ],
+        "title": "ObservationRow"
+      },
+      "ObservationTrend": {
+        "properties": {
+          "direction": {
+            "type": "string",
+            "title": "Direction"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "bars": {
+            "type": "integer",
+            "title": "Bars"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "rsi14": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rsi14"
+          },
+          "rvol20": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rvol20"
+          },
+          "macd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Macd"
+          },
+          "macd_signal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Macd Signal"
+          },
+          "boll_low": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Boll Low"
+          },
+          "boll_high": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Boll High"
+          }
+        },
+        "type": "object",
+        "required": [
+          "direction",
+          "status",
+          "bars"
+        ],
+        "title": "ObservationTrend"
+      },
+      "OiChange": {
+        "properties": {
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "display_label": {
+            "type": "string",
+            "title": "Display Label"
+          },
+          "value_pct": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value Pct"
+          },
+          "quality": {
+            "$ref": "#/components/schemas/Quality"
+          },
+          "start_sample_time": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Sample Time"
+          },
+          "end_sample_time": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Sample Time"
+          },
+          "price_change_pct": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Change Pct"
+          },
+          "notional_change_pct": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notional Change Pct"
+          },
+          "quantity_contribution_quote": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity Contribution Quote"
+          },
+          "price_contribution_quote": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Contribution Quote"
+          },
+          "quote_asset": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote Asset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "period",
+          "display_label",
+          "quality"
+        ],
+        "title": "OiChange"
+      },
+      "PortfolioRequest": {
+        "properties": {
+          "account_usd": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Account Usd"
+          },
+          "per_plan_pct": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Per Plan Pct"
+          },
+          "total_pct": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Total Pct"
+          },
+          "positions": {
+            "items": {
+              "$ref": "#/components/schemas/ResearchPosition"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Positions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "account_usd",
+          "per_plan_pct",
+          "total_pct"
+        ],
+        "title": "PortfolioRequest"
+      },
+      "PreferenceRequest": {
+        "properties": {
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload"
+          }
+        },
+        "type": "object",
+        "title": "PreferenceRequest"
+      },
+      "PublishRequest": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "title": "Expected Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_version"
+        ],
+        "title": "PublishRequest"
+      },
+      "Quality": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "Quality"
+      },
+      "ResearchPosition": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "instrument_id": {
+            "type": "string",
+            "title": "Instrument Id"
+          },
+          "entry": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Entry"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "stop": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "open",
+              "closed"
+            ],
+            "title": "State",
+            "default": "open"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "paper",
+              "user_declared"
+            ],
+            "title": "Kind",
+            "default": "paper"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "instrument_id",
+          "entry",
+          "quantity"
+        ],
+        "title": "ResearchPosition"
+      },
+      "RuntimeConfig": {
+        "properties": {
+          "disabled_strategies": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "recent_high",
+                "ath",
+                "squeeze",
+                "double_bottom",
+                "early_strength",
+                "trend_pullback",
+                "failed_breakdown",
+                "retest",
+                "repeated_test"
+              ]
+            },
+            "type": "array",
+            "title": "Disabled Strategies"
+          },
+          "collector_enabled": {
+            "type": "boolean",
+            "title": "Collector Enabled",
+            "default": true
+          },
+          "collector_interval_seconds": {
+            "type": "integer",
+            "maximum": 3600.0,
+            "minimum": 60.0,
+            "title": "Collector Interval Seconds",
+            "default": 60
+          },
+          "symbols": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 5000,
+            "minItems": 1,
+            "title": "Symbols"
+          },
+          "universe_mode": {
+            "type": "string",
+            "const": "binance_volume",
+            "title": "Universe Mode",
+            "default": "binance_volume"
+          },
+          "asset_limit": {
+            "type": "integer",
+            "maximum": 1000.0,
+            "minimum": 10.0,
+            "title": "Asset Limit",
+            "default": 200
+          },
+          "deep_asset_limit": {
+            "type": "integer",
+            "maximum": 500.0,
+            "minimum": 10.0,
+            "title": "Deep Asset Limit",
+            "default": 80
+          },
+          "analysis": {
+            "$ref": "#/components/schemas/AnalysisConfig"
+          },
+          "execution": {
+            "$ref": "#/components/schemas/ExecutionConfig"
+          },
+          "sources": {
+            "$ref": "#/components/schemas/SourcesConfig"
+          },
+          "notifications": {
+            "$ref": "#/components/schemas/NotificationConfig"
+          },
+          "validation": {
+            "$ref": "#/components/schemas/ValidationConfig"
+          },
+          "default_view": {
+            "type": "string",
+            "enum": [
+              "stages",
+              "recommended",
+              "trial",
+              "all"
+            ],
+            "title": "Default View",
+            "default": "stages"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "RuntimeConfig"
+      },
+      "SourceBudget": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "month_budget": {
+            "type": "integer",
+            "maximum": 1000000.0,
+            "minimum": 100.0,
+            "title": "Month Budget",
+            "default": 10000
+          },
+          "external_used": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "External Used",
+            "default": 0
+          },
+          "reserve_pct": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 10.0,
+            "title": "Reserve Pct",
+            "default": 10
+          },
+          "interval_seconds": {
+            "type": "integer",
+            "maximum": 86400.0,
+            "minimum": 60.0,
+            "title": "Interval Seconds",
+            "default": 1800
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SourceBudget"
+      },
+      "SourcesConfig": {
+        "properties": {
+          "policy": {
+            "type": "string",
+            "const": "binance_only",
+            "title": "Policy",
+            "default": "binance_only"
+          },
+          "cmc": {
+            "$ref": "#/components/schemas/SourceBudget"
+          },
+          "bykaranteli": {
+            "$ref": "#/components/schemas/SourceBudget"
+          },
+          "wallet_enabled": {
+            "type": "boolean",
+            "title": "Wallet Enabled",
+            "default": true
+          },
+          "min_market_cap_usd": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Min Market Cap Usd",
+            "default": 1000000
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SourcesConfig"
+      },
+      "ValidationConfig": {
+        "properties": {
+          "horizons_hours": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Horizons Hours"
+          },
+          "min_mature_fills": {
+            "type": "integer",
+            "minimum": 30.0,
+            "title": "Min Mature Fills",
+            "default": 200
+          },
+          "min_assets": {
+            "type": "integer",
+            "minimum": 5.0,
+            "title": "Min Assets",
+            "default": 30
+          },
+          "min_days": {
+            "type": "integer",
+            "minimum": 30.0,
+            "title": "Min Days",
+            "default": 90
+          },
+          "probability_enabled": {
+            "type": "boolean",
+            "const": false,
+            "title": "Probability Enabled",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ValidationConfig"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

@@ -8,6 +8,9 @@ from engine.adapters.base import now_ms
 def evaluate_path(bars,entry,target,stop,start,end,cost=None,entry_expires=None):
     rows=sorted([b for b in bars if start<b['open_time'] and b['close_time']<=end],key=lambda b:b['open_time'])
     if not rows:return {'state':'insufficient_history','mfe':None,'mae':None,'net_return_pct':None}
+    step=rows[0]['close_time']-rows[0]['open_time']
+    first=(start//step+1)*step
+    if rows[0]['open_time']!=first:return {'state':'data_gap','mfe':None,'mae':None,'net_return_pct':None,'gap_kind':'missing_first_bar'}
     if any(a['close_time']!=b['open_time'] for a,b in zip(rows,rows[1:])):return {'state':'data_gap','mfe':None,'mae':None,'net_return_pct':None}
     e,t,s=map(lambda x:D(str(x)),(entry,target,stop));filled=False;mfe=D(0);mae=D(0);fill_time=None
     def result(state,at=None,exit_price=None):
@@ -35,7 +38,7 @@ def evaluate_path(bars,entry,target,stop,start,end,cost=None,entry_expires=None)
             out=result('same_bar_order_unknown');out['return_bounds_gross_pct']=[str((s/e-1)*100),str((t/e-1)*100)];return out
         if low<=s:return result('stop_first',b['close_time'],s)
         if high>=t:return result('target_first',b['close_time'],t)
-    if rows[-1]['close_time']<end-3600000:return result('incomplete_horizon')
+    if rows[-1]['close_time']<end//step*step:return result('incomplete_horizon')
     return result('expired' if filled else 'unfilled',rows[-1]['close_time'],rows[-1].get('close') if filled else None)
 
 def first_recommendation(session, plan_id):
@@ -44,15 +47,21 @@ def first_recommendation(session, plan_id):
         SignalSnapshot.payload['action']['code'].as_string().in_(('participate','trial')),
     ).order_by(SignalSnapshot.as_of,SignalSnapshot.id).limit(1))
 
-def update_outcomes():
+def update_outcomes(limit=20):
     now=now_ms();count=0
     with Session.begin() as s:
-        for plan in s.scalars(select(Plan)):
+        from sqlalchemy import func
+        order=select(PlanOutcome.plan_id,func.min(PlanOutcome.evaluated_at).label('checked')).group_by(PlanOutcome.plan_id).subquery()
+        for plan in s.scalars(select(Plan).outerjoin(order,order.c.plan_id==Plan.id).order_by(order.c.checked.asc().nullsfirst(),Plan.id).limit(limit)):
+            revision=tuple(s.execute(select(func.max(Candle.received_at),func.sum(Candle.revision)).where(Candle.instrument_id==plan.execution_instrument_id,Candle.resolution=='60',Candle.is_closed.is_(True))).one())
             target=plan.payload.get('original_t1')
             recommendation=first_recommendation(s,plan.id)
             for horizon in plan.payload['config']['validation']['horizons_hours']:
                 old=s.get(PlanOutcome,(plan.id,horizon))
-                if old and old.state not in ('immature','not_recommended'):continue
+                dependency=list(revision)
+                if old and old.state not in ('immature','not_recommended') and old.payload.get('dependency_token')==dependency:
+                    old.evaluated_at=now;continue
+                if old and old.state=='immature' and now<old.payload.get('matures_at',0):old.evaluated_at=now;continue
                 start=recommendation.as_of if recommendation else plan.payload.get('created_at',now)
                 end=start+horizon*3600000
                 if not target:result={'state':'target_missing'}
@@ -62,6 +71,6 @@ def update_outcomes():
                     candles=list(s.scalars(select(Candle).where(Candle.instrument_id==plan.execution_instrument_id,Candle.resolution=='60',Candle.open_time>start,Candle.close_time<=end,Candle.is_closed==True,Candle.received_at<=now).order_by(Candle.open_time)))
                     bars=[{'open_time':c.open_time,'close_time':c.close_time,'open':str(c.open),'low':str(c.low),'high':str(c.high),'close':str(c.close)} for c in candles]
                     result=evaluate_path(bars,plan.payload['evidence']['entry_zone'][1],target['low'],plan.payload['original_protection'],start,end,recommendation.payload.get('execution'),plan.expires_at)
-                result.update(kind='forward_frozen_plan_research',known_at=start,horizon_hours=horizon,original_t1=target,original_stop=plan.payload['original_protection'],probability=None,validation_status='unvalidated',cost_model=plan.payload['config']['execution'])
+                result.update(dependency_token=dependency,kind='forward_frozen_plan_research',known_at=start,horizon_hours=horizon,original_t1=target,original_stop=plan.payload['original_protection'],probability=None,validation_status='unvalidated',cost_model=plan.payload['config']['execution'])
                 s.merge(PlanOutcome(plan_id=plan.id,horizon_hours=horizon,state=result['state'],evaluated_at=now,payload=result));count+=1
     return count

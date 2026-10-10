@@ -7,7 +7,7 @@ const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.
 const {createRefreshLoop}=await import('data:text/javascript;base64,'+Buffer.from(compiled).toString('base64'));
 const flush=async()=>{await Promise.resolve();await Promise.resolve();};
 
-test('20-second response survives timer and SSE bursts; polling waits for completion',async t=>{
+test('20-second response survives SSE bursts and performs one trailing refresh',async t=>{
   t.mock.timers.enable({apis:['setTimeout','Date'],now:100000});
   let calls=0,finish;const accepted=[],errors=[];
   const loop=createRefreshLoop(()=>{calls++;return new Promise(resolve=>{finish=resolve})},v=>accepted.push(v),e=>errors.push(e),()=>{});
@@ -15,7 +15,7 @@ test('20-second response survives timer and SSE bursts; polling waits for comple
   for(let n=0;n<20;n++){t.mock.timers.tick(1000);void loop.refresh();}
   assert.equal(calls,1);finish({rows:[{symbol:'BTC'}]});await pending;
   assert.equal(accepted[0].rows.length,1);assert.deepEqual(errors,[]);
-  t.mock.timers.tick(14999);assert.equal(calls,1);
+  t.mock.timers.tick(999);assert.equal(calls,1);
   t.mock.timers.tick(1);assert.equal(calls,2);
   loop.dispose();finish({rows:[]});await flush();assert.equal(accepted.length,1);
 });

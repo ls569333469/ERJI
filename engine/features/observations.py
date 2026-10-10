@@ -14,7 +14,7 @@ GROUPS = [
 ]
 
 def paired_changes(q0, p0, q1, n1, quote_asset):
-    if q0 is None or p0 is None or q0<=0 or p0<=0 or q1<=0:
+    if q0 is None or p0 is None or n1 is None or q0<=0 or p0<=0 or q1<=0:
         return {}
     # Use the price paired with the OI sample, not a later display quote.
     p1=n1/q1

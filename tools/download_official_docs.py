@@ -100,16 +100,6 @@ DOCS = [
         "notes": "Generated official SDK endpoint definitions; filename may change upstream, so manifest must be refreshed when updating.",
     },
     {
-        "id": "okx-api-v5",
-        "title": "OKX API V5",
-        "source_url": "https://www.okx.com/docs-v5/en/",
-        "fetch_url": "https://www.okx.com/docs-v5/en/",
-        "file": "okx-api-v5.html",
-        "owner": "OKX",
-        "kind": "official-web-document",
-        "notes": "Dynamic documentation page; local copy is a retrieval snapshot and may not include content loaded by later JavaScript requests.",
-    },
-    {
         "id": "gate-api-futures",
         "title": "Gate API v4 Futures API reference",
         "source_url": "https://www.gate.com/docs/developers/apiv4/en/",

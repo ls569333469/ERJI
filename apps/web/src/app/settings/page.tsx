@@ -1,3 +1,3 @@
-import {SettingsPage} from "@/components/system-pages";
-export default function Page(){return <SettingsPage/>}
+import {SettingsAndAlertsPage} from "@/components/system-workspaces";
+export default function Page(){return <SettingsAndAlertsPage/>}
 

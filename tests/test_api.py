@@ -11,7 +11,7 @@ def test_live_db_health_and_strategy_boundary(client):
     data=client.get("/v1/health").json()
     assert data["database"]=="postgresql"
     assert data["strategy_status"]=="pd2_decisions"
-    assert data["execution_status"]=="native_book_cost_gated"
+    assert data["execution_status"]=="native_book_strategy_gated_cost_reference"
     data=client.get("/v1/signals?view=recommended").json()
     assert len(data["groups"])==4
     assert all(r["action_code"] in ("participate","trial") for r in data["rows"])

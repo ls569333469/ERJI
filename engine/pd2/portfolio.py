@@ -35,6 +35,8 @@ def plan_risk(risk,entry,stop,execution):
     """Size only up to both declared risk and tested book notional."""
     if risk['status']!='available':return {'status':risk['status'],'quantity':None,'reason':'未设置研究本金；仅给价格计划，不虚构购买金额' if risk['status']=='unconfigured' else '已有研究仓位风险不完整，暂停新增研究仓位'}
     if not execution or execution.get('status')!='eligible':return {'status':'execution_unavailable','quantity':None}
+    if execution.get('stop_path_cost') is None:
+        return {'status':'estimate_unavailable','quantity':None,'reason':'成本估算不足，暂不估算研究仓位；不改变买入信号资格'}
     fx=execution.get('quote_usd_rate');loss=D(str(entry))-D(str(stop))+D(execution['stop_path_cost'])
     if not fx or loss<=0:return {'status':'execution_unavailable','quantity':None}
     capacity=D(risk['max_new_plan_risk_usd']);unit=loss*D(fx)

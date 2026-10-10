@@ -7,9 +7,10 @@ def price_distance(price,target):
     if p<=0 or t<=0:return None
     return {'price_multiple':str(t/p),'remaining_upside_pct':str((t/p-1)*100),'drawdown_pct':str((p/t-1)*100)}
 
-def enrich(opportunity,assessments,bars,price,now,quote_asset,action=None,valuation=None):
+def enrich(opportunity,assessments,bars,price,now,quote_asset,action=None,valuation=None,basis_price=None):
     op=deepcopy(opportunity);p=D(str(price)) if price is not None else None
     if not p or p<=0:return op
+    basis=D(str(basis_price)) if basis_price is not None else p
     available=[b for rows in bars.values() for b in rows if b.get('is_closed') and b['close_time']<=now and b.get('received_at',b['close_time'])<=now]
     high=max(available,key=lambda b:D(b['high']),default=None)
     op['ath']={'status':'not_verified','price':None,'reason':'尚无经核验的全历史/迁移调整记录；下方仅为当前市场已采集样本最高价'}
@@ -18,7 +19,7 @@ def enrich(opportunity,assessments,bars,price,now,quote_asset,action=None,valuat
     for a in assessments:
         levels=sorted([v for v in a.get('levels',[]) if v['kind']=='resistance' and D(v['low'])>p],key=lambda v:D(v['low']))
         target=deepcopy(levels[0]) if levels and a['status']=='fresh' else None
-        if target:target.update(price_distance(p,target['low']))
+        if target:target.update(price_distance(basis,target['low']))
         current.append({'timeframe':a['timeframe'],'target':target,'direction':a['direction'],'status':a['status'],'missing_reason':a.get('reason') or ('无上方有效结构阻力' if not target else None),'condition':('该周期收盘维持原支撑，前序阻力突破后才激活远目标' if target else None)})
     op['timeframe_spaces']=current
     daily=by_tf.get('1D',{});weekly=by_tf.get('1W',{})
@@ -34,10 +35,11 @@ def enrich(opportunity,assessments,bars,price,now,quote_asset,action=None,valuat
             gates.append({**dependency,'met':met,'known_at':a.get('known_at')})
         if maximum['timeframe']=='1W':gates.append({'timeframe':'1W','condition':'周线已闭合结构上行且MACD柱值为正','met':weekly.get('status')=='fresh' and weekly.get('direction')=='up' and D(str(weekly.get('latest',{}).get('histogram') or 0))>0,'known_at':weekly.get('known_at')})
         maximum['dependencies']=gates;maximum['activation_status']='active' if all(g['met'] for g in gates) else 'conditional'
-        maximum.update(price_distance(p,maximum['low']))
+        maximum.update(price_distance(basis,maximum['low']))
+    op['target_basis']={'price':str(basis),'kind':'entry_zone_midpoint' if basis_price is not None else 'current_price'}
     op['space_classification']='当前不支持倍数判断'
-    if primary and D(primary['low'])>=2*p and (action or {}).get('code') in ('trial','participate'):op['space_classification']='本轮具备倍数级结构空间'
-    elif maximum and D(maximum['low'])>=2*p:op['space_classification']='有倍数延伸条件，须先满足列示关口'
+    if primary and D(primary['low'])>=2*basis and (action or {}).get('code') in ('trial','participate'):op['space_classification']='本轮具备倍数级结构空间'
+    elif maximum and D(maximum['low'])>=2*basis:op['space_classification']='有倍数延伸条件，须先满足列示关口'
     elif high and D(high['high'])>=2*p:op['space_classification']='仅有远端样本修复空间，当前无倍数交易依据'
     op['target_reached']={k:bool(op.get(k) and p>=D(op[k]['low'])) for k in ('t1','daily','weekly')}
     op['position_management']='第一目标已到，按计划部分兑现；余仓继续跟踪原保护和日周结构' if op['target_reached']['t1'] else '未到第一目标，按原保护管理；不因远目标扩大而放松保护'

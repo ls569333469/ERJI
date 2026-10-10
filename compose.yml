@@ -15,10 +15,11 @@ x-backend: &backend
     ERJI_REQUIRE_AUTH: "true"
     ERJI_COOKIE_PATH: /erji
     ERJI_ADMIN_TOKEN_FILE: /run/secrets/admin-token.txt
-    ERJI_CMC_KEY_FILE: ${ERJI_CMC_KEY_FILE:-/run/secrets/CMC.txt}
-    ERJI_BYKARANTELI_KEY_FILE: ${ERJI_BYKARANTELI_KEY_FILE:-/run/secrets/bykaranteli.txt}
     ERJI_TELEGRAM_TOKEN_FILE: ${ERJI_TELEGRAM_TOKEN_FILE:-}
     ERJI_WEB_ORIGIN: ${ERJI_WEB_ORIGIN:-http://127.0.0.1:18770}
+    ERJI_BUDGET_OWNER: "1"
+    ERJI_BUDGET_HOST: worker-budget
+    ERJI_BUDGET_TOKEN_FILE: /run/secrets/budget-owner.token
   volumes:
     - ${ERJI_SECRET_DIR:?Set private ERJI_SECRET_DIR}:/run/secrets:ro
   restart: unless-stopped
@@ -51,11 +52,27 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
+      worker-budget:
+        condition: service_healthy
     healthcheck:
       test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:18771/v1/health',timeout=3)"]
       interval: 15s
       timeout: 5s
       retries: 5
+  worker-budget:
+    <<: *backend
+    command: ["python","-m","services.worker.main","--role","budget"]
+    environment:
+      <<: *backend-env
+      ERJI_BUDGET_BIND: "0.0.0.0"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:18772/health',timeout=3)"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
   worker-live:
     <<: *backend
     command: ["python","-m","services.worker.main","--role","live"]

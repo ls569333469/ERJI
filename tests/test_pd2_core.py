@@ -50,12 +50,18 @@ def test_nearest_resistance_cannot_be_skipped_and_no_fixed_multiplier():
     assert choose_targets([],"1")["highest_conditional_target"] is None
     assert choose_targets([{"levels":levels}],"1.15")["entry_obstructions"][0]["id"]=="near"
 
+
+def test_target_space_uses_explicit_plan_basis_instead_of_live_price():
+    levels=[{"id":"near","kind":"resistance","low":"1.2","high":"1.22","timeframe":"240"}]
+    result=choose_targets([{"levels":levels}],"1.05",reference_price="1.01")
+    assert D(result["t1"]["remaining_upside_pct"])==(D("1.2")/D("1.01")-1)*100
+
 def test_execution_uses_actual_depth_and_nonzero_costs():
-    book={"received_at":1000,"scope":"execution_market","asks":[["1","2000"]],"bids":[[".999","2000"]]}
+    book={"received_at":1000,"observed_at":1000,"scope":"execution_market","asks":[["1","2000"]],"bids":[[".999","2000"]]}
     result=execution_cost("1",".95","1.2",book,1000,fee_rate=".0005",funding_cost_rate=".001")
     assert result["status"]=="eligible"
     assert D(result["net_r"])<D("4")
-    assert execution_cost("1",".95","1.2",book,11001,fee_rate=".0005",funding_cost_rate=".001")["status"]=="stale"
+    assert execution_cost("1",".95","1.2",book,91001,fee_rate=".0005",funding_cost_rate=".001")["status"]=="stale"
     assert execution_cost("1",".95","1.2",book,1000,notional="5000",fee_rate=".0005",funding_cost_rate=".001")["status"]=="insufficient_depth"
     assert execution_cost("1",".95","1.2",book,1000,fee_rate=None,funding_cost_rate=".001")["net_r"] is None
 
@@ -71,7 +77,8 @@ def test_actions_protection_expiry_and_no_oi_dependency():
     assert decide(e,"early_trigger",quote(),1000,cost,style="confirmed")["code"]=="waiting"
     assert decide(e,"structure_confirmed",quote("1.5"),10001,cost)["code"]=="expired"
     assert decide(e,"structure_confirmed",{**quote(".89"),"as_of":20000},20000,cost)["code"]=="ended"
-    assert decide(e,"structure_confirmed",quote(".89"),20000,cost)["code"]=="paused"
+    assert decide(e,"structure_confirmed",quote(".89"),20000,cost)["code"]=="ended"
+    assert decide(e,"structure_confirmed",{**quote(".89"),"as_of":20000-90001},20000,cost)["code"]=="expired"
     assert decide(e,"structure_confirmed",{"price":"1","price_kind":"mark","as_of":1000},1000,cost)["code"]=="paused"
 
 def test_trailing_cannot_loosen_original_or_previous():

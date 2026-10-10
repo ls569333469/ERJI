@@ -45,6 +45,12 @@ class OiChange(BaseModel):
     quote_asset: str | None = None
 
 class MarketDTO(BaseModel):
+    asset_class:str='unknown'
+    asset_class_label:str='分类待核验'
+    asset_class_source:str|None=None
+    asset_class_as_of:int|None=None
+    asset_name:str|None=None
+    underlying_symbol:str|None=None
     instrument_id: str
     asset_id: str
     symbol: str
@@ -95,6 +101,7 @@ class CandleList(BaseModel):
 
 class RuntimeConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    disabled_strategies: list[Literal["recent_high","ath","squeeze","double_bottom","early_strength","trend_pullback","failed_breakdown","retest","repeated_test"]] = Field(default_factory=list)
     collector_enabled: bool = True
     collector_interval_seconds: int = Field(default=60, ge=60, le=3600)
     symbols: list[str] = Field(default_factory=lambda: ["BTC","ETH","SOL","HYPE"], min_length=1, max_length=5000)

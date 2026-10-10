@@ -7,7 +7,7 @@ export function createRefreshLoop<T>(
   interval=15000,
   minGap=1000,
 ) {
-  let disposed=false, running=false, lastFinished=0;
+  let disposed=false, running=false, pending=false, lastFinished=0;
   let visible=true, polling=true;
   let timer:ReturnType<typeof setTimeout>|undefined;
   let controller:AbortController|undefined;
@@ -16,12 +16,13 @@ export function createRefreshLoop<T>(
     timer=setTimeout(()=>void refresh(),delay);
   };
   async function refresh(force=false) {
-    if(disposed||running||!visible)return;
+    if(disposed||!visible)return;
+    if(running){pending=true;return;}
     if(!force&&lastFinished&&Date.now()-lastFinished<minGap){
       schedule(minGap-(Date.now()-lastFinished));return;
     }
     if(timer!==undefined)clearTimeout(timer);
-    running=true;controller=new AbortController();busy(true);
+    pending=false;running=true;controller=new AbortController();busy(true);
     try {
       const value=await load(controller.signal);
       if(!disposed)accept(value);
@@ -29,7 +30,7 @@ export function createRefreshLoop<T>(
       if(!disposed)reject(error instanceof Error?error:new Error(String(error)));
     } finally {
       running=false;lastFinished=Date.now();
-      if(!disposed){busy(false);if(polling&&visible)schedule(interval);}
+      if(!disposed){busy(false);if(visible&&(pending||polling))schedule(pending?minGap:interval);}
     }
   }
   return {

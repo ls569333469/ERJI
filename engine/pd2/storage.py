@@ -55,19 +55,66 @@ def reconcile(provider,extra=0,retry_after=0):
         if row:
             row.used+=max(0,extra)
             row.blocked_until=max(row.blocked_until,now_ms()+int(retry_after*1000))
+
+def reference_turn(provider,daily_remaining,now=None):
+    """Slow references share at most 45% of remaining daily credits.
+
+    Quotes, FX and account/identity checks retain the other share. This is a
+    collection allocation, never a longer live evidence validity window.
+    """
+    now=now or now_ms();allowance=int(daily_remaining*.45)
+    interval=max(60000,(86400000+max(1,allowance)-1)//max(1,allowance))
+    with Session.begin() as s:
+        key='reference_pacing:'+provider
+        s.execute(text('SELECT pg_advisory_xact_lock(hashtext(current_schema() || :key))'),{'key':key})
+        row=s.get(UserPreference,key);old=row.payload if row else {}
+        due=old.get('next_at',0)
+        if not allowance:return False,now+3600000
+        if now<due:return False,due
+        due=now+interval
+        s.merge(UserPreference(key=key,updated_at=now,payload={'next_at':due,'interval_ms':interval,
+            'daily_credit_allowance':allowance,'usage':'background_references_only'}))
+    return True,due
+
+def reconcile_reference_cost(provider,extra):
+    if extra<=0:return
+    with Session.begin() as s:
+        key='reference_pacing:'+provider
+        s.execute(text('SELECT pg_advisory_xact_lock(hashtext(current_schema() || :key))'),{'key':key})
+        row=s.get(UserPreference,key)
+        if row:row.payload={**row.payload,'next_at':row.payload['next_at']+extra*row.payload['interval_ms']}
 def put(provider,capability,subject,payload,observed_at,ttl_ms,status="fresh",reason=None,endpoint="",next_ms=None):
     now=now_ms();key=f"{provider}:{capability}:{subject}"
     raw_id=sha256((key+str(now)+json.dumps(payload,sort_keys=True,separators=(",",":"))).encode()).hexdigest()
     with Session.begin() as s:
-        s.merge(RawEvent(id=raw_id,source=provider,endpoint=endpoint[:150],received_at=now,payload=payload))
-        old=s.get(DataCapability,key)
-        if old and status!="fresh" and old.payload:
-            payload=old.payload
-            observed_at=old.observed_at
+        from sqlalchemy.dialects.postgresql import insert
+        s.execute(insert(RawEvent).values(id=raw_id,source=provider,endpoint=endpoint[:150],received_at=now,payload=payload).on_conflict_do_nothing(index_elements=['id']))
+        s.execute(text('SELECT pg_advisory_xact_lock(hashtext(:k))'),{'k':'capability:'+key})
+        old=s.get(DataCapability,key,with_for_update=True)
+        if old and status=='fresh' and ((observed_at is not None and old.observed_at is not None and observed_at<old.observed_at) or now<old.received_at):return old.raw_ref
+        value_status = status if status != "fresh" or observed_at is not None else "source_time_unknown"
+        if capability=='execution_book' and payload.get('source_time_kind')=='snapshot_received':
+            from engine.pd2.book_clock import fresh
+            value_status='fresh' if status=='fresh' and fresh(payload,now) else 'snapshot_latency_invalid'
+        if status == "fresh" and observed_at is not None and observed_at > now:
+            value_status = "clock_invalid"
+        # Transport success can have an unknown market timestamp. Keep that
+        # response with its own provenance; it is never action-fresh.
+        accepted = status == "fresh"
+        if old and not accepted and old.payload:
+            payload, observed_at = old.payload, old.observed_at
+            raw_ref, received_at, expires_at = old.raw_ref, old.received_at, old.expires_at
+            last_success_at, last_success_raw_ref = old.last_success_at, old.last_success_raw_ref
+        else:
+            raw_ref, received_at = raw_id, now
+            expires_at = (observed_at if observed_at is not None else now) + ttl_ms
+            last_success_at = now if accepted else None
+            last_success_raw_ref = raw_id if accepted else None
         s.merge(DataCapability(key=key,provider=provider,capability=capability,subject=subject,
-            status=status if observed_at is not None or status!="fresh" else "source_time_unknown",
-            observed_at=observed_at,received_at=now,expires_at=(observed_at or now)+ttl_ms,
-            next_refresh_at=next_ms,reason=reason,raw_ref=raw_id,payload=payload))
+            status=value_status,observed_at=observed_at,received_at=received_at,expires_at=expires_at,
+            next_refresh_at=next_ms,reason=reason,raw_ref=raw_ref,
+            last_success_at=last_success_at,last_success_raw_ref=last_success_raw_ref,
+            last_attempt_at=now,last_attempt_raw_ref=raw_id,payload=payload))
     return raw_id
 def get(provider,capability,subject,now=None):
     now=now or now_ms()
@@ -77,10 +124,17 @@ def get(provider,capability,subject,now=None):
         status=row.status
         if row.observed_at and row.observed_at>now:status="clock_invalid"
         if status=="fresh" and row.expires_at<now:status="stale"
+        from engine.pd2.capability_policy import describe
+        policy=describe(provider,capability,row.observed_at,now)
+        if policy and status not in ('fresh','stale'):
+            policy['reference_status']=status
         return {"status":status,"reason":row.reason or ("数据已过期" if status=="stale" else None),
           "provider":provider,"capability":capability,"subject":subject,"observed_at":row.observed_at,
           "received_at":row.received_at,"expires_at":row.expires_at,"next_refresh_at":row.next_refresh_at,
-          "raw_ref":row.raw_ref,"payload":row.payload}
+          "raw_ref":row.raw_ref,"last_success_at":row.last_success_at,
+          "last_success_raw_ref":row.last_success_raw_ref,
+          "last_attempt_at":row.last_attempt_at,"last_attempt_raw_ref":row.last_attempt_raw_ref,
+          "policy":policy,"payload":row.payload}
 def budget_status(config):
     with Session() as s:
         result=[]

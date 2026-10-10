@@ -37,7 +37,13 @@
     ".next-pd2-dev/types/**/*.ts",
     ".next-pd2-dev/dev/types/**/*.ts",
     ".next-pd2-build/types/**/*.ts",
-    ".next-pd2-build/dev/types/**/*.ts"
+    ".next-pd2-build/dev/types/**/*.ts",
+    ".next-erji-dev/types/**/*.ts",
+    ".next-erji-dev/dev/types/**/*.ts",
+    ".next-p34-validation/types/**/*.ts",
+    ".next-p34-validation/dev/types/**/*.ts",
+    ".next-p37-validation/types/**/*.ts",
+    ".next-p37-validation/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

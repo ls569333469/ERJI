@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 const config: NextConfig = {
   output: "standalone",
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
@@ -10,4 +11,12 @@ const config: NextConfig = {
     return [{ source: "/v1/:path*", destination: `${process.env.ERJI_API_ORIGIN || "http://127.0.0.1:18771"}/v1/:path*` }];
   },
 };
-export default config;
+export default function nextConfig(phase: string): NextConfig {
+  return {
+    ...config,
+    // Development must never consume output written by a production build.
+    distDir: phase === PHASE_DEVELOPMENT_SERVER
+      ? ".next-erji-dev"
+      : config.distDir,
+  };
+}

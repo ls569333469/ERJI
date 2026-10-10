@@ -1,0 +1,6 @@
+"use client";
+import {useCallback,useState} from "react";
+import {api} from "@/lib/api";
+import {useRefresh} from "@/lib/use-refresh";
+const fields:Record<string,string>={price_5m:"5分钟涨跌阈值（%）",price_15m:"15分钟涨跌阈值（%）",volume_multiple:"RVOL10放量倍数",volume_min:"5分钟最低成交额（USDT）",liquidity_min:"24小时最低成交额（USDT）",oi_change:"15分钟持仓变化（%）",capacity:"高频分析名额",merge_ms:"事件合并间隔（毫秒）",cool_ms:"降频间隔（毫秒）",archive_ms:"归档间隔（毫秒）"};
+export function AnomalySettings(){const load=useCallback((signal:AbortSignal)=>api<Record<string,number>>('/anomaly-observations/config',{signal}),[]);const {data,error}=useRefresh(load);const [edits,setEdits]=useState<Record<string,number>>({}),[message,setMessage]=useState('');async function save(){try{await api('/anomaly-observations/config',{method:'PUT',body:JSON.stringify(edits)});setMessage('异动设置已保存，采集任务下一次读取后生效')}catch(e){setMessage(String(e))}}return <section style={{padding:24}}><h2>异动发现设置</h2><p>与交易策略分开。满足异动条件仅进入观察；BTC同向普涨由后台降噪。</p>{error&&<p>{error}</p>}{Object.entries(fields).map(([key,label])=><label key={key} style={{display:'block',margin:8}}>{label} <input type="number" min="0.01" step="any" value={edits[key]??data?.[key]??''} onChange={e=>setEdits({...edits,[key]:Number(e.target.value)})}/></label>)}<button disabled={!data} onClick={save}>保存异动设置</button><p role="status">{message}</p></section>}

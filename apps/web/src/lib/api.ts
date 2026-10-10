@@ -4,11 +4,12 @@ export type Market = components["schemas"]["MarketDTO"];
 export type MarketList = components["schemas"]["MarketList"];
 export type Candle = components["schemas"]["CandleDTO"];
 export type CandleList = components["schemas"]["CandleList"];
-export async function api<T>(path:string, options?:RequestInit):Promise<T> {
-  const timeout=AbortSignal.timeout(45000);
+export async function api<T>(path:string, options?:RequestInit&{timeoutMs?:number}):Promise<T> {
+  const {timeoutMs=45000,...request}=options||{};
+  const timeout=AbortSignal.timeout(timeoutMs);
   const signal=options?.signal?AbortSignal.any([options.signal,timeout]):timeout;
   try {
-  const response=await fetch(appPath("/v1"+path),{...options,signal,headers:{"Content-Type":"application/json","X-ERJI-Client":"local-ui","X-ERJI-CSRF":typeof document!=="undefined"?decodeURIComponent(document.cookie.split("; ").find(x=>x.startsWith("erji_csrf="))?.split("=")[1]||""):"",...options?.headers},cache:"no-store"});
+  const response=await fetch(appPath("/v1"+path),{...request,signal,headers:{"Content-Type":"application/json","X-ERJI-Client":"local-ui","X-ERJI-CSRF":typeof document!=="undefined"?decodeURIComponent(document.cookie.split("; ").find(x=>x.startsWith("erji_csrf="))?.split("=")[1]||""):"",...options?.headers},cache:"no-store"});
   if(response.status===401&&typeof window!=="undefined"&&!window.location.pathname.startsWith(appPath("/login"))){window.location.assign(appPath("/login"));}
   if(!response.ok) {
     const body=await response.json().catch(()=>({}));
@@ -36,7 +37,12 @@ export function pct(value:string|number|null|undefined) {
   const n=Number(value);return (n>0?"+":"")+n.toFixed(2)+"%";
 }
 export function clock(value:number|null|undefined) {
-  return value?new Date(value).toLocaleString("zh-CN",{hour12:false}):"尚无记录";
+  return value?new Date(value).toLocaleString("zh-CN",{hour12:false,timeZone:"Asia/Shanghai"}):"尚无记录";
+}
+export function sourceAge(value:number|null|undefined,now:number){
+  if(value==null)return '尚未更新';
+  const seconds=Math.max(0,Math.floor((now-value)/1000));
+  return seconds<60?`上次更新 ${seconds} 秒前`:`上次更新 ${Math.floor(seconds/60)} 分钟前`;
 }
 export function intervalLabel(seconds:number|null|undefined) {
   if(!seconds)return "周期未知";
@@ -56,6 +62,6 @@ export function oiChangeLabel(change:NonNullable<Market["oi_changes"]>[number]) 
 export function oiRatioLabel(market:Market) {
   if(market.oi_cap_ratio!=null)return (Number(market.oi_cap_ratio)*100).toFixed(2)+"%";
   if(market.oi_quality.status==="not_applicable")return "不适用（无合约）";
-  const labels:Record<string,string>={unmapped:"身份待映射",supply_missing_or_stale:"流通供应缺失或过期",fx_missing_or_stale:"USD换算缺失或过期",price_stale:"报价已过期",invalid_supply:"流通供应无效"};
+  const labels:Record<string,string>={unmapped:"暂缺流通市值，无法计算 OI 占比",binance_supply_not_provided:"币安未提供流通量，OI金额独立显示",supply_stale:"币安流通量更新延迟",supply_missing_or_stale:"流通量数据暂缺或更新延迟",fx_missing_or_stale:"币安USD参考估值待更新",price_stale:"价格更新延迟",invalid_supply:"流通量数据无效"};
   return labels[market.valuation_status]||("OI "+qualityLabel(market.oi_quality.status));
 }

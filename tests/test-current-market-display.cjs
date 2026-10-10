@@ -1,0 +1,22 @@
+const {readFileSync}=require('node:fs');
+const ts=require('typescript'),{runInNewContext}=require('node:vm'),assert=require('node:assert/strict');
+const code=ts.transpileModule(readFileSync('apps/web/src/lib/opportunity-display.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText;
+const out={};runInNewContext(code,{exports:out});
+const {contractDataMessage,valuationMessage,observationOiMessage}=out;
+const now=2000000040000;
+const row={contract_status:'verified',native_oi:{status:'fresh',observed_at:now-1000,notional_quote:'400',fx_status:'available'},oi_usd:'400',oi_status:'fresh',valuation_status:'binance_supply_not_provided'};
+assert.equal(contractDataMessage(row,now),'');
+assert.equal(valuationMessage(row),"市值暂无数据");
+assert.match(contractDataMessage({...row,native_oi:{...row.native_oi,status:'unmapped'},contract_status:'unmapped'},now),/未关联币安合约/);
+assert.equal(contractDataMessage({...row,native_oi:{...row.native_oi,observed_at:now-360001}},now),'');
+assert.match(contractDataMessage({...row,native_oi:{...row.native_oi,observed_at:now-600001}},now),/更新延迟/);
+assert.match(contractDataMessage({...row,native_oi:{...row.native_oi,observed_at:now+1000}},now),/时间异常/);
+assert.match(contractDataMessage({...row,native_oi:{...row.native_oi,fx_status:'missing_or_stale'},oi_usd:null},now),/USD 换算/);
+assert.equal(valuationMessage({...row,valuation_status:'reference',circulating_cap:'200'}),"");
+assert.equal(observationOiMessage({oi_status:'not_applicable',oi_change:10,oi_change_status:'available'}),'现货不适用');
+assert.equal(observationOiMessage({oi_status:'fresh',oi_change:0,oi_change_status:'available'}),'0.00%');
+assert.equal(observationOiMessage({oi_status:'fresh',oi_change:null,oi_change_status:'insufficient_history'}),'15M 历史端点待齐');
+assert.equal(observationOiMessage({oi_status:'stale',oi_change:null,oi_change_status:'stale'}),'持仓量更新延迟');
+console.log('Separate OI/valuation reasons, actual freshness and observation OI states passed');
+
+assert.equal(contractDataMessage({contract_status:"verified",oi_status:"notional_unavailable",native_oi:{quantity:"10"}}),"OI 数量已返回，金额待同刻标记价格");

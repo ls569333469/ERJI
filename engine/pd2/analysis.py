@@ -44,13 +44,15 @@ def aggregate(bars, resolution, now):
             "is_closed":complete,"received_at":max(b.get("received_at",b["close_time"]) for b in group)})
     return result
 
-def pivots(bars, key, left=2, right=2):
+def pivots(bars, key, left=2, right=2, equal='last'):
+    if equal not in ('first','last'): raise ValueError('unknown_pivot_tie_rule')
     points=[]
     for i in range(left,len(bars)-right):
         values=[D(b[key]) for b in bars[i-left:i+right+1]]
         extreme=max(values) if key=="high" else min(values)
-        # Last equal extreme in the entire window wins; right-side bars confirm it.
-        if D(bars[i][key])!=extreme or any(v==extreme for v in values[left+1:]): continue
+        # Existing PD2 retains last-equal; P33 explicitly selects first-equal.
+        ties=values[:left] if equal=='first' else values[left+1:]
+        if D(bars[i][key])!=extreme or any(v==extreme for v in ties): continue
         points.append({"price":str(extreme),"pivot_time":bars[i]["open_time"],
             "known_at":max(bars[i+right]["close_time"],max(b.get("received_at",b["close_time"]) for b in bars[i-left:i+right+1])),
             "index":i,"source_bar_ids":[b["open_time"] for b in bars[i-left:i+right+1]]})
@@ -64,15 +66,17 @@ from threading import RLock
 _analysis_cache=OrderedDict()
 _analysis_lock=RLock()
 
-def technical(bars,resolution,now,tick="0.00000001",config=None):
+def technical(bars,resolution,now,tick="0.00000001",config=None,pivot_tie='last'):
     rows=closed_bars(bars,now)
     settings=config.model_dump() if config and hasattr(config,'model_dump') else vars(config) if config else {}
-    key=sha256(json.dumps([rows,resolution,str(tick),settings],sort_keys=True,default=str).encode()).hexdigest()
+    key=sha256(json.dumps([rows,resolution,str(tick),settings,pivot_tie],sort_keys=True,default=str).encode()).hexdigest()
     with _analysis_lock:
         cached=_analysis_cache.get(key)
         if cached is not None:_analysis_cache.move_to_end(key)
     if cached is None:
-        cached=_technical(rows,resolution,now,tick,config)
+        cached=_technical(rows,resolution,now,tick,config,pivot_tie)
+        cached['pivot_tie_rule']=pivot_tie
+        cached['analysis_version']=VERSION if pivot_tie=='last' else 'p33-structure-first-equal-v1'
         with _analysis_lock:
             _analysis_cache[key]=deepcopy(cached)
             while len(_analysis_cache)>256:_analysis_cache.popitem(last=False)
@@ -82,7 +86,7 @@ def technical(bars,resolution,now,tick="0.00000001",config=None):
         result['status']='stale' if stale else 'fresh';result['reason']='最近闭合K线过期' if stale else None
     return result
 
-def _technical(bars, resolution, now, tick="0.00000001", config=None):
+def _technical(bars, resolution, now, tick="0.00000001", config=None,pivot_tie='last'):
     rows=closed_bars(bars,now)
     # Do not silently calculate through a missing interval.
     duration=DURATIONS[resolution]
@@ -108,7 +112,7 @@ def _technical(bars, resolution, now, tick="0.00000001", config=None):
     tick=D(str(tick));p=D(rows[-1]["close"])
     left=getattr(config,"pivot_left",2);right=getattr(config,"pivot_right",2)
     factor=D(str(getattr(config,"zone_atr_multiplier",.25)))
-    tops,bottoms=pivots(rows,"high",left,right),pivots(rows,"low",left,right)
+    tops,bottoms=pivots(rows,"high",left,right,pivot_tie),pivots(rows,"low",left,right,pivot_tie)
     # Independent standard AVWAP: a pivot becomes usable only after right-bar confirmation.
     # OHLCV typical-price approximation; missing base volume disables it, never use USD volume as base.
     for i,point in enumerate(series):
@@ -129,34 +133,16 @@ def _technical(bars, resolution, now, tick="0.00000001", config=None):
         dh=D(tops[-1]["price"])-D(tops[-2]["price"]);dl=D(bottoms[-1]["price"])-D(bottoms[-2]["price"])
         direction="up" if dh>tick and dl>tick else "down" if dh < -tick and dl < -tick else "mixed"
         if direction=="up" and p<D(bottoms[-1]["price"]):direction="broken"
-    levels=[];excluded_levels=[]
-    if a:
-        width=max(2*tick,a*factor)
-        for kind,points in (("resistance",tops),("support",bottoms)):
-            for anchor in points[-30:]:
-                # PD2 4.15: use the latest closed ATR at creation of this price snapshot.
-                anchor_atr=atr[-1]
-                if not np.isfinite(anchor_atr) or anchor_atr<=0:continue
-                width=max(2*tick,D(str(anchor_atr))*factor)
-                anchor_price=D(anchor["price"]);lo=anchor_price-width;hi=anchor_price+width
-                if lo<=0:continue
-                after=[b for b in rows if b["close_time"]>anchor["known_at"]]
-                role=level_role(kind,lo,hi,after)
-                active_kind=role['kind']
-                level={"id":sha256(f'{resolution}:{kind}:{anchor["pivot_time"]}'.encode()).hexdigest()[:20],
-                  "kind":active_kind,"original_kind":kind,"low":str(lo),"high":str(hi),"timeframe":resolution,"method":"confirmed_pivot",
-                  "label":LABELS[resolution]+("阻力转支撑" if kind!=active_kind and active_kind=="support" else "支撑转阻力" if kind!=active_kind else "前高阻力" if kind=="resistance" else "前低支撑"),
-                  "anchors":[anchor],"known_at":anchor["known_at"],"atr":number(anchor_atr),"tick_size":str(tick),"revision":rows[-1]["close_time"],"created_at":now,
-                  "formula":f"p ± max(2*tick, {factor}*ATR14_at_snapshot_latest_close)","status":role["status"],"role_events":role["events"],"validation_status":"unvalidated"}
-                if role["events"]:level["known_at"]=max(level["known_at"],role["events"][-1]["known_at"])
-                (levels if role["status"]=="confirmed" else excluded_levels).append(level)
+    structure=structural(rows,resolution,now,str(tick),config,pivot_tie,atr=atr)
+    levels=structure['levels'];excluded_levels=structure['excluded_levels']
     last=series[-1];previous=series[-2] if len(series)>1 else {}
     cross=last["histogram"] is not None and previous.get("histogram") is not None and D(last["histogram"])>0>=D(previous["histogram"])
     momentum="unknown"
     if last["histogram"] is not None and previous.get("histogram") is not None:
         momentum="strengthening" if D(last["histogram"])>D(previous["histogram"]) else "weakening"
     qv=[D(b["quote_volume"]) for b in rows[-21:-1] if b.get("quote_volume") is not None]
-    vm=D(rows[-1]["quote_volume"])/median(qv) if len(qv)==20 and median(qv)>0 and rows[-1].get("quote_volume") is not None else None
+    from engine.features.numeric import relative_volume
+    vm=relative_volume(rows[-1].get("quote_volume"),qv,20,"median")
     fib=[]
     if tops and bottoms:
         bottom=bottoms[-1];before=[v for v in tops if v["pivot_time"]<bottom["pivot_time"]]
@@ -174,11 +160,11 @@ def _technical(bars, resolution, now, tick="0.00000001", config=None):
       "volume_multiple":str(vm) if vm is not None else None,
       "roc_5_pct":number((close[-1]/close[-6]-1)*100) if len(close)>5 and close[-6]>0 else None,
       "macd_atr":number(hist[-1]/atr[-1]) if a and np.isfinite(hist[-1]) else None,"latest":last,"series":series,
-      "levels":levels,"excluded_levels":excluded_levels,"fibonacci":fib,"validation_status":"unvalidated","algorithm_version":VERSION}
+      "levels":levels,"excluded_levels":excluded_levels,"coverage":structure["coverage"],"structural_version":structure["structural_version"],"structural_status":structure["status"],"fibonacci":fib,"validation_status":"unvalidated","algorithm_version":VERSION}
 
 def choose_targets(assessments, entry, box=None,reference_price=None,box_confirmed=False):
     """Nearest resistance cannot be skipped to improve R. Projections are conditional."""
-    e=D(str(entry));all_levels=[deepcopy(v) for a in assessments if a.get("status","fresh")=="fresh" for v in a.get("levels",[]) if v["kind"]=="resistance"]
+    e=D(str(entry));all_levels=[deepcopy(v) for a in assessments if a.get("structural_status",a.get("status","fresh"))=="fresh" for v in a.get("levels",[]) if v["kind"]=="resistance"]
     touching=[v for v in all_levels if D(v["low"])<=e<=D(v["high"])]
     above=sorted((v for v in all_levels if D(v["low"])>e),key=lambda v:(D(v["low"]),v["timeframe"]))
     projection=None
@@ -200,7 +186,7 @@ def choose_targets(assessments, entry, box=None,reference_price=None,box_confirm
         highest=deepcopy(highest)
         highest["activation_status"]="conditional"
         highest["dependencies"]=[{"level_id":v["id"],"price":v["high"],"timeframe":v["timeframe"],"condition":"所属周期收盘突破阻力上沿"} for v in above if D(v["low"])<D(highest["low"])]
-    supports=sorted((deepcopy(v) for a in assessments if a.get("status")=="fresh" for v in a.get("levels",[]) if v["kind"]=="support" and D(v["high"])<D(str(reference_price or e))),key=lambda v:D(v["high"]),reverse=True)
+    supports=sorted((deepcopy(v) for a in assessments if a.get("structural_status",a.get("status"))=="fresh" for v in a.get("levels",[]) if v["kind"]=="support" and D(v["high"])<D(str(reference_price or e))),key=lambda v:D(v["high"]),reverse=True)
     return {"selected_support":supports[0] if supports else None,"t1":first,"daily":daily,"weekly":weekly,"highest_conditional_target":highest,
         "intermediate_levels":above,"entry_obstructions":touching,"box_projection":projection,
         "highest_condition":"先突破沿途阻力，且目标所属周期结构维持有效；周线延伸须周收盘确认",
@@ -235,10 +221,20 @@ def weekly_cross_gate(bars, now):
       "method":"TA-Lib MACD(12,26,9) next-close affine threshold"}
 
 
-def level_role(kind,low,high,bars):
-    """A broken level is unavailable until a later closed retest confirms its new role."""
-    role=kind;status='confirmed';events=[];break_time=None
-    for b in bars:
+def level_role(kind,low,high,bars,arrays=None):
+    """Closed break/retest state machine; vector masks skip irrelevant bars only."""
+    role=kind;status='confirmed';events=[];break_time=None;index=0
+    if not bars:return {'kind':role,'status':status,'events':events}
+    closes,highs,lows=arrays if arrays is not None else tuple(np.array([float(b[k]) for b in bars]) for k in ('close','high','low'))
+    lo,hi=float(low),float(high);eps=max(abs(lo),abs(hi),1)*1e-12
+    while index<len(bars):
+        if status=='confirmed':
+            mask=closes>=hi-eps if role=='resistance' else closes<=lo+eps
+        else:
+            mask=((lows<=hi+eps)&(highs>=lo-eps)&(closes>=hi-eps))|(closes<=lo+eps) if role=='resistance' else ((highs>=lo-eps)&(lows<=hi+eps)&(closes<=lo+eps))|(closes>=hi-eps)
+        possible=np.flatnonzero(mask[index:])
+        if not len(possible):break
+        index+=int(possible[0]);b=bars[index];index+=1
         c,h,l=map(lambda k:D(str(b[k])),('close','high','low'))
         known=max(b['close_time'],b.get('received_at',b['close_time']))
         if status=='confirmed':
@@ -253,3 +249,44 @@ def level_role(kind,low,high,bars):
             elif failed:
                 status='invalidated';events.append({'event':'failed_retest','known_at':known,'close':str(c)});break
     return {'kind':role,'status':status,'events':events}
+
+
+def structural(bars,resolution,now,tick="0.00000001",config=None,pivot_tie='last',atr=None):
+    """One causal pivot/zone/role algorithm for charts, candidates and new plans."""
+    rows=closed_bars(bars,now);duration=DURATIONS[resolution]
+    gaps=[b['open_time'] for a,b in zip(rows,rows[1:]) if b['open_time']-a['open_time']!=duration]
+    count=len(rows);start=rows[0]['open_time'] if rows else None
+    if gaps:rows=[b for b in rows if b['open_time']>=gaps[-1]];atr=None
+    coverage={'stored_closed_bars':count,'analyzed_closed_bars':len(rows),'stored_start':start,
+        'analyzed_start':rows[0]['open_time'] if rows else None,'end':rows[-1]['close_time'] if rows else None,
+        'gap_count':len(gaps),'scope':'contiguous_known_native_history','complete_lifetime':False}
+    result={'timeframe':resolution,'status':'insufficient_history','levels':[],'excluded_levels':[],
+        'coverage':coverage,'structural_version':'pd2-shared-structure-v2','pivot_tie_rule':pivot_tie,
+        'closed_at':rows[-1]['close_time'] if rows else None}
+    if len(rows)<15:return result
+    if atr is None:atr=talib.ATR(*(np.array([float(b[k]) for b in rows]) for k in ('high','low','close')),14)
+    if not np.isfinite(atr[-1]) or atr[-1]<=0:return result
+    result['status']='fresh' if 0<=now-rows[-1]['close_time']<=duration+180000 else 'stale'
+    left=getattr(config,'pivot_left',2);right=getattr(config,'pivot_right',2)
+    factor=D(str(getattr(config,'zone_atr_multiplier',.25)));tick=D(str(tick))
+    a=D(str(atr[-1]));width=max(2*tick,a*factor)
+    arrays=tuple(np.array([float(b[k]) for b in rows]) for k in ('close','high','low'))
+    atr_known=max(rows[-1]['close_time'],rows[-1].get('received_at',0))
+    for kind,key in (('resistance','high'),('support','low')):
+        for anchor in pivots(rows,key,left,right,pivot_tie):
+            lo=D(anchor['price'])-width;hi=D(anchor['price'])+width
+            if lo<=0:continue
+            # Reception today must not hide old break/retest candles that are also known today.
+            index=anchor['index']+right+1
+            role=level_role(kind,lo,hi,rows[index:],tuple(v[index:] for v in arrays))
+            active=role['kind'];known=max(anchor['known_at'],atr_known,max((e['known_at'] for e in role['events']),default=0))
+            level={'id':sha256(f'{resolution}:{kind}:{anchor["pivot_time"]}'.encode()).hexdigest()[:20],
+                'kind':active,'original_kind':kind,'low':str(lo),'high':str(hi),'timeframe':resolution,
+                'method':'confirmed_pivot','label':LABELS[resolution]+('阻力转支撑' if kind!=active and active=='support' else '支撑转阻力' if kind!=active else '前高阻力' if kind=='resistance' else '前低支撑'),
+                'anchors':[anchor],'anchor':anchor,'known_at':known,'atr':str(a),'tick_size':str(tick),
+                'revision':rows[-1]['close_time'],'atr_bar_open':rows[-1]['open_time'],
+                'formula':f'p ± max(2*tick, {factor}*ATR14_at_snapshot_latest_close)',
+                'status':role['status'],'role_events':role['events'],'validation_status':'unvalidated',
+                'structural_version':result['structural_version']}
+            result['levels' if role['status']=='confirmed' else 'excluded_levels'].append(level)
+    return result

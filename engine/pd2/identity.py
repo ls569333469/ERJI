@@ -1,33 +1,30 @@
 """Reviewed ticker/slug pairs plus exact chain-contract matches, never fuzzy name joins."""
-from sqlalchemy import select
-from engine.db import Session
-from engine.models import IdentityLink,Instrument
-from engine.adapters.base import now_ms
-REVIEWED={
- 'BTC':'bitcoin','ETH':'ethereum','SOL':'solana','HYPE':'hyperliquid','ASTER':'aster','RAVE':'rave-dao',
- 'DOGE':'dogecoin','PEPE':'pepe','BNB':'bnb','XRP':'xrp','ADA':'cardano','TRX':'tron','LINK':'chainlink',
- 'AVAX':'avalanche','SUI':'sui','TON':'toncoin','DOT':'polkadot-new','LTC':'litecoin','BCH':'bitcoin-cash',
- 'UNI':'uniswap','AAVE':'aave','NEAR':'near-protocol','ICP':'internet-computer','INJ':'injective','ENA':'ethena',
- 'OP':'optimism-ethereum','ARB':'arbitrum','CRV':'curve-dao-token','DASH':'dash','ZEC':'zcash','XLM':'stellar',
- 'ETC':'ethereum-classic','FIL':'filecoin','APT':'aptos','SEI':'sei','TIA':'celestia','WLD':'worldcoin-org',
- 'JUP':'jupiter-ag','JTO':'jito','BONK':'bonk1','WIF':'dogwifhat','FLOKI':'floki-inu','SHIB':'shiba-inu',
- 'PENDLE':'pendle','FET':'artificial-superintelligence-alliance','RENDER':'render','TAO':'bittensor',
- 'PYTH':'pyth-network','RUNE':'thorchain','ONDO':'ondo-finance','TRUMP':'official-trump','XPL':'plasma',
- 'PIPPIN':'pippin','TUT':'tutorial','MYX':'myx-finance','COAI':'chainopera-ai','SIREN':'siren',
- 'USDT':'tether','USDC':'usd-coin'
-}
-def save_map(document):
-    rows=document.get('data') or [];updated=0;conflicts=[]
-    if not isinstance(rows,list):return {'updated':0,'status':'invalid_payload'}
-    with Session.begin() as s:
-        assets=set(s.scalars(select(Instrument.asset_id)))
-        for symbol,slug in REVIEWED.items():
-            matched=[r for r in rows if r.get('symbol')==symbol and r.get('slug')==slug and r.get('is_active',1)==1]
-            if len(matched)!=1:conflicts.append(symbol);continue
-            row=matched[0]
-            for asset in [a for a in (symbol,'aster:'+symbol,'hyperliquid:'+symbol) if a in assets]:
-                old=s.get(IdentityLink,(asset,'cmc'))
-                if old and old.status=='verified' and old.external_id!=str(row['id']):conflicts.append(asset);continue
-                s.merge(IdentityLink(asset_id=asset,provider='cmc',external_id=str(row['id']),status='verified',evidence={'method':'reviewed_symbol_and_exact_slug','symbol':symbol,'slug':slug,'name':row.get('name'),'source':'CMC /v1/cryptocurrency/map'},known_at=now_ms()))
-                updated+=1
-    return {'updated':updated,'unresolved':conflicts,'scope':'reviewed_identity_registry'}
+CHAIN_SLUGS={'ethereum':'1','bnb':'56','bnb-smart-chain':'56','base':'8453','solana':'501','arbitrum':'42161'}
+
+
+def contract_key(chain,address):
+    if not chain or not address:return None
+    chain=str(chain).strip();address=str(address).strip()
+    chain={'CT_501':'501','solana':'501','ethereum':'1','bsc':'56','bnb':'56','base':'8453','arbitrum':'42161'}.get(chain,chain)
+    if chain in ('1','56','8453','42161'):address=address.lower()
+    return chain,address
+
+
+def exact_contract_links(instruments,rows):
+    """Only the provider's exact chain/address can extend the reviewed registry."""
+    candidates={}
+    for row in rows:
+        platform=row.get('platform') or {}
+        key=contract_key(CHAIN_SLUGS.get(platform.get('slug')),platform.get('token_address'))
+        if key and row.get('is_active',1)==1 and row.get('id') is not None:
+            candidates.setdefault(key,{})[str(row['id'])]=row
+    result=[]
+    for inst in instruments:
+        key=contract_key(inst.spec.get('chain_id'),inst.spec.get('contract_address'))
+        choices=candidates.get(key,{})
+        if len(choices)!=1:continue
+        ident,row=next(iter(choices.items()))
+        result.append({'asset_id':inst.asset_id,'external_id':ident,'evidence':{
+            'method':'exact_chain_contract','chain_id':key[0],'contract_address':key[1],
+            'provider_symbol':row.get('symbol'),'source':'CMC /v1/cryptocurrency/map','multiplier':'1'}})
+    return result

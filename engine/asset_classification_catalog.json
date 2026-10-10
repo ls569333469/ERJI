@@ -1,0 +1,9001 @@
+{
+  "source": "https://www.binance.com/bapi/asset/v2/public/asset/asset/get-all-asset",
+  "checked_at": 1791350457039,
+  "assets": {
+    "BNB": {
+      "name": "BNB",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BCHSV": {
+      "name": "Bitcoin Cash SV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CHR": {
+      "name": "Chromia",
+      "tags": [
+        "Layer1_Layer2",
+        "NFT",
+        "RWA",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTCUP": {
+      "name": "BTCUP",
+      "tags": [
+        "ETF"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTCDOWN": {
+      "name": "BTCDOWN",
+      "tags": [
+        "ETF"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "JST": {
+      "name": "JUST",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DOT": {
+      "name": "Polkadot",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "REPV1": {
+      "name": "Augur",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNBUP": {
+      "name": "BNBUP",
+      "tags": [
+        "ETF"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNBDOWN": {
+      "name": "BNBDOWN",
+      "tags": [
+        "ETF"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GHS": {
+      "name": "Ghanaian cedi",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "EGP": {
+      "name": "Egyptian pound",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "ADXOLD": {
+      "name": "AdEx Old Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "PERLOLD": {
+      "name": "Perlin Old Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "TRB": {
+      "name": "Tellor Tributes",
+      "tags": [
+        "Infrastructure",
+        "defi",
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OXT": {
+      "name": "Orchid",
+      "tags": [
+        "Monitoring",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SUN": {
+      "name": "SUN",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AVAX": {
+      "name": "Avalanche",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BURGER": {
+      "name": "BurgerCities",
+      "tags": [
+        "Monitoring",
+        "Gaming",
+        "innovation-zone",
+        "bnbchain",
+        "Seed",
+        "Metaverse"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BAKE": {
+      "name": "BakeryToken",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FLM": {
+      "name": "Flamingo",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SCRT": {
+      "name": "Secret",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XVS": {
+      "name": "Venus",
+      "tags": [
+        "defi",
+        "Launchpool",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CAKE": {
+      "name": "PancakeSwap",
+      "tags": [
+        "defi",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SPARTA": {
+      "name": "Spartan Protocol",
+      "tags": [
+        "innovation-zone",
+        "defi",
+        "bnbchain"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALPHA": {
+      "name": "Stella",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ORN": {
+      "name": "Orion Protocol",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AAVE": {
+      "name": "Aave",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FIL": {
+      "name": "Filecoin",
+      "tags": [
+        "storage-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "INJ": {
+      "name": "Injective",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "Launchpad",
+        "defi",
+        "AI",
+        "RWA",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CTK": {
+      "name": "Shentu",
+      "tags": [
+        "Launchpool",
+        "pos",
+        "Infrastructure",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EASY": {
+      "name": "EasyFi",
+      "tags": [
+        "innovation-zone",
+        "defi",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AUDIO": {
+      "name": "Audius",
+      "tags": [
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ANTOLD": {
+      "name": "Old Aragon",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BOT": {
+      "name": "Bounce Token",
+      "tags": [
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AXS": {
+      "name": "Axie Infinity",
+      "tags": [
+        "Gaming",
+        "Launchpad",
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AKRO": {
+      "name": "Akropolis",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HARD": {
+      "name": "Kava Lend",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KP3R": {
+      "name": "Keep3rV1",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "defi",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RENBTC": {
+      "name": "renBTC",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SLP": {
+      "name": "Smooth Love Potion",
+      "tags": [
+        "Gaming",
+        "NFT",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "STRAX": {
+      "name": "Xertra",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "UNFI": {
+      "name": "Unifi Protocol DAO",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Launchpool",
+        "bnbchain",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CVP": {
+      "name": "PowerPool",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BCHA": {
+      "name": "Bitcoin Cash ABC",
+      "tags": [
+        "pow",
+        "innovation-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BOB": {
+      "name": "Bolivian boliviano",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "PAB": {
+      "name": "Panamanian balboa",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "PYG": {
+      "name": "Paraguayan guaraní",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "FOR": {
+      "name": "ForTube",
+      "tags": [
+        "Monitoring",
+        "bnbchain",
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FRONT": {
+      "name": "Frontier",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ROSE": {
+      "name": "Oasis Network",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MDX": {
+      "name": "Mdex",
+      "tags": [
+        "Monitoring",
+        "bnbchain",
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HEGIC": {
+      "name": "Hegic",
+      "tags": [
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PROM": {
+      "name": "Prometeus",
+      "tags": [
+        "Infrastructure",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BETH": {
+      "name": "BETH",
+      "tags": [
+        "bnbchain",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SKL": {
+      "name": "SKALE Network",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SUSD": {
+      "name": "sUSD",
+      "tags": [
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "COVER": {
+      "name": "COVER Protocol",
+      "tags": [
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GHST": {
+      "name": "Aavegotchi",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DF": {
+      "name": "dForce",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "JUV": {
+      "name": "Juventus Fan Token",
+      "tags": [
+        "fan_token",
+        "innovation-zone",
+        "Launchpool",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PSG": {
+      "name": "Paris Saint-Germain Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpool",
+        "innovation-zone",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BVND": {
+      "name": "BVND",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GRT": {
+      "name": "The Graph",
+      "tags": [
+        "Infrastructure",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CELO": {
+      "name": "Celo",
+      "tags": [
+        "Layer1_Layer2",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TWT": {
+      "name": "Trust Wallet Token",
+      "tags": [
+        "Infrastructure",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "REEF": {
+      "name": "Reef",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OG": {
+      "name": "OG Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpool",
+        "innovation-zone",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ATM": {
+      "name": "Atlético de Madrid Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpool",
+        "innovation-zone",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ASR": {
+      "name": "AS Roma Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpool",
+        "innovation-zone",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "1INCH": {
+      "name": "1inch",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ONX": {
+      "name": "OnX.Finance",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "COVEROLD": {
+      "name": "COVER Protocol Old",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "RIF": {
+      "name": "Rootstock Infrastructure Framework",
+      "tags": [
+        "Layer1_Layer2",
+        "storage-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTCST": {
+      "name": "Bitcoin Standard Hashrate Token",
+      "tags": [
+        "innovation-zone",
+        "defi",
+        "bnbchain",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TRU": {
+      "name": "TrueFi",
+      "tags": [
+        "Monitoring",
+        "defi",
+        "Seed",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DEXE": {
+      "name": "DeXe",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CKB": {
+      "name": "CKB",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LIT": {
+      "name": "Litentry",
+      "tags": [
+        "Infrastructure",
+        "innovation-zone",
+        "Polkadot",
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PROS": {
+      "name": "Prosper",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Seed",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VAI": {
+      "name": "Vai",
+      "tags": [
+        "Monitoring",
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZCX": {
+      "name": "ZEN Exchange Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SFP": {
+      "name": "SafePal",
+      "tags": [
+        "Infrastructure",
+        "Launchpad",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FXS": {
+      "name": "Frax Share",
+      "tags": [
+        "liquid_staking",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DODO": {
+      "name": "DODO",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "innovation-zone",
+        "Seed",
+        "defi",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AUCTION": {
+      "name": "Auction",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "UFT": {
+      "name": "UniLend",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ACM": {
+      "name": "AC Milan Fan Token",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PHA": {
+      "name": "Phala.Network",
+      "tags": [
+        "Infrastructure",
+        "innovation-zone",
+        "Seed",
+        "AI",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TVK": {
+      "name": "Virtua",
+      "tags": [
+        "Metaverse",
+        "NFT",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BADGER": {
+      "name": "Badger DAO",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FIS": {
+      "name": "Stafi",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "defi",
+        "Seed",
+        "liquid_staking"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OM": {
+      "name": "MANTRA",
+      "tags": [
+        "Layer1_Layer2",
+        "innovation-zone",
+        "Seed",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "POND": {
+      "name": "Marlin",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "AI",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALICE": {
+      "name": "My Neighbor Alice",
+      "tags": [
+        "Gaming",
+        "innovation-zone",
+        "NFT",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BHD": {
+      "name": "Bahraini Dinar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "OMR": {
+      "name": "Oman Rial",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "DZD": {
+      "name": "Algerian Dinar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "TND": {
+      "name": "Tunisian Dinar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "SDG": {
+      "name": "Sudanese Pound",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "DEGO": {
+      "name": "Dego Finance",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "bnbchain",
+        "NFT",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LOOMOLD": {
+      "name": "Old Loom Network",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "OMOLD": {
+      "name": "Old MANTRA DAO",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BIFI": {
+      "name": "Beefy.Finance",
+      "tags": [
+        "Monitoring",
+        "bnbchain",
+        "innovation-zone",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WETH": {
+      "name": "Wrapped Ether",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LINA": {
+      "name": "Linear",
+      "tags": [
+        "Monitoring",
+        "bnbchain",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PERP": {
+      "name": "Perpetual Protocol",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XYM": {
+      "name": "Symbol",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SUPER": {
+      "name": "SuperVerse",
+      "tags": [
+        "NFT",
+        "defi",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CFX": {
+      "name": "Conflux Network",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TKO": {
+      "name": "Tokocrypto",
+      "tags": [
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AUTO": {
+      "name": "Auto",
+      "tags": [
+        "defi",
+        "bnbchain",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EPS": {
+      "name": "Ellipsis",
+      "tags": [
+        "innovation-zone",
+        "defi",
+        "bnbchain"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PUNDIX": {
+      "name": "Pundi X",
+      "tags": [
+        "Payments"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TLM": {
+      "name": "Alien Worlds",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "Gaming",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MIR": {
+      "name": "Mirror Protocol",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BAR": {
+      "name": "FC Barcelona Fan Token BAR",
+      "tags": [
+        "fan_token",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FORTH": {
+      "name": "Ampleforth Governance Token",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EZ": {
+      "name": "EasyFi",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AR": {
+      "name": "Arweave",
+      "tags": [
+        "storage-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ICP": {
+      "name": "Internet Computer",
+      "tags": [
+        "Layer1_Layer2",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SHIB": {
+      "name": "SHIBA INU",
+      "tags": [
+        "Meme"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GYEN": {
+      "name": "GYEN",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MDXT": {
+      "name": "MANDALA EXCHANGE TOKEN",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "VRT": {
+      "name": "Venus Reward Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "POLS": {
+      "name": "Polkastarter",
+      "tags": [
+        "Monitoring",
+        "bnbchain",
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AXSOLD": {
+      "name": "Axie Infinity Old",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SLPOLD": {
+      "name": "Small Love Potion Old",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LPT": {
+      "name": "Livepeer",
+      "tags": [
+        "Infrastructure",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ATA": {
+      "name": "Automata",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "innovation-zone",
+        "Seed",
+        "Infrastructure",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NU": {
+      "name": "NuCypher",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MTLX": {
+      "name": "Mettalex",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "NFT": {
+      "name": "APENFT",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "TBCC": {
+      "name": "TBCC",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GTC": {
+      "name": "Gitcoin",
+      "tags": [
+        "Monitoring",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KLAY": {
+      "name": "Kaia",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TORN": {
+      "name": "Tornado Cash",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SUNOLD": {
+      "name": "SUN OLD",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KEEP": {
+      "name": "Keep Network",
+      "tags": [
+        "storage-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SPARTAOLD": {
+      "name": "Spartan Protocol Old",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ERN": {
+      "name": "Ethernity Chain",
+      "tags": [
+        "Layer1_Layer2",
+        "innovation-zone",
+        "Seed",
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KEYFI": {
+      "name": "KeyFi",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BOND": {
+      "name": "BarnBridge",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MLN": {
+      "name": "Enzyme",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "C98": {
+      "name": "Coin98",
+      "tags": [
+        "defi",
+        "Launchpad",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FLOW": {
+      "name": "Flow",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "QUICK": {
+      "name": "QuickSwap",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RAY": {
+      "name": "Raydium",
+      "tags": [
+        "defi",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MINA": {
+      "name": "Mina",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XEC": {
+      "name": "eCash",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "VGX": {
+      "name": "Voyager Token",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WAX": {
+      "name": "WAXP",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MBOX": {
+      "name": "MOBOX",
+      "tags": [
+        "Monitoring",
+        "NFT",
+        "defi",
+        "Gaming",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WAXP": {
+      "name": "WAX",
+      "tags": [
+        "NFT",
+        "Layer1_Layer2",
+        "defi",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TRIBE": {
+      "name": "Tribe",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GNO": {
+      "name": "Gnosis",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XDATA": {
+      "name": "Streamr XDATA",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDP": {
+      "name": "Pax Dollar",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DYDX": {
+      "name": "dYdX",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VAB": {
+      "name": "Vabble",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GALA": {
+      "name": "Gala",
+      "tags": [
+        "Gaming",
+        "NFT",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ILV": {
+      "name": "Illuvium",
+      "tags": [
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "YGG": {
+      "name": "Yield Guild Games",
+      "tags": [
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FIDA": {
+      "name": "Bonfida",
+      "tags": [
+        "Infrastructure",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AGLD": {
+      "name": "Adventure Gold",
+      "tags": [
+        "NFT",
+        "innovation-zone",
+        "Gaming",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BETA": {
+      "name": "Beta Finance",
+      "tags": [
+        "Monitoring",
+        "Launchpad",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RAD": {
+      "name": "Radworks",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RARE": {
+      "name": "SuperRare",
+      "tags": [
+        "Monitoring",
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SSV": {
+      "name": "SSV Token",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LAZIO": {
+      "name": "Lazio Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MOVR": {
+      "name": "Moonriver",
+      "tags": [
+        "Monitoring",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WSOL": {
+      "name": "Wrapped SOL",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CHESS": {
+      "name": "Tranchess",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "QISWAP": {
+      "name": "QiSwap",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DAR": {
+      "name": "Mines of Dalarnia",
+      "tags": [
+        "Gaming",
+        "NFT",
+        "bnbchain",
+        "Metaverse",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PHBV1": {
+      "name": "Phoenix Global old",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ACA": {
+      "name": "Acala Token",
+      "tags": [
+        "Monitoring",
+        "Polkadot",
+        "Layer1_Layer2",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MA": {
+      "name": "Manta Network",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ASTR": {
+      "name": "Astar",
+      "tags": [
+        "Layer1_Layer2",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EFI": {
+      "name": "Efinity Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "PARA": {
+      "name": "Parallel Finance",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNX": {
+      "name": "BinaryX",
+      "tags": [
+        "Gaming",
+        "innovation-zone",
+        "NFT",
+        "bnbchain",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RGT": {
+      "name": "Rari Governance Token",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CITY": {
+      "name": "Manchester City Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ENS": {
+      "name": "Ethereum Name Service",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PORTO": {
+      "name": "FC Porto Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BOBA": {
+      "name": "BOBA token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SGB": {
+      "name": "Songbird",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "JASMY": {
+      "name": "JasmyCoin",
+      "tags": [
+        "Monitoring",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AMP": {
+      "name": "AMP",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PLA": {
+      "name": "PlayDapp",
+      "tags": [
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PYR": {
+      "name": "Vulcan Forged PYR",
+      "tags": [
+        "Monitoring",
+        "NFT",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SANTOS": {
+      "name": "Santos FC Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RNDR": {
+      "name": "Old Render Token",
+      "tags": [
+        "Infrastructure",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALCX": {
+      "name": "Alchemix",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MAPS": {
+      "name": "MAPS",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MC": {
+      "name": "Merit Circle",
+      "tags": [
+        "Gaming",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ANY": {
+      "name": "Anyswap",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LTOOLD": {
+      "name": "Old LTO network token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "VOXEL": {
+      "name": "Voxies",
+      "tags": [
+        "Monitoring",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BICO": {
+      "name": "Biconomy",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FLUX": {
+      "name": "Flux",
+      "tags": [
+        "Infrastructure",
+        "AI",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "UST": {
+      "name": "TerraUSD",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HIGH": {
+      "name": "Highstreet",
+      "tags": [
+        "Monitoring",
+        "NFT",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OOKI": {
+      "name": "OokiDAO",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CVX": {
+      "name": "Convex Finance",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PEOPLE": {
+      "name": "ConstitutionDAO",
+      "tags": [
+        "innovation-zone",
+        "Meme",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SPELL": {
+      "name": "Spell Token",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PURSE": {
+      "name": "Pundi X PURSE",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "JOE": {
+      "name": "JOE",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PYROLD": {
+      "name": "Vulcan Forged PYR Old",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BDOT": {
+      "name": "BDOT",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GLMR": {
+      "name": "Moonbeam",
+      "tags": [
+        "Monitoring",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ACH": {
+      "name": "Alchemy Pay",
+      "tags": [
+        "Payments"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IMX": {
+      "name": "ImmutableX",
+      "tags": [
+        "Layer1_Layer2",
+        "NFT",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IHC": {
+      "name": "Inflation Hedging Coin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LOKA": {
+      "name": "League of Kingdoms",
+      "tags": [
+        "Gaming",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTTC": {
+      "name": "BitTorrent",
+      "tags": [
+        "storage-zone",
+        "Launchpad",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTTOLD": {
+      "name": "BitTorrent OLD",
+      "tags": [
+        "ALTS"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SOLO": {
+      "name": "Sologenic",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ANC": {
+      "name": "Anchor Protocol",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "API3": {
+      "name": "API3",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XNO": {
+      "name": "Nano",
+      "tags": [
+        "Payments"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SFM": {
+      "name": "SafeMoon",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "COW": {
+      "name": "CoW Protocol",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WOO": {
+      "name": "WOO",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALPINE": {
+      "name": "Alpine F1 Team Fan Token",
+      "tags": [
+        "fan_token",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "T": {
+      "name": "Threshold",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NBT": {
+      "name": "NanoByte Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LTT": {
+      "name": "Lord Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KDA": {
+      "name": "Kadena",
+      "tags": [
+        "Layer1_Layer2",
+        "pow"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MNTC": {
+      "name": "MNTCoin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "APE": {
+      "name": "ApeCoin",
+      "tags": [
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GMT": {
+      "name": "Green Metaverse Token",
+      "tags": [
+        "NFT",
+        "Launchpad",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MOB": {
+      "name": "MobileCoin",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BSW": {
+      "name": "Biswap",
+      "tags": [
+        "Monitoring",
+        "bnbchain",
+        "innovation-zone",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TMT": {
+      "name": "Turkmenistani Manat",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "MULTI": {
+      "name": "Multichain",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KGS": {
+      "name": "Kyrgyzstani Som",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "TOMB": {
+      "name": "Tomb",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DEGOOLD": {
+      "name": "Old Dego Finance Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "REI": {
+      "name": "REI Network",
+      "tags": [
+        "Monitoring",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LOOKS": {
+      "name": "LooksRare",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ELON": {
+      "name": "Dogelon",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ATEM": {
+      "name": "ATEM",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BOO": {
+      "name": "Spookyswap",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GST": {
+      "name": "Green Satoshi Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDCE": {
+      "name": "Avalanche C-Chain USD Coin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDTE": {
+      "name": "Tether USD",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GAL": {
+      "name": "Galxe",
+      "tags": [
+        "Infrastructure",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NEXO": {
+      "name": "Nexo",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SPIRIT": {
+      "name": "SpiritSwap",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BASED": {
+      "name": "Based",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "EPX": {
+      "name": "Ellipsis",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "bnbchain",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LDO": {
+      "name": "Lido DAO",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MIMATIC": {
+      "name": "MAI",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "AFN": {
+      "name": "Afghan Afghani",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "JOD": {
+      "name": "Jordanian Dinar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "KWD": {
+      "name": "Kuwaiti Dinar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "BND": {
+      "name": "Brunei Dollar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "MNT": {
+      "name": "Mongolian Tughrik",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "AMD": {
+      "name": "Armenian Dram",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "LAK": {
+      "name": "Laotian Kip",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "KHR": {
+      "name": "Cambodian riel",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "USTC": {
+      "name": "TerraClassicUSD",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LUNC": {
+      "name": "Terra Classic",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OP": {
+      "name": "Optimism",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LQDR": {
+      "name": "Liquid Driver",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "XOF": {
+      "name": "West African CFA",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "XAF": {
+      "name": "Central African CFA franc",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "ETB": {
+      "name": "Ethiopian Birr",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "TZS": {
+      "name": "Tanzanian Shilling",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "FUSDT": {
+      "name": "Frapped USDT",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "FUSDC": {
+      "name": "Fantom USD Coin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "TREEB": {
+      "name": "Retreeb",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BRUSH": {
+      "name": "PaintSwap",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LYD": {
+      "name": "Libyan Dinar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "LEVER": {
+      "name": "LeverFi",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OGV": {
+      "name": "Origin Dollar Governance",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "TJS": {
+      "name": "Tajikistani Somoni",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "QUINT": {
+      "name": "QUINT",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GQ": {
+      "name": "Outer Ring MMO",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BYN": {
+      "name": "Belarusian Ruble",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "STG": {
+      "name": "Stargate Finance",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "POLYX": {
+      "name": "Polymesh",
+      "tags": [
+        "Layer1_Layer2",
+        "Infrastructure",
+        "pos",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHW": {
+      "name": "Ethereum PoW",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "TAROT": {
+      "name": "TAROT",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GMX": {
+      "name": "GMX",
+      "tags": [
+        "defi",
+        "innovation-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MMK": {
+      "name": "Myanmar Kyat",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "APT": {
+      "name": "Aptos",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FLR": {
+      "name": "Flare",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "OSMO": {
+      "name": "Osmosis",
+      "tags": [
+        "defi",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HFT": {
+      "name": "Hashflow",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "Seed",
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PGALA": {
+      "name": "Old pNetwork Gala",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LIF3": {
+      "name": "LIF3",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "STMXOLD": {
+      "name": "StormX Old",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "HOOK": {
+      "name": "Hooked Protocol",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "bnbchain",
+        "Infrastructure",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHOS": {
+      "name": "ETHOS",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MAGIC": {
+      "name": "Treasure",
+      "tags": [
+        "AI",
+        "NFT",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HIFI": {
+      "name": "Hifi Finance",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VELO": {
+      "name": "VELO",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "RPL": {
+      "name": "Rocket Pool",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GFT": {
+      "name": "Gifto",
+      "tags": [
+        "Monitoring",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GNS": {
+      "name": "Gains Network",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SYN": {
+      "name": "Synapse",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TRXOLD": {
+      "name": "Old BEP20 Tron",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "STGOLD": {
+      "name": "Old Stargate Finance",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LQTY": {
+      "name": "Liquity",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ID": {
+      "name": "Space ID",
+      "tags": [
+        "Infrastructure",
+        "innovation-zone",
+        "Launchpad",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ARB": {
+      "name": "Arbitrum",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RDNT": {
+      "name": "Radiant Capital",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "Seed",
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RDNTOLD": {
+      "name": "Radiant Capital OLD",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "EDU": {
+      "name": "Open Campus",
+      "tags": [
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WBETH": {
+      "name": "Wrapped Beacon ETH (WBETH)",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SUI": {
+      "name": "Sui",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PEPE": {
+      "name": "Pepe",
+      "tags": [
+        "Meme",
+        "innovation-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FLOKI": {
+      "name": "FLOKI",
+      "tags": [
+        "Meme",
+        "innovation-zone",
+        "Gaming",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "COMBO": {
+      "name": "COMBO",
+      "tags": [
+        "Monitoring",
+        "bnbchain",
+        "NFT",
+        "mining-zone",
+        "Metaverse",
+        "Layer1_Layer2",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NTRN": {
+      "name": "Neutron",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ARBUSDCE": {
+      "name": "Bridged USDC",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "TUSDOLD": {
+      "name": "TrueUSD",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MAV": {
+      "name": "Maverick Protocol",
+      "tags": [
+        "Infrastructure",
+        "Launchpool",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FDUSD": {
+      "name": "First Digital USD",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PENDLE": {
+      "name": "Pendle",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "Launchpool",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ARKM": {
+      "name": "Arkham",
+      "tags": [
+        "Infrastructure",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "QUICKOLD": {
+      "name": "QuickSwap OLD",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "WLD": {
+      "name": "Worldcoin",
+      "tags": [
+        "AI",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GTQ": {
+      "name": "Guatemalan Quetzal",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "CYBER": {
+      "name": "Cyber",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SEI": {
+      "name": "Sei",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FIN": {
+      "name": "FINANDY",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "AVAOLD": {
+      "name": "Travala.com",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "AEUR": {
+      "name": "Anchored EUR",
+      "tags": [
+        "Monitoring",
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ACHF": {
+      "name": "Anchored CHF",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OPUSDCE": {
+      "name": "Bridged USDC(OP network)",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "EURPS": {
+      "name": "EURPaysafe",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "ORDI": {
+      "name": "ORDI",
+      "tags": [
+        "Meme",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BIFIBSCOLD": {
+      "name": "Beefy.Finance",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MATICUSDCE": {
+      "name": "Bridged USDC",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MEME": {
+      "name": "Memecoin",
+      "tags": [
+        "Meme",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TIA": {
+      "name": "Celestia",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BEAMX": {
+      "name": "Beam (Formerly Merit Circle)",
+      "tags": [
+        "Gaming",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZKUSDCE": {
+      "name": "Bridged USDC",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "VIC": {
+      "name": "Viction",
+      "tags": [
+        "Monitoring",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BLUR": {
+      "name": "Blur",
+      "tags": [
+        "Monitoring",
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VANRY": {
+      "name": "Vanar",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "AI",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "JTO": {
+      "name": "JITO",
+      "tags": [
+        "defi",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ACE": {
+      "name": "Fusionist",
+      "tags": [
+        "Gaming",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "1000SATS": {
+      "name": "1000*SATS (Ordinals)",
+      "tags": [
+        "Seed",
+        "Meme"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TON": {
+      "name": "Toncoin",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BONK": {
+      "name": "Bonk",
+      "tags": [
+        "Meme",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AXL": {
+      "name": "Axelar",
+      "tags": [
+        "Layer1_Layer2",
+        "Infrastructure",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BWP": {
+      "name": "Botswana Pula",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "GNF": {
+      "name": "Guinean Franc",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "NFP": {
+      "name": "NFPrompt Token",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "NFT",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AI": {
+      "name": "Sleepless AI",
+      "tags": [
+        "AI",
+        "Seed",
+        "Launchpool",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XAI": {
+      "name": "Xai",
+      "tags": [
+        "Gaming",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CREO": {
+      "name": "Creo Engine",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MANTA": {
+      "name": "Manta",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "METIS": {
+      "name": "MetisDAO",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALT": {
+      "name": "AltLayer",
+      "tags": [
+        "Infrastructure",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RONIN": {
+      "name": "Ronin",
+      "tags": [
+        "Gaming",
+        "Layer1_Layer2",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "JUP": {
+      "name": "Jupiter",
+      "tags": [
+        "defi",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PYTH": {
+      "name": "Pyth Network",
+      "tags": [
+        "Infrastructure",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DYM": {
+      "name": "Dymension",
+      "tags": [
+        "Infrastructure",
+        "Layer1_Layer2",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PIXEL": {
+      "name": "Pixels",
+      "tags": [
+        "Gaming",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "STRK": {
+      "name": "Starknet Token",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PORTAL": {
+      "name": "Portal",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "Seed",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PDA": {
+      "name": "PlayDapp",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WIF": {
+      "name": "Dogwifhat",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "Solana",
+        "Meme"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AEVO": {
+      "name": "AEVO",
+      "tags": [
+        "defi",
+        "Seed",
+        "Layer1_Layer2",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHFI": {
+      "name": "ether.fi",
+      "tags": [
+        "defi",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AOA": {
+      "name": "Angolan Kwanza",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "BOME": {
+      "name": "BOOK OF MEME",
+      "tags": [
+        "Meme",
+        "Seed",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ENA": {
+      "name": "Ethena",
+      "tags": [
+        "defi",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "W": {
+      "name": "Wormhole",
+      "tags": [
+        "Infrastructure",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SAGA": {
+      "name": "Saga",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TAO": {
+      "name": "Bittensor",
+      "tags": [
+        "Layer1_Layer2",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TNSR": {
+      "name": "Tensor",
+      "tags": [
+        "NFT",
+        "Seed",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OMNI": {
+      "name": "Omni Network",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MERL": {
+      "name": "Merlin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BB": {
+      "name": "BounceBit",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed",
+        "Megadrop",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "REZ": {
+      "name": "Renzo",
+      "tags": [
+        "defi",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NOT": {
+      "name": "Notcoin",
+      "tags": [
+        "Gaming",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KOM": {
+      "name": "Kommunitas",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LISTA": {
+      "name": "Lista",
+      "tags": [
+        "defi",
+        "Megadrop",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IO": {
+      "name": "IO.NET",
+      "tags": [
+        "Infrastructure",
+        "Launchpool",
+        "Seed",
+        "Solana",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WRXOLD": {
+      "name": "WazirX",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZK": {
+      "name": "zkSync",
+      "tags": [
+        "Layer1_Layer2",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZRO": {
+      "name": "LayerZero",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNFCR": {
+      "name": "Binance Futures Credit",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BLASTETH": {
+      "name": "ETH (Blast network)",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZMW": {
+      "name": "Zambian Kwacha",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "VDAO": {
+      "name": "VITE DAO",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "G": {
+      "name": "Gravity",
+      "tags": [
+        "Infrastructure",
+        "innovation-zone",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BANANA": {
+      "name": "Banana Gun",
+      "tags": [
+        "defi",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RENDER": {
+      "name": "Render",
+      "tags": [
+        "Infrastructure",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KLY": {
+      "name": "Klayr",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SLF": {
+      "name": "SLF",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DOGS": {
+      "name": "Dogs",
+      "tags": [
+        "Meme",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EURI": {
+      "name": "Eurite",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ONDO": {
+      "name": "Ondo",
+      "tags": [
+        "Infrastructure",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNSOL": {
+      "name": "Binance Staked SOL",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "USCX": {
+      "name": "USCX",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LUMIA": {
+      "name": "LUMIA",
+      "tags": [
+        "Layer1_Layer2",
+        "defi",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "POL": {
+      "name": "Polygon Ecosystem Token",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HMSTR": {
+      "name": "Hamster Kombat",
+      "tags": [
+        "Gaming",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CATI": {
+      "name": "Catizen",
+      "tags": [
+        "Gaming",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NEIRO": {
+      "name": "First Neiro On Ethereum",
+      "tags": [
+        "Meme",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TURBO": {
+      "name": "Turbo",
+      "tags": [
+        "Meme",
+        "AI",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "1MBABYDOGE": {
+      "name": "1M x BABYDOGE",
+      "tags": [
+        "Meme",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EIGEN": {
+      "name": "EigenLayer",
+      "tags": [
+        "Infrastructure",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SCR": {
+      "name": "Scroll",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "Seed",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BDT": {
+      "name": "Bangladeshi Takas",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "ZENT": {
+      "name": "Zentry",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "WLDETH": {
+      "name": "WLDETH",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BFUSD": {
+      "name": "BFUSD",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "1000PEPPER": {
+      "name": "PEPPER",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KAIA": {
+      "name": "Kaia",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CETUS": {
+      "name": "Cetus Protocol",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CYBERETH": {
+      "name": "CYBERETH",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "PNUT": {
+      "name": "Peanut the Squirrel",
+      "tags": [
+        "Meme",
+        "Solana",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ACT": {
+      "name": "Act I : The AI Prophecy",
+      "tags": [
+        "Monitoring",
+        "Solana",
+        "AI",
+        "Seed",
+        "Meme"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ATH": {
+      "name": "Aethir Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USUAL": {
+      "name": "Usual",
+      "tags": [
+        "RWA",
+        "Launchpool",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "THE": {
+      "name": "THENA",
+      "tags": [
+        "defi",
+        "Launchpool",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KYD": {
+      "name": "Cayman Islands Dollar",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "RWF": {
+      "name": "Rwandan Franc",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "ACX": {
+      "name": "Across Protocol",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ORCA": {
+      "name": "Orca",
+      "tags": [
+        "defi",
+        "Seed",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HNL": {
+      "name": "Honduran Lempira",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "NIO": {
+      "name": "Nicaraguan Córdoba",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "MOVE": {
+      "name": "Movement",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "Launchpool",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ME": {
+      "name": "Magic Eden",
+      "tags": [
+        "NFT",
+        "Seed",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VANA": {
+      "name": "Vana",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed",
+        "Launchpool",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VELODROME": {
+      "name": "Velodrome Finance",
+      "tags": [
+        "Monitoring",
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MONKY": {
+      "name": "Wise Monkey",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "PENGU": {
+      "name": "Pudgy Penguins",
+      "tags": [
+        "NFT",
+        "Solana",
+        "Meme",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "1000CAT": {
+      "name": "1000*Simons Cat",
+      "tags": [
+        "Meme",
+        "Seed",
+        "Launchpool",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BIO": {
+      "name": "Bio Protocol",
+      "tags": [
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MUR": {
+      "name": "Mauritian Rupee",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "LSL": {
+      "name": "Lesotho Loti",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "SOLV": {
+      "name": "Solv Protocol",
+      "tags": [
+        "defi",
+        "Seed",
+        "Megadrop",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "D": {
+      "name": "Dar Open Network",
+      "tags": [
+        "Monitoring",
+        "NFT",
+        "Gaming",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "S": {
+      "name": "Sonic",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AIXBT": {
+      "name": "aixbt by Virtuals",
+      "tags": [
+        "AI",
+        "Seed",
+        "Meme"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CGPT": {
+      "name": "ChainGPT",
+      "tags": [
+        "AI",
+        "Seed",
+        "Infrastructure",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "COOKIE": {
+      "name": "Cookie DAO",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "AI",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SOS": {
+      "name": "Somali Shillings",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "VIRTUAL": {
+      "name": "Virtuals Protocol",
+      "tags": [
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TRUMP": {
+      "name": "OFFICIAL TRUMP",
+      "tags": [
+        "Meme",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ANIME": {
+      "name": "Animecoin",
+      "tags": [
+        "NFT",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SOLVBTC": {
+      "name": "SOLV BTC",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BERA": {
+      "name": "BERACHAIN",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTCX": {
+      "name": "BTCX",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "HEI": {
+      "name": "Heima",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "Seed",
+        "defi",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TST": {
+      "name": "Test",
+      "tags": [
+        "Meme",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "1000CHEEMS": {
+      "name": "1000*cheems.pet",
+      "tags": [
+        "Meme",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LAYER": {
+      "name": "Solayer",
+      "tags": [
+        "defi",
+        "Seed",
+        "Solana",
+        "Launchpool",
+        "Infrastructure",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CARV": {
+      "name": "CARV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KAITO": {
+      "name": "Kaito",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "Launchpool",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NIL": {
+      "name": "Nillion",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "AI",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SKYA": {
+      "name": "Sekuya Multiverse",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "RED": {
+      "name": "RedStone",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SHELL": {
+      "name": "MyShell",
+      "tags": [
+        "AI",
+        "Seed",
+        "Launchpool",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FARTCOIN": {
+      "name": "Fartcoin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GPS": {
+      "name": "GoPlus Security",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XUSD": {
+      "name": "XUSD",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EPIC": {
+      "name": "Epic Chain",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FORM": {
+      "name": "Four",
+      "tags": [
+        "defi",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BMT": {
+      "name": "Bubblemaps",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "Launchpool",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GUN": {
+      "name": "GUNZ",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "Seed",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PARTI": {
+      "name": "Particle Network",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpool",
+        "Infrastructure",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MUBARAK": {
+      "name": "Mubarak",
+      "tags": [
+        "Seed",
+        "Meme",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BANANAS31": {
+      "name": "Banana For Scale",
+      "tags": [
+        "Seed",
+        "Meme",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TUT": {
+      "name": "Tutorial",
+      "tags": [
+        "Seed",
+        "Meme",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BROCCOLI714": {
+      "name": "CZ’s Dog",
+      "tags": [
+        "Seed",
+        "Meme",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KERNEL": {
+      "name": "KernelDAO",
+      "tags": [
+        "defi",
+        "Megadrop",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BABY": {
+      "name": "Babylon",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SLE": {
+      "name": "Sierra Leone Leone",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "INIT": {
+      "name": "Initia",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WCT": {
+      "name": "WalletConnect",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BIGTIME": {
+      "name": "Big Time",
+      "tags": [
+        "Gaming",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PLUME": {
+      "name": "PLUME",
+      "tags": [
+        "Infrastructure",
+        "HODLer",
+        "Layer1_Layer2",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MORPHO": {
+      "name": "Morpho Token",
+      "tags": [
+        "HODLer",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SOPH": {
+      "name": "Sophon",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "Launchpool",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HYPER": {
+      "name": "Hyperlane",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SIGN": {
+      "name": "Sign",
+      "tags": [
+        "Infrastructure",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MILK": {
+      "name": "MilkyWay",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "STO": {
+      "name": "StakeStone",
+      "tags": [
+        "defi",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LTSTO": {
+      "name": "STO for Lending (do not use)",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SXT": {
+      "name": "Space and Time",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed",
+        "Infrastructure",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SYRUP": {
+      "name": "Maple Finance",
+      "tags": [
+        "defi",
+        "Seed",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KMNO": {
+      "name": "Kamino Finance",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "USD1": {
+      "name": "World Liberty Financial USD",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NXPC": {
+      "name": "Nexpace",
+      "tags": [
+        "Gaming",
+        "Launchpool",
+        "Layer1_Layer2",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AWE": {
+      "name": "AWE Network",
+      "tags": [
+        "Monitoring",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DOOD": {
+      "name": "Doodles",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SNS": {
+      "name": "Solana Name Service",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "HTX": {
+      "name": "HTX",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "HAEDAL": {
+      "name": "Haedal",
+      "tags": [
+        "defi",
+        "Launchpool",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HUMA": {
+      "name": "Huma Finance",
+      "tags": [
+        "Payments",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "A": {
+      "name": "Vaulta",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RESOLV": {
+      "name": "Resolv",
+      "tags": [
+        "Monitoring",
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IXFI": {
+      "name": "IXFI",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "HOME": {
+      "name": "Defi App",
+      "tags": [
+        "defi",
+        "Seed",
+        "Launchpool",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SPK": {
+      "name": "Spark",
+      "tags": [
+        "defi",
+        "Seed",
+        "Launchpool",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SPX": {
+      "name": "SPX6900",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MOODENG": {
+      "name": "Moo Deng",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "POPCAT": {
+      "name": "POPCAT",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MEW": {
+      "name": "cat in a dogs world",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GOAT": {
+      "name": "Goatseus Maximus",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALCH": {
+      "name": "Alchemist AI",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "NEWT": {
+      "name": "Newton Protocol",
+      "tags": [
+        "AI",
+        "Launchpool",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SAHARA": {
+      "name": "Sahara AI",
+      "tags": [
+        "AI",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "JELLYJELLY": {
+      "name": "Jelly-My-Jelly",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GRASS": {
+      "name": "Grass",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "RWA": {
+      "name": "Allo",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SKYAI": {
+      "name": "SKYAI",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "FAIR3": {
+      "name": "Fair and Free",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "AITECH": {
+      "name": "Solidus Ai Tech",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MYX": {
+      "name": "MYX Finance",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KOGE": {
+      "name": "48 Club Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SOON": {
+      "name": "SOON",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LA": {
+      "name": "Lagrange",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CUSDOX": {
+      "name": "CUSDOX for MirrorRSV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USYCX": {
+      "name": "USYCX for MirrorRSV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ERA": {
+      "name": "Caldera",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RWUSD": {
+      "name": "RWUSD",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "C": {
+      "name": "Chainbase",
+      "tags": [
+        "Infrastructure",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SKYCOIN": {
+      "name": "Skycoin",
+      "tags": [
+        "pow",
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "A2Z": {
+      "name": "Arena-Z",
+      "tags": [
+        "Monitoring",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SOMI": {
+      "name": "Somnia",
+      "tags": [
+        "Layer1_Layer2",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TREE": {
+      "name": "Treehouse",
+      "tags": [
+        "Seed",
+        "HODLer",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZKJ": {
+      "name": "Polyhedra Network",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BR": {
+      "name": "Bedrock",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BROCCOLIF2B": {
+      "name": "BROCCOLI",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDTX": {
+      "name": "USDTX for MirrorRSV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDCX": {
+      "name": "USDCX for MirrorRSV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHX": {
+      "name": "ETHX for MirrorRSV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "TOWNS": {
+      "name": "Towns Protocol",
+      "tags": [
+        "Monitoring",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PROVE": {
+      "name": "Succinct",
+      "tags": [
+        "Infrastructure",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MITO": {
+      "name": "Mitosis",
+      "tags": [
+        "defi",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DOLO": {
+      "name": "Dolomite",
+      "tags": [
+        "defi",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WLFI": {
+      "name": "World Liberty Financial",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NODE": {
+      "name": "NodeOps",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "OPEN": {
+      "name": "OpenLedger",
+      "tags": [
+        "Layer1_Layer2",
+        "HODLer",
+        "Seed",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LINEA": {
+      "name": "Linea",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed",
+        "HODLer",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LINEAETH": {
+      "name": "ETH on Linea",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDE": {
+      "name": "USD Ethena",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HOLO": {
+      "name": "Holoworld AI",
+      "tags": [
+        "Seed",
+        "HODLer",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PUMP": {
+      "name": "Pump.Fun",
+      "tags": [
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZKC": {
+      "name": "Boundless",
+      "tags": [
+        "Infrastructure",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AVNT": {
+      "name": "Veranta",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BARD": {
+      "name": "Lombard",
+      "tags": [
+        "defi",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DRX": {
+      "name": "DRX Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "0G": {
+      "name": "0G",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed",
+        "HODLer",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HEMI": {
+      "name": "HEMI",
+      "tags": [
+        "Layer1_Layer2",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ASTER": {
+      "name": "Aster",
+      "tags": [
+        "defi",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XPL": {
+      "name": "Plasma",
+      "tags": [
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NOM": {
+      "name": "Nomina",
+      "tags": [
+        "Monitoring",
+        "Seed",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MIRA": {
+      "name": "Mira",
+      "tags": [
+        "AI",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FF": {
+      "name": "Falcon Finance",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EDEN": {
+      "name": "OpenEden",
+      "tags": [
+        "Seed",
+        "HODLer",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "2Z": {
+      "name": "DoubleZero",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WAL": {
+      "name": "Walrus",
+      "tags": [
+        "storage-zone",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HEMIETH": {
+      "name": "ETH on Hemi",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "EUL": {
+      "name": "Euler",
+      "tags": [
+        "Seed",
+        "HODLer",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ENSO": {
+      "name": "Enso",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "YB": {
+      "name": "Yield Basis",
+      "tags": [
+        "defi",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZBT": {
+      "name": "Zerobase",
+      "tags": [
+        "defi",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TURTLE": {
+      "name": "Turtle",
+      "tags": [
+        "defi",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GIGGLE": {
+      "name": "Giggle Fund",
+      "tags": [
+        "Meme",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "F": {
+      "name": "SynFutures",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALLO": {
+      "name": "Allora",
+      "tags": [
+        "AI",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "APEOLD": {
+      "name": "Old ApeCoin",
+      "tags": [
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KITE": {
+      "name": "KITE",
+      "tags": [
+        "Seed",
+        "AI",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MMT": {
+      "name": "Momentum",
+      "tags": [
+        "defi",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BUIDLX": {
+      "name": "BUIDL for MirrorRSV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SAPIEN": {
+      "name": "SAPIEN",
+      "tags": [
+        "AI",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TAIKOETH": {
+      "name": "ETH on TAIKO",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BANK": {
+      "name": "Lorenzo Protocol",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MET": {
+      "name": "Meteora",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AT": {
+      "name": "APRO",
+      "tags": [
+        "Infrastructure",
+        "Seed",
+        "HODLer"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NIGHT": {
+      "name": "Midnight",
+      "tags": [
+        "Infrastructure",
+        "Layer1_Layer2",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KGST": {
+      "name": "Kyrgyz Som Stablecoin",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FRAX": {
+      "name": "Frax Finance",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BREV": {
+      "name": "Brevis",
+      "tags": [
+        "Infrastructure",
+        "HODLer",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MEGAETH": {
+      "name": "MegaETH",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MEGA": {
+      "name": "MEGA",
+      "tags": [
+        "Infrastructure",
+        "Layer1_Layer2",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZKP": {
+      "name": "zkPass",
+      "tags": [
+        "Infrastructure",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "币安人生": {
+      "name": "币安人生",
+      "tags": [
+        "Meme",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FOGO": {
+      "name": "FOGO",
+      "tags": [
+        "Infrastructure",
+        "Layer1_Layer2",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "U": {
+      "name": "United Stables",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IBENJIX": {
+      "name": "IBENJIX for MirrorRSV",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GBPPS": {
+      "name": "GBPPaysafe",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "RLUSD": {
+      "name": "Ripple USD",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SENT": {
+      "name": "Sentient",
+      "tags": [
+        "AI",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZAMA": {
+      "name": "ZAMA",
+      "tags": [
+        "Infrastructure",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ESP": {
+      "name": "Espresso",
+      "tags": [
+        "Infrastructure",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KAT": {
+      "name": "Katana",
+      "tags": [
+        "Infrastructure",
+        "Layer1_Layer2",
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KATETH": {
+      "name": "ETH on KATANA",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MANTRA": {
+      "name": "MANTRA",
+      "tags": [
+        "Layer1_Layer2",
+        "RWA",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OPN": {
+      "name": "OPINION",
+      "tags": [
+        "defi",
+        "Seed",
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ROBO": {
+      "name": "Fabric Protocol",
+      "tags": [
+        "AI",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CFG": {
+      "name": "Centrifuge",
+      "tags": [
+        "defi",
+        "Seed",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XAUT": {
+      "name": "Tether Gold",
+      "tags": [
+        "tCommodities"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDS": {
+      "name": "USDS",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XMN": {
+      "name": "xMoney",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CHIP": {
+      "name": "USD.AI",
+      "tags": [
+        "defi",
+        "AI",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTCY": {
+      "name": "BTC Yield",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "AIGENSYN": {
+      "name": "Gensyn",
+      "tags": [
+        "Infrastructure",
+        "AI",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ACMOLD": {
+      "name": "Old AC Milan Fan Token",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ATMOLD": {
+      "name": "Old Atlético de Madrid Fan Token",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CITYOLD": {
+      "name": "Old Manchester City Fan Token",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OGOLD": {
+      "name": "Old OG Fan Token",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ASROLD": {
+      "name": "Old AS Roma Fan Token",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BAROLD": {
+      "name": "Old FC Barcelona Fan Token BAR",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "JUVOLD": {
+      "name": "Old Juventus Fan Token",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PSGOLD": {
+      "name": "Old Paris Saint-Germain Fan Token",
+      "tags": [
+        "fan_token"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CDF": {
+      "name": "Congolese Franc",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "GENIUS": {
+      "name": "Genius Terminal",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": ""
+    },
+    "OPG": {
+      "name": "OpenGradient",
+      "tags": [
+        "AI",
+        "Seed",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": ""
+    },
+    "ADIB": {
+      "name": "TEST Tokenized",
+      "tags": [],
+      "fiat": false,
+      "underlying": "ADI"
+    },
+    "TSLAB": {
+      "name": "Tesla (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "TSLA"
+    },
+    "NVDAB": {
+      "name": "NVIDIA (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "NVDA"
+    },
+    "SNDKB": {
+      "name": "SanDisk (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SNDK"
+    },
+    "MUB": {
+      "name": "Micron Technology (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "MU"
+    },
+    "CRCLB": {
+      "name": "Circle Internet Group (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "CRCL"
+    },
+    "SPCXB": {
+      "name": "SpaceX (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SPCX"
+    },
+    "RE": {
+      "name": "Re",
+      "tags": [
+        "Seed",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": ""
+    },
+    "AMDB": {
+      "name": "Advanced Micro Devices (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "AMD"
+    },
+    "INTCB": {
+      "name": "Intel (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "INTC"
+    },
+    "MSTRB": {
+      "name": "Strategy (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "MSTR"
+    },
+    "EWYB": {
+      "name": "iShares MSCI South Korea ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "EWY"
+    },
+    "MSFTB": {
+      "name": "Microsoft (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "MSFT"
+    },
+    "QQQB": {
+      "name": "Invesco QQQ Trust (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "QQQ"
+    },
+    "METAB": {
+      "name": "Meta (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "META"
+    },
+    "LITEB": {
+      "name": "Lumentum (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "LITE"
+    },
+    "PLTRB": {
+      "name": "Palantir (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "PLTR"
+    },
+    "CNGN": {
+      "name": "Compliant Naira",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "TGBP": {
+      "name": "Tokenised GBP",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "GRAM": {
+      "name": "Gram",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": ""
+    },
+    "GOOGLB": {
+      "name": "Alphabet (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "GOOGL"
+    },
+    "QCOMB": {
+      "name": "Qualcomm (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "QCOM"
+    },
+    "COINB": {
+      "name": "Coinbase (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "COIN"
+    },
+    "SPYB": {
+      "name": "SPY (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SPY"
+    },
+    "WDCB": {
+      "name": "Western Digital (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "WDC"
+    },
+    "GLWB": {
+      "name": "Corning (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "GLW"
+    },
+    "NBISB": {
+      "name": "Nebius (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "NBIS"
+    },
+    "SOXLB": {
+      "name": "Semicon Bull 3X ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SOXL"
+    },
+    "DRAMB": {
+      "name": "Roundhill Memory ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "DRAM"
+    },
+    "CBRSB": {
+      "name": "Cerebras (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "CBRS"
+    },
+    "SKHYB": {
+      "name": "SK Hynix (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SKHY"
+    },
+    "ARMB": {
+      "name": "ARM (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "ARM"
+    },
+    "AAOIB": {
+      "name": "Applied Optoelectronics (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "AAOI"
+    },
+    "IBMB": {
+      "name": "IBM (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "IBM"
+    },
+    "RKLBB": {
+      "name": "Rocket Lab (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "RKLB"
+    },
+    "NOKB": {
+      "name": "Nokia (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "NOK"
+    },
+    "TSMB": {
+      "name": "TSMC (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "TSM"
+    },
+    "BABAB": {
+      "name": "Alibaba (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "BABA"
+    },
+    "AVGOB": {
+      "name": "Broadcom (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "AVGO"
+    },
+    "MRVLB": {
+      "name": "Marvell Technology (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "MRVL"
+    },
+    "HOODB": {
+      "name": "Robinhood (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "HOOD"
+    },
+    "AERO": {
+      "name": "Aerodrome",
+      "tags": [
+        "defi",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": ""
+    },
+    "LDAERO": {
+      "name": "AERO for lending",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "MVLLB": {
+      "name": "GraniteShares 2X Long MRVL ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "MVLL"
+    },
+    "KORUB": {
+      "name": "South Korea Bull 3X ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "KORU"
+    },
+    "AXTIB": {
+      "name": "AXT (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "AXTI"
+    },
+    "CRWVB": {
+      "name": "CoreWeave (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "CRWV"
+    },
+    "MUUB": {
+      "name": "Direxion MU Bull 2X ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "MUU"
+    },
+    "SNXXB": {
+      "name": "Tradr 2X Long SNDK ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SNXX"
+    },
+    "INTWB": {
+      "name": "GraniteShares 2X Long INTC ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "INTW"
+    },
+    "TQQQB": {
+      "name": "ProShares UltraPro QQQ (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "TQQQ"
+    },
+    "QNTB": {
+      "name": "Quantinuum (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "QNT"
+    },
+    "ORCLB": {
+      "name": "Oracle (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "ORCL"
+    },
+    "AAPLB": {
+      "name": "Apple (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "AAPL"
+    },
+    "BEB": {
+      "name": "Bloom Energy (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "BE"
+    },
+    "AMZNB": {
+      "name": "Amazon (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "AMZN"
+    },
+    "SOXSB": {
+      "name": "Direxion Semiconductor Bear 3X ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SOXS"
+    },
+    "DELLB": {
+      "name": "Dell (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "DELL"
+    },
+    "FLNCB": {
+      "name": "Fluence Energy (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "FLNC"
+    },
+    "AMATB": {
+      "name": "Applied Materials (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "AMAT"
+    },
+    "PYPLB": {
+      "name": "Paypal (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "PYPL"
+    },
+    "GSB": {
+      "name": "Goldman Sachs (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "GS"
+    },
+    "SMHB": {
+      "name": "VanEck Semiconductor ETF (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SMH"
+    },
+    "ALABB": {
+      "name": "Astera Labs (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "ALAB"
+    },
+    "USARB": {
+      "name": "USA Rare Earth (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "USAR"
+    },
+    "CRDOB": {
+      "name": "Credo Technology (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "CRDO"
+    },
+    "COHRB": {
+      "name": "Coherent (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "COHR"
+    },
+    "ASTSB": {
+      "name": "AST SpaceMobile (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "ASTS"
+    },
+    "NFLXB": {
+      "name": "Netflix (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "NFLX"
+    },
+    "ASMLB": {
+      "name": "ASML (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "ASML"
+    },
+    "IRENB": {
+      "name": "IREN Limited (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "IREN"
+    },
+    "SMCIB": {
+      "name": "Super Micro Computer (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SMCI"
+    },
+    "BMNRB": {
+      "name": "BitMine Immersion Technologies (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "BMNR"
+    },
+    "TSLAONETH": {
+      "name": "TSLAon (Ethereum)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "CRCLONETH": {
+      "name": "CRCLon (Ethereum)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "COINONETH": {
+      "name": "COINon (Ethereum)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "MSTRONETH": {
+      "name": "MSTRon (Ethereum)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "TSLAONBSC": {
+      "name": "TSLAon (BSC)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "CRCLONBSC": {
+      "name": "CRCLon (BSC)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "COINONBSC": {
+      "name": "COINon (BSC)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "MSTRONBSC": {
+      "name": "MSTRon (BSC)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "SPCXONBSC": {
+      "name": "SPCXon (BSC)",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "GMEB": {
+      "name": "GameStop (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "GME"
+    },
+    "DJTB": {
+      "name": "Trump Media & Technology Group (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "DJT"
+    },
+    "CRWDB": {
+      "name": "CrowdStrike (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "CRWD"
+    },
+    "STXB": {
+      "name": "Seagate (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "STX"
+    },
+    "SQQQB": {
+      "name": "ProShares UltraPro Short QQQ (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "SQQQ"
+    },
+    "MRNAB": {
+      "name": "Moderna (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "MRNA"
+    },
+    "COINX": {
+      "name": "COINX",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "MSTRX": {
+      "name": "MSTRX",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "TSLAX": {
+      "name": "TSLAX",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "CRCLX": {
+      "name": "CRCLX",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "MARSCOIN": {
+      "name": "MarsCoin",
+      "tags": [
+        "Meme",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": ""
+    },
+    "HIMSB": {
+      "name": "Hims & Hers (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "HIMS"
+    },
+    "CRMB": {
+      "name": "Salesforce (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "CRM"
+    },
+    "ROBINETH": {
+      "name": "ETH on Robinhood",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "牛来": {
+      "name": "牛来",
+      "tags": [
+        "Meme",
+        "Seed"
+      ],
+      "fiat": false,
+      "underlying": ""
+    },
+    "OPUSDTE": {
+      "name": "Bridged USDT on Optimism",
+      "tags": [],
+      "fiat": false,
+      "underlying": ""
+    },
+    "BNCB": {
+      "name": "BNB Standard Corporation (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "BNC"
+    },
+    "GPROB": {
+      "name": "GoPro (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "GPRO"
+    },
+    "RDDTB": {
+      "name": "Reddit (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "RDDT"
+    },
+    "CYPHB": {
+      "name": "Cypherpunk Technologies (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "CYPH"
+    },
+    "AMCB": {
+      "name": "AMC Entertainment Holdings (bStocks)",
+      "tags": [
+        "bStocks"
+      ],
+      "fiat": false,
+      "underlying": "AMC"
+    },
+    "AGPUB": {
+      "name": "Axe Compute (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "AGPU"
+    },
+    "HYPE": {
+      "name": "Hyperliquid",
+      "tags": [
+        "defi",
+        "Seed",
+        "Infrastructure",
+        "Layer1_Layer2",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": ""
+    },
+    "ZMB": {
+      "name": "Zoom (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "ZM"
+    },
+    "HPEB": {
+      "name": "Hewlett Packard (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "HPE"
+    },
+    "ADBEB": {
+      "name": "Adobe (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "ADBE"
+    },
+    "SHAZB": {
+      "name": "SharonAI (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "SHAZ"
+    },
+    "FWDIB": {
+      "name": "Forward Industries (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "FWDI"
+    },
+    "PDDB": {
+      "name": "PDD Holdings (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "PDD"
+    },
+    "WENB": {
+      "name": "Wendy's (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "WEN"
+    },
+    "SECZB": {
+      "name": "Securitize (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "SECZ"
+    },
+    "USDEB": {
+      "name": "StablecoinX (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "USDE"
+    },
+    "JPMB": {
+      "name": "JPMorgan Chase (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "JPM"
+    },
+    "LLYB": {
+      "name": "Eli Lilly (bStocks)",
+      "tags": [
+        "bStocks",
+        "newListing"
+      ],
+      "fiat": false,
+      "underlying": "LLY"
+    },
+    "BTC": {
+      "name": "Bitcoin",
+      "tags": [
+        "Payments",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FTM": {
+      "name": "Fantom",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NEO": {
+      "name": "NEO",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETH": {
+      "name": "Ethereum",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LTC": {
+      "name": "Litecoin",
+      "tags": [
+        "Payments",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "QTUM": {
+      "name": "Qtum",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "QI": {
+      "name": "BENQI",
+      "tags": [
+        "Monitoring",
+        "Launchpool",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EOS": {
+      "name": "EOS",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SNT": {
+      "name": "Status",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNT": {
+      "name": "Bancor",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GAS": {
+      "name": "NeoGas",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTM": {
+      "name": "Bytom",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDT": {
+      "name": "TetherUS",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HCC": {
+      "name": "HealthCare Chain",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "OAX": {
+      "name": "openANX",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DNT": {
+      "name": "district0x",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MCO": {
+      "name": "MCO",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ICN": {
+      "name": "ICONOMI",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZRX": {
+      "name": "0x",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OMG": {
+      "name": "OMG Network",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WTC": {
+      "name": "Walton",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "mining-zone",
+        "pow",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LRC": {
+      "name": "Loopring",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LLT": {
+      "name": "LLToken",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "YOYO": {
+      "name": "YOYOW",
+      "tags": [
+        "pow",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TRX": {
+      "name": "TRON",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SNGLS": {
+      "name": "Breaker",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BQX": {
+      "name": "Old Voyager Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KNC": {
+      "name": "KyberNetwork",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SNM": {
+      "name": "SONM",
+      "tags": [
+        "Monitoring",
+        "storage-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SNMOLD": {
+      "name": "SONM OLD",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "FUN": {
+      "name": "FunToken",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LINK": {
+      "name": "ChainLink",
+      "tags": [
+        "AI",
+        "RWA",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XVG": {
+      "name": "Verge",
+      "tags": [
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DELISTCTR": {
+      "name": "Centra",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SALT": {
+      "name": "Salt",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MDA": {
+      "name": "Moeda Loyalty Points",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "IOTA": {
+      "name": "IOTA",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SUB": {
+      "name": "Substratum",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETC": {
+      "name": "Ethereum Classic",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MTL": {
+      "name": "Metal DAO",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MTH": {
+      "name": "Monetha",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ENG": {
+      "name": "Enigma",
+      "tags": [
+        "pow",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AST": {
+      "name": "AirSwap",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DASH": {
+      "name": "Dash",
+      "tags": [
+        "Payments",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTG": {
+      "name": "Bitcoin Gold",
+      "tags": [
+        "pow",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EVX": {
+      "name": "Everex",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "REQ": {
+      "name": "Request Network",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "VIB": {
+      "name": "Viberate",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "POWR": {
+      "name": "Powerledger",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ARK": {
+      "name": "Ark",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XRP": {
+      "name": "XRP",
+      "tags": [
+        "Layer1_Layer2",
+        "Payments"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MOD": {
+      "name": "Modum",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ENJ": {
+      "name": "Enjin Coin",
+      "tags": [
+        "Layer1_Layer2",
+        "NFT",
+        "Gaming"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "STORJ": {
+      "name": "Storj",
+      "tags": [
+        "Monitoring",
+        "storage-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "KMD": {
+      "name": "Komodo",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RCN": {
+      "name": "Ripio Credit Network",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NULS": {
+      "name": "Nuls",
+      "tags": [
+        "Monitoring",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RDN": {
+      "name": "Raiden Network Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "XMR": {
+      "name": "Monero",
+      "tags": [
+        "Monitoring",
+        "pow"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DLT": {
+      "name": "Agrello",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "AMB": {
+      "name": "AirDAO",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BAT": {
+      "name": "Basic Attention Token",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZEC": {
+      "name": "Zcash",
+      "tags": [
+        "Payments",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ARN": {
+      "name": "Aeron",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GVT": {
+      "name": "Genesis Vision",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CDT": {
+      "name": "Blox",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GXS": {
+      "name": "GXChain",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "POE": {
+      "name": "Po.et",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "QSP": {
+      "name": "Quantstamp",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BTS": {
+      "name": "BitShares",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "defi",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LSK": {
+      "name": "Lisk",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FIRO": {
+      "name": "Firo",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TNT": {
+      "name": "Tierion",
+      "tags": [
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FUEL": {
+      "name": "Etherparty",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MANA": {
+      "name": "Decentraland",
+      "tags": [
+        "Gaming",
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BCD": {
+      "name": "Bitcoin Diamond",
+      "tags": [
+        "pow",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DGD": {
+      "name": "DigixDAO",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ADX": {
+      "name": "heyAura",
+      "tags": [
+        "Infrastructure",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ADA": {
+      "name": "Cardano",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PPT": {
+      "name": "Populous",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CMT": {
+      "name": "CyberMiles",
+      "tags": [
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XLM": {
+      "name": "Stellar Lumens",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CND": {
+      "name": "Cindicator",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LEND": {
+      "name": "Aave",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WABI": {
+      "name": "TAEL",
+      "tags": [
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SBTC": {
+      "name": "Super Bitcoin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BCX": {
+      "name": "BitcoinX",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "WAVES": {
+      "name": "Waves",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NSBT": {
+      "name": "Neutrino Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "TNB": {
+      "name": "Time New Bank",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GTO": {
+      "name": "Gifto",
+      "tags": [
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ICX": {
+      "name": "ICON",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OST": {
+      "name": "OST",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ELF": {
+      "name": "aelf",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AION": {
+      "name": "AION",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CVC": {
+      "name": "Civic",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "REP": {
+      "name": "Augur v2",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "STX": {
+      "name": "Stacks",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "storage-zone",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GNT": {
+      "name": "Golem",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "EDG": {
+      "name": "Edgeware",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DATA": {
+      "name": "Streamr",
+      "tags": [
+        "Monitoring",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MCAP": {
+      "name": "MCAP",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CFD": {
+      "name": "Confido",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETF": {
+      "name": "ETF",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BRD": {
+      "name": "Bread",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "NEBL": {
+      "name": "Neblio",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LUN": {
+      "name": "Lunyr",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CHAT": {
+      "name": "ChatCoin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "RLC": {
+      "name": "iExecRLC",
+      "tags": [
+        "Infrastructure",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "INS": {
+      "name": "Insolar",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "IOST": {
+      "name": "IOST",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "STEEM": {
+      "name": "Steem",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NANO": {
+      "name": "NANO",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "AE": {
+      "name": "Aeternity",
+      "tags": [
+        "pow",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VIA": {
+      "name": "Viacoin",
+      "tags": [
+        "pow",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BLZ": {
+      "name": "Bluzelle",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SYS": {
+      "name": "Syscoin",
+      "tags": [
+        "Monitoring",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NCASH": {
+      "name": "Nucleus Vision",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "POA": {
+      "name": "POA Network",
+      "tags": [
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ONT": {
+      "name": "Ontology",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "mining-zone",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZIL": {
+      "name": "Zilliqa",
+      "tags": [
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "STORM": {
+      "name": "Storm",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "XEM": {
+      "name": "NEM",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WAN": {
+      "name": "Wanchain",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WPR": {
+      "name": "WePower",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "QLC": {
+      "name": "Kepple",
+      "tags": [
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GRS": {
+      "name": "Groestlcoin",
+      "tags": [
+        "pow",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CLOAK": {
+      "name": "CloakCoin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "LOOM": {
+      "name": "Loom Network",
+      "tags": [
+        "Monitoring",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TUSD": {
+      "name": "TrueUSD",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZEN": {
+      "name": "Horizen",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SKY": {
+      "name": "Sky",
+      "tags": [
+        "defi",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "THETA": {
+      "name": "Theta Token",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "AI",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IOTX": {
+      "name": "IoTeX",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "QKC": {
+      "name": "QuarkChain",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "mining-zone",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NXS": {
+      "name": "Nexus",
+      "tags": [
+        "pow",
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SC": {
+      "name": "Siacoin",
+      "tags": [
+        "storage-zone",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EON": {
+      "name": "EOS Network",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "NPXS": {
+      "name": "Old Pundi X",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KEY": {
+      "name": "Selfkey",
+      "tags": [
+        "Monitoring",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NAS": {
+      "name": "Nebulas",
+      "tags": [
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ADD": {
+      "name": "ADD",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MEETONE": {
+      "name": "MEETONE",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ATD": {
+      "name": "Atidium",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MFT": {
+      "name": "Mainframe",
+      "tags": [
+        "mining-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EOP": {
+      "name": "EOSpace",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DENT": {
+      "name": "DENT",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IQ": {
+      "name": "IQ",
+      "tags": [
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ARDR": {
+      "name": "Ardor",
+      "tags": [
+        "Monitoring",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HOT": {
+      "name": "Holo",
+      "tags": [
+        "Layer1_Layer2",
+        "storage-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VET": {
+      "name": "VeChain",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DOCK": {
+      "name": "DOCK",
+      "tags": [
+        "Monitoring",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "POLY": {
+      "name": "Polymath",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "VTHO": {
+      "name": "VeThor Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ONG": {
+      "name": "Ontology Gas",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "HC": {
+      "name": "HyperCash",
+      "tags": [
+        "pow",
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GO": {
+      "name": "GoChain",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PAX": {
+      "name": "Paxos Standard",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "RVN": {
+      "name": "Ravencoin",
+      "tags": [
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DCR": {
+      "name": "Decred",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDC": {
+      "name": "USDC",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MITH": {
+      "name": "Mithril",
+      "tags": [
+        "ALTS"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CBM": {
+      "name": "Crypto Bonus Miles Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "REN": {
+      "name": "Ren",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "pos",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "USDSOLD": {
+      "name": "StableUSD",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "FET": {
+      "name": "Artificial Superintelligence Alliance",
+      "tags": [
+        "Infrastructure",
+        "pos",
+        "Launchpad",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TFUEL": {
+      "name": "Theta Fuel",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CELR": {
+      "name": "Celer Network",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MATIC": {
+      "name": "Polygon Old",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ATOM": {
+      "name": "Cosmos",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PHB": {
+      "name": "Phoenix",
+      "tags": [
+        "Monitoring",
+        "AI",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BOLT": {
+      "name": "BOLT",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ONE": {
+      "name": "Harmony",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "Launchpad",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CAN": {
+      "name": "CanYaCoin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "UND": {
+      "name": "Unification",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "HNST": {
+      "name": "Honest",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ENTRP": {
+      "name": "Hut34 Entropy",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "VRAB": {
+      "name": "Verasity",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "CHZ": {
+      "name": "Chiliz",
+      "tags": [
+        "Layer1_Layer2",
+        "fan_token",
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LBA": {
+      "name": "Lend Borrow Asset",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "COS": {
+      "name": "Contentos",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALGO": {
+      "name": "Algorand",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ERD": {
+      "name": "Elrond",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DOGE": {
+      "name": "Dogecoin",
+      "tags": [
+        "Meme",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BGBP": {
+      "name": "BGBP",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DUSK": {
+      "name": "Dusk",
+      "tags": [
+        "Infrastructure",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ANKR": {
+      "name": "Ankr",
+      "tags": [
+        "defi",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WIN": {
+      "name": "WINkLink",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BLINK": {
+      "name": "Blockmason Link",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "COCOS": {
+      "name": "Cocos-BCX",
+      "tags": [
+        "Gaming",
+        "mining-zone",
+        "NFT",
+        "bnbchain",
+        "Metaverse"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PERL": {
+      "name": "Perlin",
+      "tags": [
+        "Monitoring",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TOMO": {
+      "name": "TomoChain",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BUSD": {
+      "name": "BUSD",
+      "tags": [
+        "bnbchain",
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BAND": {
+      "name": "BAND",
+      "tags": [
+        "Infrastructure",
+        "pos",
+        "Launchpad",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BEAM": {
+      "name": "Beam",
+      "tags": [
+        "pow",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "HBAR": {
+      "name": "Hedera Hashgraph",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "XTZ": {
+      "name": "Tezos",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NGN": {
+      "name": "Nigerian Naira",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "DGB": {
+      "name": "DigiByte",
+      "tags": [
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "JEX": {
+      "name": "Jex Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "NKN": {
+      "name": "NKN",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "pow",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "GBP": {
+      "name": "Pound Sterling",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "EUR": {
+      "name": "Euro",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "KAVA": {
+      "name": "Kava",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "mining-zone",
+        "Launchpad",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RUB": {
+      "name": "Russian Ruble",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "UAH": {
+      "name": "Ukraine Hryvnia",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "KZT": {
+      "name": "Kazakhstani Tenge",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "ARPA": {
+      "name": "ARPA Network",
+      "tags": [
+        "Layer1_Layer2",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TRY": {
+      "name": "Turkish Lira",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "CTXC": {
+      "name": "Cortex",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "USD": {
+      "name": "USD",
+      "tags": [
+        "newListing"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "AERGO": {
+      "name": "Aergo",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "INR": {
+      "name": "INR",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "BCH": {
+      "name": "Bitcoin Cash",
+      "tags": [
+        "Payments",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TROY": {
+      "name": "Troy",
+      "tags": [
+        "Monitoring",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VND": {
+      "name": "Vietnamese Dong",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "IDR": {
+      "name": "Indonesian Rupiah",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "COP": {
+      "name": "Colombian Peso",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "MXN": {
+      "name": "Mexican Peso",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "CAD": {
+      "name": "Canadian Dollar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "ARS": {
+      "name": "Argentine Peso",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "BRL": {
+      "name": "Brazilian Real",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "VITE": {
+      "name": "VITE",
+      "tags": [
+        "Monitoring",
+        "mining-zone",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FTT": {
+      "name": "FTX Token",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PLN": {
+      "name": "Polish Zlotych",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "CZK": {
+      "name": "Czech Koruny",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "BGN": {
+      "name": "Bulgarian Leva",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "RON": {
+      "name": "Romanian Lei",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "SEK": {
+      "name": "Swedish Kroner",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "NOK": {
+      "name": "Norwegian Kroner",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "HRK": {
+      "name": "Croatia Kuna",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "HUF": {
+      "name": "Hungarian Forint",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "DKK": {
+      "name": "Danish Kroner",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "ISK": {
+      "name": "Icelandic Kronur",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "THB": {
+      "name": "Thai Baht",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "HKD": {
+      "name": "Hong Kong Dollar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "AUD": {
+      "name": "Australian Dollar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "OGN": {
+      "name": "OriginToken",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHBNT": {
+      "name": "BNT Smart Token Relay",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DREP": {
+      "name": "DREP",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BULL": {
+      "name": "3X Long Bitcoin Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BEAR": {
+      "name": "3X Short Bitcoin Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHBULL": {
+      "name": "3X Long Ethereum Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHBEAR": {
+      "name": "3X Short Ethereum Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "XRPBULL": {
+      "name": "3X Long XRP Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "XRPBEAR": {
+      "name": "3X Short XRP Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "EOSBULL": {
+      "name": "3X Long EOS Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "EOSBEAR": {
+      "name": "3X Short EOS Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "JPY": {
+      "name": "Japanese Yen",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "TCT": {
+      "name": "TokenClub Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "WRX": {
+      "name": "WazirX",
+      "tags": [
+        "Monitoring",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LTO": {
+      "name": "LTO Network",
+      "tags": [
+        "Monitoring",
+        "RWA",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ZAR": {
+      "name": "South African Rand",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "CHF": {
+      "name": "schweizer Franken",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "NZD": {
+      "name": "New Zealand Dollar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "ILS": {
+      "name": "Israeli new shekel",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "KRW": {
+      "name": "Korean Won",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "MBL": {
+      "name": "MovieBloc",
+      "tags": [
+        "Gaming",
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "COTI": {
+      "name": "COTI",
+      "tags": [
+        "Payments"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BKRW": {
+      "name": "Binance KRW",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNBBULL": {
+      "name": "3X Long BNB Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNBBEAR": {
+      "name": "3X Short BNB Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "PEN": {
+      "name": "Peruvian sol",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "HIVE": {
+      "name": "Hive",
+      "tags": [
+        "Layer1_Layer2",
+        "mining-zone",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "STPT": {
+      "name": "Standard Tokenization Protocol",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "AED": {
+      "name": "United Arab Emirates dirham",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "PHP": {
+      "name": "Philippine Peso",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "KES": {
+      "name": "Kenya Shilling",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "TWD": {
+      "name": "New Taiwan Dollar",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "XPR": {
+      "name": "Proton",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "SAR": {
+      "name": "Saudi Riyal",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "UGX": {
+      "name": "Uganda Shilling",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "SOL": {
+      "name": "Solana",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "mining-zone",
+        "Solana"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IDRT": {
+      "name": "Rupiah Token",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MAD": {
+      "name": "Moroccan Dirham",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "CTSI": {
+      "name": "Cartesi",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "Launchpad"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AZN": {
+      "name": "Azerbaijani Manat",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "CLP": {
+      "name": "Chilean Peso",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "CRC": {
+      "name": "Costa Rican Colon",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "DOP": {
+      "name": "Dominican Peso",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "GEL": {
+      "name": "Georgian Lari",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "MDL": {
+      "name": "Moldovan Leu",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "QAR": {
+      "name": "Qatar Riyal",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "UYU": {
+      "name": "Uruguay Peso",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "UZS": {
+      "name": "Uzbekistani Sum",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "HNT": {
+      "name": "Helium",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FIO": {
+      "name": "FIO Protocol",
+      "tags": [
+        "Monitoring",
+        "NFT",
+        "pos",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BIDR": {
+      "name": "BIDR",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PKR": {
+      "name": "Pakistani Rupee",
+      "tags": [
+        "FIAT"
+      ],
+      "fiat": true,
+      "underlying": null
+    },
+    "VES": {
+      "name": "Sovereign Bolivar",
+      "tags": [],
+      "fiat": true,
+      "underlying": null
+    },
+    "STMX": {
+      "name": "StormX",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MDT": {
+      "name": "Measurable Data Token",
+      "tags": [
+        "Monitoring",
+        "AI",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PNT": {
+      "name": "pNetwork",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SGT": {
+      "name": "snglsDAO Governance Token",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "COMP": {
+      "name": "Compound",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IRIS": {
+      "name": "IRISnet",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "MKR": {
+      "name": "Maker",
+      "tags": [
+        "defi",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SXP": {
+      "name": "Solar",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SNX": {
+      "name": "Synthetix Network Token",
+      "tags": [
+        "defi",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "DAI": {
+      "name": "Dai",
+      "tags": [
+        "stablecoin"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHUP": {
+      "name": "ETHUP",
+      "tags": [
+        "ETF"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ETHDOWN": {
+      "name": "ETHDOWN",
+      "tags": [
+        "ETF"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NVT": {
+      "name": "NerveNetwork",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "RUNE": {
+      "name": "THORChain",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AVA": {
+      "name": "AVA",
+      "tags": [
+        "Monitoring"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BAL": {
+      "name": "Balancer",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "YFI": {
+      "name": "yearn.finance",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SRM": {
+      "name": "Serum",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ANT": {
+      "name": "Aragon",
+      "tags": [
+        "Monitoring",
+        "pos",
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CRV": {
+      "name": "Curve",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SAND": {
+      "name": "The Sandbox",
+      "tags": [
+        "Gaming",
+        "Launchpad",
+        "NFT"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "OCEAN": {
+      "name": "Ocean Protocol",
+      "tags": [
+        "Infrastructure",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NMR": {
+      "name": "Numeraire",
+      "tags": [
+        "defi",
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "LUNA": {
+      "name": "Terra",
+      "tags": [
+        "Layer1_Layer2",
+        "pos",
+        "mining-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "IDEX": {
+      "name": "IDEX",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "RSR": {
+      "name": "Reserve Rights",
+      "tags": [
+        "defi",
+        "RWA"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "PAXG": {
+      "name": "PAX Gold",
+      "tags": [
+        "tCommodities"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WNXM": {
+      "name": "Wrapped NXM",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EGLD": {
+      "name": "MultiversX",
+      "tags": [
+        "Layer1_Layer2",
+        "Launchpad",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BZRX": {
+      "name": "bZx Protocol",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "WBTC": {
+      "name": "Wrapped Bitcoin",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KSM": {
+      "name": "Kusama",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SUSHI": {
+      "name": "Sushi",
+      "tags": [
+        "defi",
+        "innovation-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "YFII": {
+      "name": "DFI.Money",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DIA": {
+      "name": "DIA",
+      "tags": [
+        "Infrastructure",
+        "pos",
+        "mining-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BEL": {
+      "name": "Bella Protocol",
+      "tags": [
+        "defi",
+        "innovation-zone",
+        "Launchpool",
+        "Seed",
+        "BSC"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "UMA": {
+      "name": "UMA",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NBS": {
+      "name": "New BitShares",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WING": {
+      "name": "Wing Token",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "SWRV": {
+      "name": "Swerve",
+      "tags": [
+        "innovation-zone",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CREAM": {
+      "name": "Cream Finance",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "UNI": {
+      "name": "Uniswap",
+      "tags": [
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "UTK": {
+      "name": "xMoney",
+      "tags": [
+        "Payments"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "NEAR": {
+      "name": "NEAR Protocol",
+      "tags": [
+        "Layer1_Layer2",
+        "pos"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "VIDT": {
+      "name": "VIDT DAO",
+      "tags": [
+        "Monitoring",
+        "innovation-zone",
+        "Seed",
+        "Layer1_Layer2"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "WBNB": {
+      "name": "Wrapped BNB",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "GLM": {
+      "name": "Golem",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CBK": {
+      "name": "Cobak",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DON": {
+      "name": "Donnie Finance",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "DREPOLD": {
+      "name": "Old DREP",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "KNCL": {
+      "name": "Kyber Network Crystal Legacy",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "MASK": {
+      "name": "Mask Network",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "AGIX": {
+      "name": "SingularityNET Token",
+      "tags": [
+        "AI"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "QNT": {
+      "name": "Quant",
+      "tags": [
+        "Infrastructure"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "CLV": {
+      "name": "Clover Finance",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "ALPACA": {
+      "name": "Alpaca Finance",
+      "tags": [
+        ""
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "FARM": {
+      "name": "Harvest Finance",
+      "tags": [
+        "Monitoring",
+        "defi"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "EDO": {
+      "name": "Eidoo",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "WINGS": {
+      "name": "WINGS",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "NAV": {
+      "name": "Navcoin",
+      "tags": [
+        "pos",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "TRIG": {
+      "name": "Triggers",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "APPC": {
+      "name": "AppCoins",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "PIVX": {
+      "name": "PIVX",
+      "tags": [
+        "Monitoring",
+        "mining-zone"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "BNC": {
+      "name": "Bifrost",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    },
+    "123": {
+      "name": "123",
+      "tags": [
+        "Launchpool"
+      ],
+      "fiat": false,
+      "underlying": null
+    },
+    "456": {
+      "name": "456",
+      "tags": [],
+      "fiat": false,
+      "underlying": null
+    }
+  }
+}

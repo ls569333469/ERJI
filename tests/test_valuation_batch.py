@@ -3,19 +3,22 @@ from types import SimpleNamespace as NS
 import pytest
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session
-from engine.models import IdentityLink, DataCapability
+from engine.models import Asset,Instrument,DataCapability
 from engine.pd2.providers import valuation_inputs, valuation_for
 
 
 @pytest.fixture
 def db():
     engine=create_engine('sqlite://')
-    IdentityLink.__table__.create(engine)
+    Asset.__table__.create(engine)
+    Instrument.__table__.create(engine)
     DataCapability.__table__.create(engine)
     with Session(engine) as s:
-        s.add(IdentityLink(asset_id='BTC',provider='cmc',external_id='1',status='verified',evidence={},known_at=1))
-        for ident,payload in [('1',{'circulating_supply':'100','observed_at':1000}),('825',{'price':'1'})]:
-            s.add(DataCapability(key='cmc:valuation:'+ident,provider='cmc',capability='valuation',subject=ident,
+        s.add(Asset(id='BTC',symbol='BTC',known_at=1));s.flush()
+        for quote in ('USDT','USDC'):
+            s.add(Instrument(id='binance:perp:BTC'+quote,asset_id='BTC',venue='binance',native_symbol='BTC'+quote,market_type='linear_perpetual',quote_asset=quote,spec={'circulating_supply':'100','quality_received_at':1000}))
+            ident=quote+'USD';payload={'symbol':ident,'index':'1'}
+            s.add(DataCapability(key='binance:fx:'+ident,provider='binance',capability='fx',subject=ident,
                 status='fresh',received_at=1000,observed_at=1000,expires_at=99999999,payload=payload))
         s.commit()
         yield engine,s
@@ -23,7 +26,7 @@ def db():
 
 
 def market(asset='BTC',quote='USDT',quality='fresh'):
-    return NS(asset_id=asset,quote_asset=quote,price=D('10'),oi_notional_quote=D('50'),
+    return NS(instrument_id='binance:perp:'+asset+quote,asset_id=asset,quote_asset=quote,price=D('10'),oi_notional_quote=D('50'),
         quality=NS(status=quality),oi_quality=NS(status='fresh'))
 
 
@@ -36,7 +39,7 @@ def test_batch_has_constant_queries_including_unknown_assets(db):
     output=[valuation_for(m,s,1000,inputs) for m in rows]
     assert len(queries)==2
     assert output[0]['cap']==D('1000') and output[0]['ratio']==D('.05')
-    assert all(v['status']=='unmapped' and v['ratio'] is None for v in output[30:])
+    assert all(v['status']=='binance_supply_not_provided' and v['ratio'] is None for v in output[30:])
 
 
 @pytest.mark.parametrize('asset,quote,quality,now',[

@@ -44,8 +44,38 @@ def history_changes(asset,current,now):
     with Session() as s:
         for label,duration in [('1H',3600000),('4H',14400000),('1D',86400000)]:
             row=s.scalar(select(RawEvent).where(RawEvent.source=='erji',RawEvent.endpoint=='cross_oi:'+asset,RawEvent.received_at<=now-duration,RawEvent.received_at>=now-duration-180000).order_by(RawEvent.received_at.desc()).limit(1))
-            result.append({'period':label,'start_at':row.received_at if row else None,'end_at':now,**compare_snapshots(row.payload if row else None,current)})
+            change={'period':label,'start_at':row.received_at if row else None,'end_at':now,**compare_snapshots(row.payload if row else None,current)}
+            if change.get('quantity_change_pct') is None:
+                fallback=native_quantity_change(s,current,duration,now)
+                if fallback:
+                    # Never convert historical quote amounts using today's FX.
+                    # Only the same-contract quantity comparison is repaired.
+                    change.update(fallback)
+            result.append(change)
     return result
+
+
+def native_quantity_change(session,current,duration,now):
+    from engine.models import OiPoint
+    from sqlalchemy import select
+    markets=current.get('markets',[])
+    if not markets or any(r.get('source')!='native' or r.get('quantity') is None for r in markets):return None
+    endpoints=[];before=D(0);after=D(0)
+    for r in markets:
+        end=r.get('observed_at') or 0;target=end-duration
+        if not 0<=now-end<=360000:return None
+        point=session.scalar(select(OiPoint).where(OiPoint.instrument_id==r['instrument_id'],
+            OiPoint.event_time<=target,OiPoint.event_time>=target-300000,OiPoint.received_at<=now,
+            OiPoint.base_quantity.is_not(None)).order_by(OiPoint.event_time.desc()).limit(1))
+        if point is None or point.base_quantity<=0:return None
+        before+=D(point.base_quantity);after+=D(str(r['quantity']))
+        endpoints.append({'market_key':r['market_key'],'start_at':point.event_time,'end_at':end,
+            'start_quantity':str(point.base_quantity),'end_quantity':str(r['quantity']),
+            'raw_ref':point.raw_ref,'known_at':point.received_at})
+    if max(p['end_at'] for p in endpoints)-min(p['end_at'] for p in endpoints)>300000:return None
+    return {'quantity_change_pct':str((after/before-1)*100),'quantity_status':'available',
+        'quantity_method':'same_native_market_set_endpoints','quantity_endpoints':endpoints,
+        'start_at':min(p['start_at'] for p in endpoints),'end_at':max(p['end_at'] for p in endpoints)}
 
 def record_snapshot(session,asset,current,now):
     from engine.models import RawEvent

@@ -132,6 +132,7 @@ class Plan(Base):
 
 class SignalSnapshot(Base):
     __tablename__ = "signal_snapshots"
+    __table_args__ = (Index('ix_signal_snapshots_plan_latest','plan_id', 'as_of'),)
     id: Mapped[str] = mapped_column(String(100), primary_key=True)
     plan_id: Mapped[str] = mapped_column(ForeignKey("plans.id"))
     as_of: Mapped[int] = mapped_column(BigInteger)
@@ -168,6 +169,47 @@ class Task(Base):
     payload: Mapped[dict] = mapped_column(JSON)
 
 
+class AnalysisDemand(Base):
+    """Why a native market needs T2; observation retention is independent."""
+    __tablename__ = 'analysis_demands'
+    __table_args__ = (Index('ix_analysis_demands_live', 'state', 'expires_at', 'instrument_id'),)
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    instrument_id: Mapped[str] = mapped_column(ForeignKey('instruments.id'), index=True)
+    origin_type: Mapped[str] = mapped_column(String(40))
+    source_id: Mapped[str] = mapped_column(String(180))
+    state: Mapped[str] = mapped_column(String(30))
+    created_at: Mapped[int] = mapped_column(BigInteger)
+    updated_at: Mapped[int] = mapped_column(BigInteger)
+    expires_at: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    payload: Mapped[dict] = mapped_column(JSON)
+
+
+class AnalysisResult(Base):
+    """Immutable, compact evidence for one native market/input calculation."""
+    __tablename__ = 'analysis_results'
+    __table_args__ = (Index('ix_analysis_results_recent', 'computed_at', 'work_kind'),)
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    instrument_id: Mapped[str] = mapped_column(ForeignKey('instruments.id'), index=True)
+    work_kind: Mapped[str] = mapped_column(String(30))
+    input_version: Mapped[str] = mapped_column(String(64))
+    computed_at: Mapped[int] = mapped_column(BigInteger)
+    payload: Mapped[dict] = mapped_column(JSON)
+
+
+class MarketAnalysisState(Base):
+    __tablename__ = 'market_analysis_states'
+    instrument_id: Mapped[str] = mapped_column(ForeignKey('instruments.id'), primary_key=True)
+    work_kind: Mapped[str] = mapped_column(String(30), primary_key=True)
+    input_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    result_id: Mapped[str | None] = mapped_column(ForeignKey('analysis_results.id'), nullable=True)
+    analysis_status: Mapped[str] = mapped_column(String(30))
+    strategy_result: Mapped[str] = mapped_column(String(40))
+    last_attempt_at: Mapped[int] = mapped_column(BigInteger)
+    last_success_at: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    next_check_at: Mapped[int] = mapped_column(BigInteger)
+    payload: Mapped[dict] = mapped_column(JSON)
+
+
 # PD2 datasets carry explicit provenance/availability; null is distinct from zero.
 class DataCapability(Base):
     __tablename__="data_capabilities"
@@ -182,6 +224,11 @@ class DataCapability(Base):
     next_refresh_at: Mapped[int | None]=mapped_column(BigInteger,nullable=True)
     reason: Mapped[str | None]=mapped_column(String(400),nullable=True)
     raw_ref: Mapped[str | None]=mapped_column(String(64),nullable=True)
+    # Successful value provenance is kept separate from failed attempts.
+    last_success_at: Mapped[int | None]=mapped_column(BigInteger,nullable=True)
+    last_success_raw_ref: Mapped[str | None]=mapped_column(String(64),nullable=True)
+    last_attempt_at: Mapped[int | None]=mapped_column(BigInteger,nullable=True)
+    last_attempt_raw_ref: Mapped[str | None]=mapped_column(String(64),nullable=True)
     payload: Mapped[dict]=mapped_column(JSON,default=dict)
 
 class ProviderBudget(Base):
@@ -232,6 +279,7 @@ class SnapshotDataset(Base):
 class CurrentSignal(Base):
     """Worker-owned list projection; heavy immutable evidence stays in snapshots."""
     __tablename__ = 'current_signals'
+    __table_args__ = (Index('ix_current_signals_action_computed','action','computed_at'),)
     id: Mapped[str] = mapped_column(String(180), primary_key=True)
     asset_id: Mapped[str] = mapped_column(String(100), index=True)
     instrument_id: Mapped[str] = mapped_column(ForeignKey('instruments.id'))
@@ -239,4 +287,18 @@ class CurrentSignal(Base):
     first_seen_at: Mapped[int] = mapped_column(BigInteger, index=True)
     computed_at: Mapped[int] = mapped_column(BigInteger)
     valid_until: Mapped[int] = mapped_column(BigInteger, index=True)
+    payload: Mapped[dict] = mapped_column(JSON)
+
+
+class Observation(Base):
+    __tablename__ = 'observations'
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    instrument_id: Mapped[str] = mapped_column(String(180), index=True)
+    asset_id: Mapped[str] = mapped_column(String(100), index=True)
+    direction: Mapped[str] = mapped_column(String(10))
+    first_at: Mapped[int] = mapped_column(BigInteger)
+    last_at: Mapped[int] = mapped_column(BigInteger, index=True)
+    visible_at: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    status: Mapped[str] = mapped_column(String(30), index=True)
+    version: Mapped[int] = mapped_column(BigInteger)
     payload: Mapped[dict] = mapped_column(JSON)

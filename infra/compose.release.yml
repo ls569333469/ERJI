@@ -1,4 +1,6 @@
 services:
+  worker-budget:
+    image: erji-api:b4b799c6c011
   api:
     image: erji-api:b4b799c6c011
   worker-live:

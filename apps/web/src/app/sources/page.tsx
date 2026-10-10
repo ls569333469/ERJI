@@ -1,3 +1,3 @@
-import {Sources} from "@/components/system-pages";
-export default function Page(){return <Sources/>}
+import {redirect} from 'next/navigation';
+export default function Page(){redirect('/operations#sources')}
 

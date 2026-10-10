@@ -1,3 +1,3 @@
-import {MarketDashboard} from "@/components/market-dashboard";
-export default function Page(){return <MarketDashboard/>}
+import {OpportunityBoard} from "@/components/opportunity-board";
+export default function Page(){return <OpportunityBoard/>}
 

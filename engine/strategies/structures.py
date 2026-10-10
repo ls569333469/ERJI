@@ -57,19 +57,18 @@ def find_box(bars,lookback):
             "trigger_price":str(u+a*D("0.25")),"rule_version":VERSION}
 
 def volume_multiple(bar,prior):
-    values=[D(b["quote_volume"]) for b in prior[-20:] if b.get("quote_volume") is not None]
-    if len(values)!=20 or bar.get("quote_volume") is None:return None
-    baseline=median(values)
-    return D(bar["quote_volume"])/baseline if baseline>0 else None
+    from engine.features.numeric import relative_volume
+    return relative_volume(bar.get('quote_volume'),[b.get('quote_volume') for b in prior],20,'median')
 
-def target(bars,entry):
+def target(bars,entry,timeframe=None):
     a=atr(bars)
     if a is None:return None
     above=[p for p in pivots(bars,"high") if p["price"]-a*D("0.25")>entry]
     if not above:return None
     anchor=min(above,key=lambda p:p["price"])
     return {"low":str(anchor["price"]-a*D("0.25")),"high":str(anchor["price"]+a*D("0.25")),
-            "kind":"confirmed_pivot","known_at":anchor["known_at"]}
+            "kind":"confirmed_pivot","method":"confirmed_pivot_atr_zone","timeframe":timeframe,
+            "known_at":anchor["known_at"]}
 
 def candidate(instrument,bars4,bars1,now):
     four=closed(bars4,now)
@@ -80,6 +79,10 @@ def candidate(instrument,bars4,bars1,now):
         for size in (20,60):
             box=find_box(history,size)
             if box:
+                from engine.pd2.box_quality import audit
+                qualification=audit(box,history)
+                if qualification['status']!='verified':continue
+                box={**box,'qualification':qualification}
                 key=sha256((instrument+str(box)).encode()).hexdigest()[:24]
                 state=evaluate(box,bars4,bars1,now)
                 if state["phase"] not in ("invalidated","ended"):
@@ -90,12 +93,14 @@ def evaluate(box,bars4,bars1,now,recorded=None):
     four=closed(bars4,now);one=closed(bars1,now)
     u,l,a=(D(box[k]) for k in ("upper","lower","atr"));threshold=D(box["trigger_price"])
     post=[b for b in four if b["close_time"]>box["end_time"]]
-    confirmed=None;early=None;volume=None
+    confirmed=None;early=None;volume=None;unconfirmed_breakouts=[]
     for i,b in enumerate(four):
         if b["close_time"]<=box["end_time"]:continue
         multiple=volume_multiple(b,four[:i])
-        if D(b["close"])>threshold and multiple is not None and multiple>=D("1.5"):
-            confirmed=b;volume=multiple;break
+        if D(b["close"])>threshold:
+            unconfirmed_breakouts.append({"close_time":b["close_time"],"close":str(b["close"]),"volume_multiple":str(multiple) if multiple is not None else None})
+            if multiple is not None and multiple>=D("1.5"):
+                confirmed=b;volume=multiple;break
     for i,b in enumerate(one):
         if b["close_time"]<=box["end_time"]:continue
         if confirmed and b["close_time"]>=confirmed["close_time"]:break
@@ -111,8 +116,17 @@ def evaluate(box,bars4,bars1,now,recorded=None):
         elif early is None or saved["close_time"]<early["close_time"]:
             early=saved
     trigger=confirmed or early
-    state={"phase":"structure_pending","reason":"有效 4H 箱体，等待收盘越过上沿及成交确认", "trigger":None,
-           "confirmation":None,"volume_multiple":None,"protection":None,"entry_zone":None,"expires_at":None}
+    pending_volume=volume_multiple(four[-1],four[:-1]) if four else None
+    pending_state=("close_above_volume_unconfirmed" if unconfirmed_breakouts else
+                   "intrabar_above_close_rejected" if any(D(b["high"])>threshold and D(b["close"])<=threshold for b in post) else
+                   "near_trigger" if post and D(post[-1]["close"])>=u else "waiting_breakout")
+    state={"phase":"structure_pending","reason":"等待 4H 收盘突破与成交量确认", "trigger":None,
+           "confirmation":None,"volume_multiple":None,"pending_volume_multiple":str(pending_volume) if pending_volume is not None else None,
+           "pending_state":pending_state,"unconfirmed_breakouts":unconfirmed_breakouts[-3:],
+           "trigger_requirements":{"timeframe":"240","close_above":str(threshold),"relative_volume_min":"1.5","volume_baseline":"prior_20_closed_4h_quote_volume_median"},
+           "invalidation":{"price":str(l),"timeframe":"240","condition":"close_below","method":"frozen_box_lower"},
+           "protection_reference":{"price":str(u-a*D("0.25")),"status":"estimated","method":"box_upper_minus_0.25_atr","finalized_when":"trigger_confirmed"},
+           "protection":None,"entry_zone":None,"expires_at":None}
     if trigger:
         is_confirmed=confirmed is not None
         trigger_resolution="240" if is_confirmed else "60"

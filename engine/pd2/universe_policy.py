@@ -10,6 +10,8 @@ PRIMARY = {'binance', 'binance_spot', 'binance_alpha', 'wallet_rising'}
 
 def primary_eligible(inst):
     spec = inst.spec or {}
+    if inst.venue=='wallet_rising' and inst.market_type=='dex_pool':
+        return False  # Old GeckoTerminal pool evidence is historical only.
     if inst.venue not in PRIMARY or spec.get('crypto_eligible') is False:
         return False
     if spec.get('status', 'TRADING') not in ('TRADING', 'active'):
@@ -31,7 +33,7 @@ def resolve(instruments, links):
     primary = {i.asset_id for i in instruments if primary_eligible(i)}
     groups = defaultdict(set)
     for link in links:
-        if link.provider == 'cmc' and link.status == 'verified':
+        if link.provider == 'binance' and link.status == 'verified':
             groups[link.external_id].add(link.asset_id)
     aliases = {i.asset_id: i.asset_id for i in instruments}
     for assets in groups.values():
@@ -53,6 +55,8 @@ def allowed_native_assets(session):
 
 
 def auxiliary_symbols(venue):
+    from engine.pd2.source_policy import DISABLED
+    if venue in DISABLED:return set()
     from engine.db import Session
     with Session() as session:
         aliases, admitted = membership(session)

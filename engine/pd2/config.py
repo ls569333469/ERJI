@@ -22,14 +22,15 @@ class ExecutionConfig(Strict):
     probe_notional_usd:float=Field(1000,ge=10,le=100000)
     early_min_net_r:float=Field(1.5,ge=.5,le=10)
     confirmed_min_net_r:float=Field(1.8,ge=.5,le=10)
-    taker_fee_rates:dict[str,float]=Field(default_factory=lambda:{"binance":.0005,"aster":.0005,"hyperliquid":.00045,"binance_spot":.001,"binance_alpha":.001,"okx":.0005})
+    taker_fee_rates:dict[str,float]=Field(default_factory=lambda:{"binance":.0005,"binance_spot":.001,"binance_alpha":.001})
     funding_scenario_rate:float=Field(.001,ge=0,le=.1)
     fee_source:str="研究情景：常见基础taker档位；不代表用户账户实际费率，可在设置中调整"
-    quote_max_age_seconds:int=Field(15,ge=1,le=15)
-    depth_max_age_seconds:int=Field(10,ge=1,le=10)
+    quote_max_age_seconds:int=Field(90,ge=1,le=90)
+    depth_max_age_seconds:int=Field(90,ge=1,le=90)
     max_spread_bps:float=Field(30,gt=0,le=100)
     @model_validator(mode="after")
     def fees(self):
+        self.taker_fee_rates={k:v for k,v in self.taker_fee_rates.items() if k in ('binance','binance_spot','binance_alpha')}
         if any(not 0<=v<=.05 for v in self.taker_fee_rates.values()):raise ValueError("手续费须为0至0.05的小数")
         return self
 class SourceBudget(Strict):
@@ -39,13 +40,15 @@ class SourceBudget(Strict):
     reserve_pct:int=Field(10,ge=10,le=50)
     interval_seconds:int=Field(1800,ge=60,le=86400)
 class SourcesConfig(Strict):
-    cmc:SourceBudget=Field(default_factory=SourceBudget)
-    bykaranteli:SourceBudget=Field(default_factory=lambda:SourceBudget(month_budget=15000))
+    policy:Literal['binance_only']='binance_only'
+    cmc:SourceBudget=Field(default_factory=lambda:SourceBudget(enabled=False))
+    bykaranteli:SourceBudget=Field(default_factory=lambda:SourceBudget(enabled=False,month_budget=15000))
     wallet_enabled:bool=True
     min_market_cap_usd:int=Field(1000000,ge=0)
     @model_validator(mode="after")
-    def free_limits(self):
-        if self.bykaranteli.month_budget>15000:raise ValueError("免费方案ByKaranteli月预算不得超过15000")
+    def disable_retired_sources(self):
+        self.cmc.enabled=False
+        self.bykaranteli.enabled=False
         return self
 class NotificationConfig(Strict):
     enabled:bool=False

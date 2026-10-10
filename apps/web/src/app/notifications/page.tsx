@@ -1,3 +1,3 @@
-import {EmptySystem} from "@/components/system-pages";
-export default function Page(){return <EmptySystem kind="notifications"/>}
+import {redirect} from 'next/navigation';
+export default function Page(){redirect('/settings#notifications')}
 

@@ -46,13 +46,44 @@ class PublicAdapter:
         self.blocked_until=0.0
     async def close(self): await self.client.aclose()
     async def request(self,batch,method,url,**kwargs):
+        from engine.pd2.source_policy import assert_market_request
+        assert_market_request(url, batch.venue)
+        from engine.db import owner_context
+        owner=owner_context.get()
+        if owner is not None and owner.lost:raise RuntimeError('worker_role_lost')
+        from engine.pd2.p36_budget import specification, sent, durable_call, feedback as modern_feedback
+        from engine.pd2.request_budget import request_slot, feedback
+        if specification(url,kwargs):
+            async with request_slot(url,kwargs) as ticket:
+                await durable_call(sent,ticket)
+                network_started=time.monotonic()
+                async with asyncio.timeout(45):
+                    response=await self.client.request(method,url,**kwargs)
+                received=now_ms()
+                batch.metadata['last_network_ms']=round((time.monotonic()-network_started)*1000)
+                await durable_call(modern_feedback,url,response.status_code,dict(response.headers),kwargs,ticket,received,round((time.monotonic()-network_started)*1000))
+                response.raise_for_status()
+                data=response.json()
+                if isinstance(data,dict) and isinstance(data.get('code'),int) and data['code']<0:
+                    raise ValueError('provider_business_error')
+                raw_text=json.dumps(data,separators=(',',':'),sort_keys=True)
+                raw_id=hashlib.sha256((self.venue+url+str(received)+raw_text).encode()).hexdigest()
+                batch.raw.append({'id':raw_id,'source':self.venue,'endpoint':url.split('?')[0],'received_at':received,'payload':data})
+                return data,raw_id,received
+        return await self._legacy_request(batch,method,url,**kwargs)
+
+    async def _legacy_request(self,batch,method,url,**kwargs):
+        from engine.pd2.source_policy import assert_market_request
+        assert_market_request(url,batch.venue)
         from engine.pd2.request_budget import request_slot, feedback
         async with request_slot(url, kwargs), shared_http_slots(), self.slots:
             async with self.lock:
                 await asyncio.sleep(max(0,self.blocked_until-time.monotonic(),0.25-(time.monotonic()-self.last_request)))
                 self.last_request=time.monotonic()
             try:
+                network_started=time.monotonic()
                 response=await self.client.request(method,url,**kwargs)
+                batch.metadata['last_network_ms']=round((time.monotonic()-network_started)*1000)
                 await asyncio.to_thread(feedback,url,response.status_code,response.headers)
                 if response.status_code in (418,429):
                     try: delay=float(response.headers.get("Retry-After","60"))

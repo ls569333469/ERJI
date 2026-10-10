@@ -1,4 +1,4 @@
-import asyncio, json
+import asyncio, json,logging,time
 from contextlib import asynccontextmanager
 from typing import Literal
 from fastapi import FastAPI, HTTPException, Request, Query
@@ -15,7 +15,15 @@ from engine.adapters.base import now_ms
 
 class EventHub:
     def __init__(self):
-        self.queues=set();self.cursor=0
+        self.queues=set();self.cursor=0;self.last_error=None;self.error_at=None;self.last_success_at=None;self.recovered_at=None;self.logged_at=0;self.failing=False
+    def status(self):
+        return {'subscribers':len(self.queues),'cursor':self.cursor,'last_error':self.last_error,'error_at':self.error_at,'last_success_at':self.last_success_at,'recovered_at':self.recovered_at,'failing':self.failing}
+    async def start(self):
+        # New connections read their initial list over HTTP. Historic replay is
+        # bounded in /stream; the shared pump must not replay the entire database.
+        def latest():
+            with Session() as s:return s.scalar(select(func.max(StreamEvent.id))) or 0
+        self.cursor=await asyncio.to_thread(latest);self.last_success_at=now_ms()
     async def pump(self):
         while True:
             try:
@@ -27,17 +35,25 @@ class EventHub:
                             while not queue.empty(): queue.get_nowait()
                             queue.put_nowait({"id":event["id"],"kind":"reset","payload":{}})
                         else: queue.put_nowait(event)
-            except Exception:
-                pass  # /health reports dependency failure; no credentials in logs
+                self.last_success_at=now_ms()
+                if self.failing:self.recovered_at=self.last_success_at
+                self.failing=False
+            except Exception as error:
+                self.failing=True;self.last_error=type(error).__name__;self.error_at=now_ms()
+                if time.monotonic()-self.logged_at>=60:
+                    logging.getLogger('erji.events').warning('event pump failed: %s',self.last_error);self.logged_at=time.monotonic()
             await asyncio.sleep(1)
 
 hub=EventHub()
 @asynccontextmanager
 async def lifespan(app):
+    from engine.p38.startup import manifest
+    logging.getLogger('erji.startup').info('startup %s',json.dumps(manifest('api'),ensure_ascii=False))
     if settings().require_auth:
         from engine.pd2.auth import secret
         secret()
     await asyncio.to_thread(bootstrap)
+    await hub.start()
     task=asyncio.create_task(hub.pump())
     yield
     task.cancel()
@@ -68,10 +84,75 @@ async def local_writes(request,call_next):
 
 @app.get("/v1/health")
 def health():
+    from engine.p40.diagnostics import current_run,run_scope
+    run=current_run()
     with Session() as s:
         s.execute(text("SELECT 1"))
-        workers=[{"role":w.role,"updated_at":w.updated_at,"state":w.state,"fresh":now_ms()-w.updated_at<300_000} for w in s.scalars(select(WorkerHeartbeat))]
-    return {"status":"ok","database":"postgresql","mode":settings().mode,"schema_version":SCHEMA_VERSION,"workers":workers,"strategy_status":"pd2_decisions","execution_status":"native_book_cost_gated","telegram_status":"not_enabled"}
+        workers=[{"role":w.role,"updated_at":w.updated_at,"state":w.state,"fresh":0<=now_ms()-w.updated_at<300_000,'run_id':w.details.get('run_id'),'pid':w.details.get('pid')} for w in s.scalars(select(WorkerHeartbeat))]
+    from engine.pd2.source_policy import REALTIME,VERSION,DISABLED
+    previous_run=sum(run_scope(w,run)=='previous_run' for w in workers)
+    workers=[{**w,'run_scope':run_scope(w,run)} for w in workers if run_scope(w,run)!='previous_run' and not any(w['role']==p or w['role'].split(':')[0].endswith('_'+p) or ':'+p+':' in w['role'] for p in DISABLED)]
+    return {"status":"ok","database":"postgresql","mode":settings().mode,"schema_version":SCHEMA_VERSION,"workers":workers,'run_id':run,'previous_run_workers':previous_run,"strategy_status":"pd2_decisions","execution_status":"native_book_strategy_gated_cost_reference","source_policy":VERSION,"telegram_status":"not_enabled"}
+
+@app.get("/v1/operations")
+def operations():
+    """Compact database-only proof that collection and analysis are progressing."""
+    now=now_ms()
+    from engine.p40.diagnostics import current_run,run_scope,scan_view
+    run=current_run()
+    expected={"analysis_owner":180_000,"anomaly_discovery":180_000,"live_binance":180_000,"signals":120_000,"signal_projection":120_000,"signal_coverage":600_000,
+        "stream_binance":120_000,"candles_binance":600_000,"supplements":600_000}
+    detail_keys={"updated","gaps","markets","bars_updated","rows","snapshots","scanned","matched",
+        "eligible_markets","unique_assets","history_ready_markets","history_pending_or_short","last_batch_ms","by_work_kind","producer","lanes","timing_scope",
+        "last_full_scan_at","reconcile_cycle_complete","trade_markets","candidate_subscriptions","run_id","pid","execution_owner","tasks","priority_overflow","write_queue","last_receive_at","close_code","close_reason","database_timings"}
+    detail_keys.update({'window_coverage','oi_window_coverage','snapshot_at','event_delivery','scan_started_at','scan_finished_at','scan_in_progress',
+        'scan_markets','ordinary_interval_ms','hot_interval_ms','receive_timings','loop_lag','quote_writer','lane_slots','demand_metrics','reason','stage','work_kind','restarts','last_error','last_error_at','next_retry_at','scope','role_name','lifecycle','price_receipts','oi_receipts','oi_persisted_probe','retry_seconds'})
+    with Session() as s:
+        beats={w.role:w for w in s.scalars(select(WorkerHeartbeat))}
+        previous_beats={k:w for k,w in beats.items() if run_scope(w.details,run)=='previous_run'}
+        beats={k:w for k,w in beats.items() if k not in previous_beats}
+        owner=beats.get("analysis_owner")
+        p38_active=bool(owner and 0<=now-owner.updated_at<=180000 and owner.details.get("execution_owner") in ('p38_analysis','p39_typed'))
+        workers=[]
+        from engine.pd2.source_policy import DISABLED
+        for role,w in sorted(beats.items()):
+            if any(role==source or role.split(':')[0].endswith('_'+source) or ':'+source+':' in role for source in DISABLED):continue
+            if p38_active and (role=="p37_analysis" or role.startswith("observation_analysis:") or role.startswith("analysis_owner:")):continue
+            if role in ("live","jobs","notify") and now-w.updated_at>86_400_000:continue
+            ttl=expected.get(role,300_000);fresh=0<=now-w.updated_at<=ttl
+            workers.append({"role":role,"updated_at":w.updated_at,"state":w.state,"fresh":fresh,
+                'run_scope':run_scope(w.details,run),
+                "details":{k:v for k,v in (w.details or {}).items() if k in detail_keys}})
+        required=('analysis_owner','anomaly_discovery','live_binance') if p38_active else ("signals","signal_projection","signal_coverage","stream_binance","candles_binance")
+        overall="ok" if all(role in beats and 0<=now-beats[role].updated_at<=expected.get(role,180000) and beats[role].state not in ("error","reconnecting","partial","warming","delayed") for role in required) else "warning"
+        coverage=(beats.get("signal_coverage").details or {}) if beats.get("signal_coverage") else {}
+        scan=scan_view((beats.get("signals").details or {}) if beats.get("signals") else {})
+        projection=beats.get("signal_projection")
+        from engine.strategies.p33_reports import summary as research_summary
+        research=research_summary(s)
+        from engine.pd2.p35_capacity import capacity
+        collection_capacity=capacity(s,now)
+        data_chain=s.scalar(select(UserPreference.payload['summary']).where(UserPreference.key=='p34_data_health'))
+        source_rows=[{"source":x.source,"state":x.state,"last_success_at":x.last_success_at,"message":x.message}
+            for x in s.scalars(select(SourceHealth).where(SourceHealth.source.notin_(DISABLED)).order_by(SourceHealth.source))]
+        counts=dict(s.execute(select(CurrentSignal.action,func.count()).group_by(CurrentSignal.action)).all())
+        event_kinds=("market_update","candle_update","signal_update","source_update","settings_published","reset")
+        raw=list(s.scalars(select(StreamEvent).where(StreamEvent.kind.in_(event_kinds)).order_by(StreamEvent.id.desc()).limit(60)))
+        events=[]
+        for event in raw:
+            payload=event.payload or {};count=payload.get("count")
+            if count is None and isinstance(payload.get("instruments"),list):count=len(payload["instruments"])
+            events.append({"id":event.id,"kind":event.kind,"created_at":event.created_at,
+                "source":payload.get("source"),"asset_id":payload.get("asset_id"),"count":count,
+                "version":payload.get("version")})
+    discovery=beats.get('anomaly_discovery')
+    details=discovery.details if discovery else {}
+    return {"as_of":now,"status":overall,"coverage":coverage,"scan":scan,
+        'run_id':run,'previous_run_workers':[{'role':w.role,'run_id':w.details.get('run_id'),'state':w.state,'updated_at':w.updated_at} for w in previous_beats.values()],
+        'discovery':{k:details.get(k) for k in ('snapshot_at','window_coverage','oi_window_coverage','event_delivery','scan_finished_at','scan_markets')},
+        'ttls_ms':{'entry_quote':90000,'entry_book':90000,'t1_price_continuity':15000},
+        "projection":{"as_of":projection.updated_at if projection else None,"state":projection.state if projection else "missing"},
+        "signal_counts":counts,"workers":workers,"sources":source_rows,"events":events,"research":research,"data_chain":data_chain,"collection_capacity":collection_capacity}
 
 @app.get("/v1/markets",response_model=MarketList)
 def markets(): return list_markets()
@@ -98,7 +179,7 @@ def instruments(asset: str | None=None):
         return {"rows":[{"id":i.id,"asset_id":i.asset_id,"venue":i.venue,"native_symbol":i.native_symbol,"quote_asset":i.quote_asset,"spec":i.spec} for i in s.scalars(q)]}
 
 @app.get("/v1/candles",response_model=CandleList)
-def candles(instrument:str,resolution:Literal["15","30","60","120","240","480","720","1D","1W"]="240",before:int | None=None,limit:int=Query(300,ge=1,le=1500),snapshot_id:str|None=None):
+def candles(instrument:str,resolution:Literal["5","15","30","60","120","240","480","720","1D","1W"]="240",before:int | None=None,limit:int=Query(300,ge=1,le=1500),snapshot_id:str|None=None):
     with Session() as s:
         if not s.get(Instrument,instrument):raise HTTPException(404,"市场尚未采集")
         if snapshot_id:
@@ -109,6 +190,20 @@ def candles(instrument:str,resolution:Literal["15","30","60","120","240","480","
             stored=snap["candles_at_snapshot"].get(resolution,[])
             rows2=[b for b in stored if before is None or b["open_time"]<before][-limit:]
             return CandleList(as_of=snap["as_of"],rows=[CandleDTO(**{**r,"revision":r.get("revision",1),"instrument_id":instrument,"resolution":resolution}) for r in rows2],has_more=False,next_before=rows2[0]["open_time"] if rows2 else None,quality=Quality(status="historical_frozen"))
+        if resolution in ("15","30"):
+            from engine.pd2.analysis import aggregate
+            from engine.pd2.service import candle_dict
+            q5=select(Candle).where(Candle.instrument_id==instrument,Candle.resolution=="5")
+            if before is not None:q5=q5.where(Candle.open_time<before)
+            native_query=select(Candle).where(Candle.instrument_id==instrument,Candle.resolution==resolution)
+            if before is not None:native_query=native_query.where(Candle.open_time<before)
+            native=list(s.scalars(native_query.order_by(Candle.open_time.desc()).limit(limit+1)))
+            source=[candle_dict(c) for c in reversed(list(s.scalars(q5.order_by(Candle.open_time.desc()).limit((int(resolution)//5)*(limit+2)))))]
+            combined={r.open_time:{**candle_dict(r),'instrument_id':instrument,'resolution':resolution} for r in native}
+            for r in aggregate(source,resolution,now_ms()):combined[r['open_time']]={**r,'instrument_id':instrument,'resolution':resolution}
+            rows2=[combined[k] for k in sorted(combined)][-(limit+1):]
+            more=len(rows2)>limit;rows2=rows2[-limit:]
+            return CandleList(as_of=now_ms(),rows=[CandleDTO(**r) for r in rows2],has_more=more,next_before=rows2[0]['open_time'] if rows2 else None,quality=Quality(status='fresh' if rows2 else 'missing'))
         if resolution in ("120","480","720"):
             from engine.pd2.analysis import aggregate
             q2=select(Candle).where(Candle.instrument_id==instrument,Candle.resolution=="60")
@@ -125,7 +220,7 @@ def candles(instrument:str,resolution:Literal["15","30","60","120","240","480","
         return CandleList(as_of=now_ms(),rows=[CandleDTO.model_validate(r) for r in rows],has_more=more,next_before=rows[0].open_time if rows else None,quality=Quality(status="fresh" if rows else "missing",reason=None if rows else "该周期历史尚未采集"))
 
 @app.get("/v1/signals")
-def signals(view:Literal["stages","recommended","trial","all","derivatives","buy","waiting","risk","history"]="stages",page:int=Query(1,ge=1),page_size:int=Query(25,ge=1,le=100),q:str="",sort:Literal["first","oi","space"]="first",list_snapshot:str|None=None):
+def signals(view:Literal["stages","recommended","trial","all","derivatives","buy","waiting","risk","history","opportunities"]="stages",page:int=Query(1,ge=1),page_size:int=Query(25,ge=1,le=300),q:str="",sort:Literal["first","oi","space"]="first",list_snapshot:str|None=None):
     from engine.pd2.signal_projection import read
     return read(view,q,sort,page,page_size,list_snapshot)
 
@@ -135,7 +230,19 @@ def structure_signal(episode_id:str):
         row=s.get(Episode,episode_id)
         if not row:raise HTTPException(404,"结构事件不存在")
         campaign=s.get(Campaign,row.campaign_id)
+        from engine.pd2.chart_contract import candidate_contract
+        from engine.pd2.box_quality import audit
+        from engine.pd2.service import candle_dict
+        box=row.evidence.get('box') or {}
+        quality={'status':'verified','reason':'已识别结构'} if row.evidence.get('price_pattern') else row.evidence.get('candidate_quality')
+        if row.phase=='structure_pending' and box:
+            source=list(s.scalars(select(Candle).where(Candle.instrument_id==campaign.reference_instrument_id,
+                Candle.resolution=='240',Candle.open_time>=box.get('start_time',0),
+                Candle.close_time<=box.get('end_time',0),Candle.is_closed.is_(True)).order_by(Candle.open_time).limit(61)))
+            quality=audit(box,[candle_dict(c) for c in source])
         return {"id":row.id,"phase":row.phase,"phase_label":PHASES[row.phase],"evidence":row.evidence,
+                "candidate_quality":quality,
+                "drawing_contract":candidate_contract(row.id,campaign.reference_instrument_id,row.evidence,row.phase,row.evidence.get('evaluated_at') or now_ms(),quality),
                 "first_seen_at":campaign.first_seen_at,"first_seen_price":str(campaign.first_seen_price)}
 
 @app.get("/v1/signals/{signal_id}/overlays")
@@ -151,9 +258,9 @@ def sources():
         now=now_ms()
         rows={r.source:{"source":r.source,"state":r.state,"checked_at":r.checked_at,"last_success_at":r.last_success_at,"message":r.message,"capabilities":r.capabilities} for r in s.scalars(select(SourceHealth))}
         from engine.pd2.source_health import supplement_health
-        for provider in ('cmc','bykaranteli'):
-            records=list(s.scalars(select(DataCapability).where(DataCapability.provider==provider)))
-            rows[provider]=supplement_health(provider,records,now)
+        from engine.pd2.source_policy import DISABLED,disabled_result
+        for provider in DISABLED:
+            rows[provider]={**disabled_result(provider),'source':provider,'message':'已停用外部实时来源；仅保留历史'}
         return {"as_of":now,"rows":[rows[k] for k in sorted(rows)]}
 
 @app.get("/v1/settings/schema")
@@ -162,7 +269,7 @@ def settings_schema():return RuntimeConfig.model_json_schema()
 @app.get("/v1/settings/active")
 def get_settings():
     with Session() as s:
-        r=active_config(s);return {"version":r.id,"config":r.config,"published_at":r.published_at,"scope":"本机单管理员"}
+        r=active_config(s);return {"version":r.id,"config":RuntimeConfig.model_validate(r.config).model_dump(),"published_at":r.published_at,"scope":"本机单管理员"}
 
 @app.post("/v1/settings/drafts")
 def draft(body:DraftRequest):
@@ -246,6 +353,11 @@ async def stream(request:Request):
     return StreamingResponse(events(),media_type="text/event-stream",headers={"Cache-Control":"no-cache","X-Accel-Buffering":"no"})
 
 # PD2: one backend decision contract feeds chart, list and notifications.
+@app.get("/v1/research/events")
+def research_events(instrument:str|None=None,limit:int=Query(30,ge=1,le=100)):
+    from engine.strategies.p33_reports import events
+    with Session() as s:return events(s,instrument,limit)
+
 @app.get("/v1/analysis")
 def analysis(instrument:str,snapshot_id:str|None=None):
     from engine.pd2.service import analyze_market
@@ -258,15 +370,24 @@ def analysis(instrument:str,snapshot_id:str|None=None):
     if result is None:raise HTTPException(404,"市场不存在")
     return result
 
+@app.get("/v1/analysis/series")
+def analysis_series(instrument:str,resolution:Literal['60','240','1D','1W'],before:int|None=None,
+                    limit:int=Query(500,ge=1,le=1500),snapshot_id:str|None=None):
+    from engine.pd2.indicator_history import page
+    from engine.pd2.service import chart_snapshot
+    snap=chart_snapshot(instrument,snapshot_id=snapshot_id) if snapshot_id else None
+    if snapshot_id and not snap:raise HTTPException(404,'快照不存在或市场不一致')
+    with Session() as session:return page(session,instrument,resolution,before,limit,now_ms(),snap)
+
 @app.get("/v1/derivatives/history")
 def derivatives_history(instrument:str,before:int|None=None,limit:int=Query(500,ge=1,le=2000),snapshot_id:str|None=None):
-    from engine.pd2.service import derivative_history,chart_snapshot
+    from engine.pd2.service import referenced_derivative_history,chart_snapshot
     if snapshot_id:
         snap=chart_snapshot(instrument,snapshot_id=snapshot_id)
         if not snap:raise HTTPException(404,"历史快照不存在或不属于本市场")
         if "derivative_history_at_snapshot" not in snap:raise HTTPException(409,"该旧快照未保存当时合约序列，不能用当前序列替代")
         return snap["derivative_history_at_snapshot"]
-    result=derivative_history(instrument,before,limit)
+    result=referenced_derivative_history(instrument,before,limit)
     if result is None:raise HTTPException(404,"市场不存在")
     return result
 
@@ -278,44 +399,45 @@ def get_chart_snapshot(instrument:str,episode:str|None=None,snapshot_id:str|None
     return {"snapshot":result,"historical":snapshot_id is not None}
 
 @app.get("/v1/signals/{episode_id}/snapshots")
-def snapshots(episode_id:str,limit:int=Query(100,ge=1,le=500)):
+def snapshots(episode_id:str,limit:int=Query(100,ge=1,le=500),snapshot_id:str|None=None):
     with Session() as s:
-        rows=list(s.scalars(select(SignalSnapshot).join(Plan).where(Plan.episode_id==episode_id).order_by(SignalSnapshot.as_of.desc()).limit(limit)))
-        return {"rows":[{"id":r.id,"as_of":r.as_of,"action":r.payload["action"],"plan_id":r.plan_id} for r in rows]}
+        query=select(SignalSnapshot).join(Plan).where(Plan.episode_id==episode_id)
+        if snapshot_id:
+            frozen=s.get(SignalSnapshot,snapshot_id)
+            if not frozen or frozen.payload.get("episode_id")!=episode_id:
+                raise HTTPException(404,"快照不属于当前事件")
+            query=query.where(SignalSnapshot.as_of<=frozen.as_of,SignalSnapshot.plan_id==frozen.plan_id)
+        rows=list(s.scalars(query.order_by(SignalSnapshot.as_of.desc(),SignalSnapshot.id.desc()).limit(limit+1)))
+        return {"truncated":len(rows)>limit,"rows":[{"id":r.id,"as_of":r.as_of,"action":r.payload["action"],"plan_id":r.plan_id,
+            "phase":r.payload.get("phase"),"phase_label":r.payload.get("phase_label"),
+            "price":(r.payload.get("market") or {}).get("price"),
+            "protection":r.payload.get("current_protection"),"tracking":r.payload.get("tracking") or {}}
+            for r in rows[:limit]]}
 
 @app.get("/v1/coverage")
-def coverage(subject:str|None=None):
-    from engine.pd2.storage import budget_status
-    from engine.repository import runtime_config
+def coverage(subject:str|None=None,historical:bool=False):
+    from engine.pd2.source_policy import REALTIME,VERSION
     with Session() as s:
         q=select(DataCapability)
+        if not historical:q=q.where(DataCapability.provider.in_(REALTIME))
         if subject:q=q.where(DataCapability.subject==subject)
         now=now_ms()
         rows=[{"provider":r.provider,"capability":r.capability,"subject":r.subject,
           "status":"stale" if r.status=="fresh" and r.expires_at<now else r.status,
           "observed_at":r.observed_at,"received_at":r.received_at,"next_refresh_at":r.next_refresh_at,"reason":r.reason}
           for r in s.scalars(q.order_by(DataCapability.provider,DataCapability.subject))]
-    return {"rows":rows,"budgets":budget_status(runtime_config())}
+    return {"rows":rows,"budgets":[],"historical":historical,"source_policy":VERSION}
 
 @app.get("/v1/supplement/{provider}/{capability}")
 def supplement(provider:Literal["cmc","bykaranteli"],capability:str,subject:str="global"):
-    from engine.pd2.storage import get
-    result=get(provider,capability,subject)
-    if result.get("payload") is not None and provider=="bykaranteli":result["attribution"]="ByKaranteli"
-    return result
+    from engine.pd2.source_policy import disabled_result
+    return disabled_result(provider)
 
 @app.post("/v1/settings/validate")
 def validate_settings(body:DraftRequest):
     cfg=body.config
-    from engine.pd2.storage import budget_plan
-    with Session() as s:
-        catalog=s.get(DataCapability,"bykaranteli:symbols:global")
-        map_count=len((catalog.payload if catalog else {}).get("symbols",[]))
-    plan=budget_plan(cfg,map_count)
-    estimate=plan["bykaranteli"]["baseline_month_requests"]
-    return {"valid":True,"config":cfg.model_dump(),"month_plan":plan,"budget_estimate":{"bykaranteli_30d":estimate,
-        "assumed_map_count":map_count,"kind":"planning_estimate_not_actual_usage","available":int(cfg.sources.bykaranteli.month_budget*(1-cfg.sources.bykaranteli.reserve_pct/100))-cfg.sources.bykaranteli.external_used},
-        "warnings":["地图目录变化后须重新核算；持仓保护任务优先","显示参数不改变已经冻结的Plan"]}
+    return {"valid":True,"config":cfg.model_dump(),"month_plan":{},
+        "source_policy":"binance_only","warnings":["币安请求使用统一权重调度；历史计划保留冻结配置"]}
 
 @app.post("/v1/settings/rollback/{version}")
 def rollback_settings(version:int,body:PublishRequest):
@@ -433,3 +555,54 @@ def put_portfolio(body:PortfolioRequest):
             if not s.get(Instrument,p.instrument_id):raise HTTPException(422,'市场尚未登记')
         s.merge(UserPreference(key='research_portfolio',payload=body.model_dump(mode='json'),updated_at=now_ms()))
     return {'saved':True,'kind':'research_only','orders_submitted':0}
+
+
+@app.get('/v1/strategy-templates')
+def strategy_templates():
+    from engine.strategies.p35_templates import catalog
+    return {'rows':catalog()}
+
+@app.get('/v1/strategy-templates/{rule}/document')
+def strategy_template_document(rule:str):
+    from fastapi.responses import HTMLResponse
+    from engine.strategies.p35_templates import document
+    content=document(rule)
+    if content is None:raise HTTPException(404,'模板不存在')
+    return HTMLResponse(content)
+
+@app.get('/v1/strategy-cases/{case_id}')
+def strategy_case(case_id:str):
+    import json
+    from engine.strategies.p33_cases import CATALOG
+    case=next((r for r in json.loads(CATALOG.read_text(encoding='utf-8'))['cases'] if r['id']==case_id),None)
+    if not case:raise HTTPException(404,'案例不存在')
+    return case
+
+
+@app.get('/v1/chart/structures')
+def chart_structures(instrument:str,as_of:int|None=None):
+    from engine.pd2.chart_contract import drawing_contract
+    cutoff=min(as_of or now_ms(),now_ms())
+    with Session() as s:
+        records=s.scalars(select(SignalSnapshot).join(Plan).where(Plan.execution_instrument_id==instrument,SignalSnapshot.as_of<=cutoff).distinct(SignalSnapshot.plan_id).order_by(SignalSnapshot.plan_id,SignalSnapshot.as_of.desc()))
+        snapshots=sorted(records,key=lambda r:r.as_of,reverse=True)[:4]
+        return {'rows':[drawing_contract(r.payload) for r in snapshots]}
+
+
+from services.api.observations import router as observations_router
+app.include_router(observations_router)
+
+@app.get('/v1/settings/effective')
+def effective_configuration():
+    from engine.p38.configuration import effective
+    return effective()
+
+@app.get('/v1/diagnostics/pipeline')
+def pipeline_diagnostics():
+    from engine.p38.diagnostics import stages
+    return stages(hub.status())
+
+@app.get('/v1/diagnostics/causal-trace')
+def causal_trace(instrument:str,limit:int=Query(20,ge=1,le=100)):
+    from engine.p39.diagnostics import trace
+    return trace(instrument,limit)

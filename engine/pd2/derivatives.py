@@ -105,7 +105,7 @@ def settled_costs(points, now, observed_through=None, max_age=180000):
         elif not tail_known:reason="tail_unverified"
         elif not prior and (not chosen or not chosen[0].get("interval_seconds") or chosen[0]["time"]-chosen[0]["interval_seconds"]*1000>start):reason="insufficient_history"
         elif any(not r.get("interval_seconds") for r in chosen):reason="interval_unknown"
-        elif any(b["time"]-b["interval_seconds"]*1000!=a["time"] for a,b in zip(chain,chain[1:])):reason="gap"
+        elif any(abs(b["time"]-b["interval_seconds"]*1000-a["time"])>1000 for a,b in zip(chain,chain[1:])):reason="gap"
         total=sum((D(str(r["rate"])) for r in chosen),D(0)) if not reason else None
         result.append({"period":label,"status":reason or "available","settlement_count":len(chosen),
           "start_at":start,"end_at":end,"observed_through":observed_through,
@@ -137,65 +137,118 @@ def cmc_liquidations(document,asset_id,now,max_age=300000):
     return {'status':'fresh' if fresh else 'stale','observed_at':at,'windows':result,'source':'CoinMarketCap','scope':'provider_covered_venues','add_to_native':False}
 
 
-def context_for(market, now):
+def shared_inputs(now):
+    """Load batch-wide identity, FX and global liquidation inputs once."""
+    from engine.db import Session
+    from engine.pd2.universe_policy import membership
+    from engine.pd2.providers import quote_usd_rate
+
+    with Session() as session:
+        aliases, _ = membership(session)
+        fx_rates = {quote: quote_usd_rate(quote, session, now) for quote in ("USD", "USDT", "USDC")}
+    members = {}
+    for asset, canonical in aliases.items():
+        members.setdefault(canonical, []).append(asset)
+    return {
+        "aliases": aliases,
+        "members": members,
+        "fx_rates": fx_rates,
+    }
+
+
+def choose_reference(catalog, selected=None):
+    """Verified catalog identity is independent of FX/OI availability."""
+    if not catalog: return None
+    primary=[c for c in catalog if c['venue']=='binance']
+    pool=primary
+    if not pool:return None
+    return next((c for c in pool if c['instrument_id']==selected),None) or min(
+        pool,key=lambda c:(c.get('quote_asset')!='USDT',c['instrument_id']))
+
+
+def context_for(market, now, shared=None, compact=False):
     from sqlalchemy import select
     from engine.db import Session
-    from engine.models import IdentityLink,FundingPoint,OiPoint,Instrument,MarketState,UserPreference,RawEvent
-    from engine.pd2.storage import get
-    with Session() as s:
-        link=s.get(IdentityLink,(market.asset_id,"cmc"))
-        cmc=get("cmc","derivatives",link.external_id) if link and link.status=="verified" else {"status":"unmapped"}
-        fund=[{"time":r.settled_at,"rate":str(r.rate),"interval_seconds":r.interval_seconds} for r in s.scalars(select(FundingPoint).where(FundingPoint.instrument_id==market.instrument_id,FundingPoint.settled_at<=now,FundingPoint.settled_at>=now-2*86400000).order_by(FundingPoint.settled_at))]
-        samples=[{"time":r.event_time,"quantity":str(r.base_quantity) if r.base_quantity is not None else None} for r in s.scalars(select(OiPoint).where(OiPoint.instrument_id==market.instrument_id,OiPoint.event_time<=now,OiPoint.received_at<=now,OiPoint.event_time>=now-90*86400000))]
-    symbol=market.native_symbol.removesuffix(market.quote_asset) if market.venue!="hyperliquid" else market.native_symbol
-    mapped=get("bykaranteli","liqmap",symbol)
-    whales=get("bykaranteli","whales","global")
-    cross=cmc_markets(cmc["payload"],link.external_id,now) if cmc.get("payload") and cmc["status"]=="fresh" else {"status":cmc["status"],"markets":[],"total_oi_usd":None}
+    from engine.models import FundingPoint,OiPoint,Instrument,MarketState,RawEvent
+    shared = shared or shared_inputs(now)
+    cross={"status":"unavailable","markets":[],"total_oi_usd":None}
     from engine.pd2.oi_aggregate import aggregate_oi
-    from engine.pd2.providers import quote_usd_rate
-    native=[]
+    native=[];perpetual_candidates=[]
     with Session() as s:
-        from engine.pd2.universe_policy import membership
-        aliases, _ = membership(s)
+        aliases=shared["aliases"]
         canonical = aliases.get(market.asset_id, market.asset_id)
-        matched = [asset for asset, key in aliases.items() if key == canonical]
-        for inst,st in s.execute(select(Instrument,MarketState).join(MarketState).where(Instrument.asset_id.in_(matched))):
-            p=st.payload;fx=quote_usd_rate(inst.quote_asset,s,now);oi=p.get("oi_notional_quote");at=p.get("oi_as_of")
-            if oi is None or not fx or at is None:continue
-            native.append({"instrument_id":inst.id,"venue":inst.venue,"native_pair":inst.spec.get("base_asset",inst.native_symbol.removesuffix(inst.quote_asset))+"/"+inst.quote_asset,"notional_usd":str(D(str(oi))*fx),"quantity":p.get("oi_base"),"observed_at":at,"quantity_status":"native_base_quantity"})
-        selection=s.get(UserPreference,"main_market:"+market.asset_id)
-        main=(selection.payload if selection else {}).get("selected_perpetual")
-        if main and main!=market.instrument_id:
-            fund=[{"time":r.settled_at,"rate":str(r.rate),"interval_seconds":r.interval_seconds} for r in s.scalars(select(FundingPoint).where(FundingPoint.instrument_id==main,FundingPoint.settled_at<=now,FundingPoint.settled_at>=now-2*86400000).order_by(FundingPoint.settled_at))]
-        funding_row=s.get(MarketState,main or market.instrument_id)
+        matched = shared["members"].get(canonical,[market.asset_id])
+        for inst,st in s.execute(select(Instrument,MarketState).outerjoin(MarketState).where(Instrument.asset_id.in_(matched))):
+            if inst.venue!='binance':continue
+            # Reference facts are not pool admission: an existing USD contract
+            # can provide OI without extending the USDT/USDC collection pool.
+            if (inst.market_type not in ('linear_perpetual','perpetual')
+                    or (inst.spec or {}).get('crypto_eligible') is False
+                    or (inst.spec or {}).get('status','TRADING') not in ('TRADING','active')):continue
+            p=st.payload if st else {};fx=shared["fx_rates"].get(inst.quote_asset);oi=p.get("oi_notional_quote");at=p.get("oi_as_of")
+            if inst.market_type in ('linear_perpetual','perpetual') and inst.spec.get('status') not in ('CLOSED','DELISTED','inactive','delisted'):
+                perpetual_candidates.append({'instrument_id':inst.id,'venue':inst.venue,'quote_asset':inst.quote_asset,
+                    'fresh_oi':p.get('oi_status')=='fresh' and at is not None and 0<=now-at<=360000 and oi is not None,
+                    'fx_status':'available' if fx else 'missing_or_stale'})
+            if oi is None or not fx or at is None or p.get('oi_status')!='fresh':continue
+            notional_usd=D(str(oi))*fx
+            native.append({"instrument_id":inst.id,"venue":inst.venue,"native_pair":inst.spec.get("base_asset",inst.native_symbol.removesuffix(inst.quote_asset))+"/"+inst.quote_asset,"notional_usd":str(notional_usd),"quantity":p.get("oi_base"),"observed_at":at,"quantity_status":"native_base_quantity"})
+        chosen=choose_reference(perpetual_candidates)
+        main=chosen['instrument_id'] if chosen else None
+        reference_selection='verified_binance_catalog' if chosen else 'no_verified_contract'
+        reference=main or market.instrument_id
+        fund=[] if compact else [{"time":r.settled_at,"rate":str(r.rate),"interval_seconds":r.interval_seconds} for r in s.scalars(select(FundingPoint).where(FundingPoint.instrument_id==reference,FundingPoint.settled_at<=now,FundingPoint.settled_at>=now-2*86400000).order_by(FundingPoint.settled_at))]
+        samples=[] if compact else [{"time":r.event_time,"quantity":str(r.base_quantity) if r.base_quantity is not None else None} for r in s.scalars(select(OiPoint).where(OiPoint.instrument_id==reference,OiPoint.event_time<=now,OiPoint.received_at<=now,OiPoint.event_time>=now-90*86400000))]
+        funding_row=s.get(MarketState,reference)
         funding_payload=funding_row.payload if funding_row else {}
+    native_reference={'instrument_id':main,'status':'unmapped' if not chosen else 'fresh' if chosen['fresh_oi'] else 'stale' if funding_payload.get('oi_as_of') else 'not_collected',
+        'quantity':funding_payload.get('oi_base') if main else None,'notional_quote':funding_payload.get('oi_notional_quote') if main else None,
+        'quote_asset':chosen['quote_asset'] if chosen else None,'observed_at':funding_payload.get('oi_as_of') if main else None,
+        'fx_status':chosen['fx_status'] if chosen else None}
+    reference_fact={'instrument_id':main,'selection':reference_selection if main else 'no_verified_contract',
+        'contract_status':'verified' if main else 'unmapped','observed_at':funding_payload.get('oi_as_of')}
+    settled_at=funding_payload.get('funding_settled_at');interval=funding_payload.get('funding_interval_seconds')
+    funding_fact={'instrument_id':main,'rate':funding_payload.get('funding_rate') if main else None,
+        'interval_seconds':interval,'settled_at':settled_at,'selection':reference_selection,
+        'status':'available' if main and settled_at and interval and 0<=now-settled_at<=interval*1000+180000 else 'stale' if settled_at else 'not_collected'}
     cross=aggregate_oi(native,cross,now)
+    # The primary OI ratio is the verified Binance reference contract, not a
+    # changing mixture of fresh auxiliary venues or alternate quote contracts.
+    cross['supplemental_markets']=cross['markets']
+    if chosen and chosen['venue']=='binance':
+        primary=[r for r in native if r['instrument_id']==main]
+        primary_total=aggregate_oi(primary,{'markets':[]},now)
+        cross.update(primary_total,scope='binance_reference_contract',reference_instrument_id=main)
+        if not primary_total['markets']:
+            cross.update(status='primary_stale' if funding_payload.get('oi_as_of') else 'unavailable')
     from engine.pd2.oi_aggregate import history_changes
     cross["changes"]=history_changes(market.asset_id,cross,now)
     cap=market.circulating_cap
     cross["oi_cap_ratio"]=str(D(cross["total_oi_usd"])/cap) if cross.get("total_oi_usd") is not None and cap and cap>0 else None
     cross["native_not_added"]=False
-    model=model_map(mapped["payload"],symbol,market.native_symbol,market.price,now) if mapped.get("payload") else {"status":mapped["status"],"levels":[],"recorded_events":[]}
-    positions=whale_positions(whales["payload"],market.native_symbol,now) if market.venue=="hyperliquid" and whales.get("payload") else {"status":"out_of_sample","positions":[]}
+    if compact:
+        # The list needs OI and funding, not 24h of every trade or 90d of OI.
+        # Full evidence remains available to immutable decision snapshots.
+        return {"cross_market_oi":cross,"native_reference":native_reference,
+          "derivatives_reference_market":reference_fact,
+          "funding_reference":funding_fact,
+          "as_of":now}
+    # Retired fields remain in the contract for frozen historical consumers.
+    references={}
+    model={"status":"disabled_by_policy","levels":[],"recorded_events":[]}
+    positions={"status":"disabled_by_policy","positions":[]}
+    liquidation_summary={"status":"disabled_by_policy","windows":[]}
     from engine.pd2.native_streams import tape_context
     tape=tape_context(market.instrument_id,now)
-    cmc_liq=get("cmc","liquidations","global")
-    liquidation_summary=cmc_liquidations(cmc_liq["payload"],link.external_id,now) if link and cmc_liq.get("payload") else {"status":"unmapped" if not link else "not_collected","windows":[]}
     with Session() as s:
-        checkpoint=s.scalar(select(RawEvent.received_at).join(FundingPoint,FundingPoint.raw_ref==RawEvent.id).where(FundingPoint.instrument_id==(main or market.instrument_id),RawEvent.received_at<=now).order_by(RawEvent.received_at.desc()).limit(1))
+        checkpoint=s.scalar(select(RawEvent.received_at).join(FundingPoint,FundingPoint.raw_ref==RawEvent.id).where(FundingPoint.instrument_id==reference,RawEvent.received_at<=now).order_by(RawEvent.received_at.desc()).limit(1))
     costs=settled_costs(fund,now,checkpoint)
     facts=[]
     day=next((x for x in market.oi_changes if x.period=="24H"),None)
     if day and day.value_pct is not None:
-        facts.append({"kind":"quantity_change","text":f"1D数量持仓变化 {day.value_pct:.2f}%；金额变化不能替代数量变化","action_impact":"确认参与仍以结构、现价和净R为准"})
-    for window in liquidation_summary.get("windows",[]):
-        if window["period"]=="1H" and window["status"]=="fresh":
-            facts.append({"kind":"reported_liquidations","text":f'近1H CMC已报告空头清算 {window["short_usd"]} USD、多头清算 {window["long_usd"]} USD',"action_impact":"已发生清算证据；不与原生采样相加，不推算剩余可爆仓总量"})
-    recent=[e for e in model.get("recorded_events",[]) if now-3600000<=e["time"]<=now]
-    if recent:
-        short=sum(D(str(e.get("notional_usd") or 0)) for e in recent if e["liquidated_side"]=="short")
-        long=sum(D(str(e.get("notional_usd") or 0)) for e in recent if e["liquidated_side"]=="long")
-        facts.append({"kind":"recorded_liquidations","text":f"近1H来源样本：空头清算 {short:.0f} USD，多头清算 {long:.0f} USD","action_impact":"已发生清算证据，不代表未来买盘或全市场总量"})
-    return {"cross_market_oi":cross,"funding_reference_instrument":main or market.instrument_id,
-      "funding_reference":{"instrument_id":main or market.instrument_id,"rate":funding_payload.get('funding_rate'),'interval_seconds':funding_payload.get('funding_interval_seconds'),'settled_at':funding_payload.get('funding_settled_at'),'selection':'execution_liquidity_comparison' if main else 'current_market_fallback'},"settled_costs":costs,"oi_baseline":oi_daily_baseline(samples,market.oi_base),
+        facts.append({"kind":"quantity_change","text":f"1D数量持仓变化 {day.value_pct:.2f}%；金额变化不能替代数量变化","action_impact":"参与仍以策略、结构、现价和数据有效性为准；费用与盈亏比仅参考"})
+    reference_quantity=funding_payload.get('oi_base')
+    return {"cross_market_oi":cross,"native_reference":native_reference,"funding_reference_instrument":main,
+      "derivatives_reference_market":reference_fact,
+      "supplemental_references":references,"funding_reference":funding_fact,"settled_costs":costs,"oi_baseline":oi_daily_baseline(samples,reference_quantity),
       "liquidation_model":model,"visible_positions":positions,"liquidation_summary":liquidation_summary,"native_tape":tape,"facts":facts,"as_of":now}

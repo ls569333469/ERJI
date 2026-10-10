@@ -1,0 +1,21 @@
+const {readFileSync}=require('node:fs');
+const ts=require('typescript');
+const {runInNewContext}=require('node:vm');
+const assert=require('node:assert/strict');
+const source=ts.transpileModule(readFileSync('apps/web/src/lib/backend-studies.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText;
+const exportsObject={};runInNewContext(source,{exports:exportsObject});
+(async()=>{
+ let current={timeframes:[{timeframe:'240',series:[{time:1000,ema20:'1.2345',ema50:null,macd:'0.2',signal:'0.3',histogram:'-0.1'}]}]};
+ const definitions=await exportsObject.backendStudies({Std:{time:c=>c.time,period:c=>c.period}},()=>current);
+ assert(!definitions.some(d=>d.name.includes('跟踪保护参考')||d.name==='ERJI 锚定均价'));
+ const ema=new (definitions.find(d=>d.name.startsWith('EMA')).constructor)();
+ const values=ema.main({time:1000,period:'240'});
+ assert.equal(values[0],1.2345);assert(Number.isNaN(values[1]));
+ assert(ema.main({time:999,period:'240'}).every(Number.isNaN));
+ assert(ema.main({time:1000,period:'1D'}).every(Number.isNaN));
+ const macd=new (definitions.find(d=>d.name.startsWith('MACD')).constructor)();
+ assert.equal(macd.main({time:1000,period:'240'})[3],1);
+ current={timeframes:[{timeframe:'240',series:[{time:1000,ema20:'2.5'}]}]};
+ assert.equal(ema.main({time:1000,period:'240'})[0],2.5);
+ console.log('backend studies: exact timestamp, missing values, timeframe isolation, revision, negative histogram passed');
+})().catch(e=>{console.error(e);process.exitCode=1;});

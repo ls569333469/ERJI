@@ -8,6 +8,7 @@ from engine.adapters.base import Batch
 from engine.pd2 import collection_schedule
 from engine.models import WorkerHeartbeat
 from services.worker import main
+from engine.p38 import candle_gaps
 
 
 @pytest.fixture
@@ -26,6 +27,13 @@ def bridge(monkeypatch):
     ])
     saved, health, acknowledged = Mock(), Mock(), Mock()
     monkeypatch.setattr(main, 'save_batch', saved)
+    completed=set()
+    async def fetch(adapter,target,lane):
+        batch=await adapter.collect_candles([target])
+        part=Batch('binance',candle_only=True,candles=[r for r in batch.candles if r['resolution']==target[2]],errors=list(batch.errors))
+        saved(part);completed.update(r['resolution'] for r in part.candles);return part
+    monkeypatch.setattr(candle_gaps,'fetch',fetch)
+    monkeypatch.setattr('engine.repository.candle_window_ready',lambda iid,res:res in completed)
     monkeypatch.setattr(main, 'heartbeat', health)
     monkeypatch.setattr(main, 'save_failure', Mock())
     monkeypatch.setattr(collection_schedule, 'acknowledge_batch', Mock())
@@ -36,7 +44,7 @@ def bridge(monkeypatch):
 def test_incomplete_timeframes_are_not_acknowledged(bridge):
     adapter, saved, health, acknowledged = bridge
     asyncio.run(main.run_binance_bridge(once=True))
-    assert saved.call_count == 2
+    assert saved.call_count == 3
     acknowledged.assert_not_called()
     adapter.close.assert_awaited_once()
 
@@ -46,7 +54,7 @@ def test_complete_candles_acknowledged_after_save(bridge):
     adapter.collect_candles.return_value.candles.append(
         {'instrument_id': 'binance:perp:BTCUSDT', 'resolution': '240'})
     asyncio.run(main.run_binance_bridge(once=True))
-    acknowledged.assert_called_once_with('binance', {'BTCUSDT'}, 'candles')
+    acknowledged.assert_called_once_with('binance', ['BTCUSDT'], 'candles')
     assert health.call_args.args[2]['candles'] == 2
 
 

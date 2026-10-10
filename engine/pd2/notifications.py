@@ -41,9 +41,10 @@ def enqueue(s,event_id,snapshot,config):
             for prior in s.scalars(select(Outbox).where(Outbox.expires_at>scheduled-config.cooldown_seconds*1000)):
                 if prior.payload.get("target_id")==target.id and prior.payload.get("asset_id")==snapshot["asset_id"] and prior.payload.get("action")==snapshot["action"]["code"] and prior.state not in ("expired","failed"):
                     scheduled=max(scheduled,prior.payload.get("created_at",0)+config.cooldown_seconds*1000)
-        s.add(Outbox(id=oid,event_id=event_id,dedupe_key=key,state="pending",
+        from engine.transaction_events import add_outbox
+        add_outbox(s,Outbox(id=oid,dedupe_key=key,state="pending",
            expires_at=now_ms()+config.ttl_seconds*1000,next_attempt_at=scheduled,lease_until=None,
-           payload={"target_id":target.id,"snapshot_id":snapshot["id"],"asset_id":snapshot["asset_id"],"action":snapshot["action"]["code"],"created_at":now_ms(),"text":render(snapshot,config.public_app_url)}))
+           payload={"target_id":target.id,"snapshot_id":snapshot["id"],"asset_id":snapshot["asset_id"],"action":snapshot["action"]["code"],"created_at":now_ms(),"text":render(snapshot,config.public_app_url)}),event_id)
 
 async def dispatch_once():
     try:token=read_key(settings().telegram_token_file)
@@ -67,15 +68,35 @@ async def dispatch_once():
             from engine.repository import runtime_config
             message=render(latest.payload,runtime_config().notifications.public_app_url)
             row.payload={**row.payload,"snapshot_id":latest.id,"text":message}
+            from uuid import uuid4
+            lease_token=uuid4().hex
+            row.payload={**row.payload,'lease_token':lease_token}
             row.state="sending";row.lease_until=now+60000
-            selected.append((row.id,target.chat_id,message))
+            selected.append((row.id,lease_token))
     sent=0
     async with httpx.AsyncClient(timeout=15,verify=ssl.create_default_context()) as client:
-        for oid,chat,message in selected:
+        for oid,lease_token in selected:
+            # Claim-time eligibility is insufficient for the last item in a
+            # slow batch. Re-read authorization, latest decision and hard ages.
+            with Session.begin() as s:
+                row=s.get(Outbox,oid,with_for_update=True);at=now_ms()
+                if not row or row.state!='sending' or row.payload.get('lease_token')!=lease_token:continue
+                target=s.get(NotificationTarget,row.payload['target_id']);snap=s.get(SignalSnapshot,row.payload['snapshot_id'])
+                latest=s.scalar(select(SignalSnapshot).where(SignalSnapshot.plan_id==snap.plan_id).order_by(SignalSnapshot.as_of.desc()).limit(1)) if snap else None
+                from engine.repository import runtime_config
+                cfg=runtime_config(s).notifications
+                valid=cfg.enabled and row.lease_until>at and row.expires_at>at and target and target.enabled and target.authorized_at and latest and latest.payload['action']['code']==snap.payload['action']['code'] and 0<=at-latest.as_of<=90000
+                if valid and latest.payload['action']['code'] in ('trial','participate'):
+                    valid=latest.payload.get('valid_until',0)>at and 0<=at-(latest.payload.get('execution') or {}).get('received_at',0)<=10000
+                if not valid:row.state='expired';continue
+                chat=target.chat_id;message=render(latest.payload,cfg.public_app_url)
+                row.payload={**row.payload,'snapshot_id':latest.id,'text':message,'send_started_at':at};row.lease_until=at+60000
             state,extra=await send_text(client,token,chat,message)
             if state=="sent":sent+=1
             with Session.begin() as s:
-                row=s.get(Outbox,oid);row.state=state;row.payload={**row.payload,**extra}
+                row=s.get(Outbox,oid,with_for_update=True)
+                if not row or row.state!='sending' or row.payload.get('lease_token')!=lease_token:continue
+                row.state=state;row.payload={**row.payload,**extra}
                 if state=="retry":row.next_attempt_at=now_ms()+extra["retry_after"]*1000
     return {"status":"ok","sent":sent}
 

@@ -1,0 +1,1336 @@
+{
+  "version": "p33-cases-v1",
+  "archive_sha256": "11ea3dbbb73f26f7105fad2ad2b617e1e294b9174a5292ede4eb67c560bd5ab4",
+  "cases": [
+    {
+      "id": "p33-79770da28298ad2468fa0e36",
+      "symbol": "MOVR",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:MOVRUSDT",
+        "as_of": 1790712000000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "1.1365",
+            "known_at": 1790640000000,
+            "start_time": 1788048000000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1790697600000,
+            "close_time": 1790712000000,
+            "price": "1.1614",
+            "timeframe": "240",
+            "known_at": 1790712000000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "1.1365",
+        "threshold": "1.141015706383305840",
+        "atr": "0.0451570638330584",
+        "volume_multiple": "11.31917872381526534197131555",
+        "entry_zone": [
+          "1.141015706383305840",
+          "1.1816570638330584"
+        ],
+        "protection": "0.925984293616694160",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "1.131984293616694160",
+          "condition": "close_below"
+        },
+        "expires_at": 1790726400000,
+        "trigger": {
+          "open_time": 1790697600000,
+          "close_time": 1790712000000,
+          "received_at": 1790712000000,
+          "is_closed": true,
+          "open": "1.0578",
+          "high": "1.187",
+          "low": "1.0558",
+          "close": "1.1614",
+          "quote_volume": "10649109.661469001",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1790712000000,
+        "event_id": "p33-79770da28298ad2468fa0e36"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e73d428a92268da5e2cb6c2895d5d1f804e363a9ce0111b94cb18319f91a600f",
+        "daily": "4fcba868953414a3a21669b220f5de6405c763fdbe74eb9ef3c53e730fe0d1af"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-b74860171f14222f377299cb",
+      "symbol": "MOVR",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:MOVRUSDT",
+        "as_of": 1790755200000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "1.2721",
+            "known_at": 1790726400000,
+            "start_time": 1788134400000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1790740800000,
+            "close_time": 1790755200000,
+            "price": "1.6911",
+            "timeframe": "240",
+            "known_at": 1790755200000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "1.2721",
+        "threshold": "1.2784222474213275980",
+        "atr": "0.06322247421327598",
+        "volume_multiple": "107.7292044174893245695899252",
+        "entry_zone": [
+          "1.2784222474213275980",
+          "1.33532247421327598"
+        ],
+        "protection": "0.9735777525786724020",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "1.2657777525786724020",
+          "condition": "close_below"
+        },
+        "expires_at": 1790769600000,
+        "trigger": {
+          "open_time": 1790740800000,
+          "close_time": 1790755200000,
+          "received_at": 1790755200000,
+          "is_closed": true,
+          "open": "1.268",
+          "high": "1.784",
+          "low": "1.2455",
+          "close": "1.6911",
+          "quote_volume": "118856008.812283",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1790755200000,
+        "event_id": "p33-b74860171f14222f377299cb"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e73d428a92268da5e2cb6c2895d5d1f804e363a9ce0111b94cb18319f91a600f",
+        "daily": "4fcba868953414a3a21669b220f5de6405c763fdbe74eb9ef3c53e730fe0d1af"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-fe0adfb85f3a29b3e866236e",
+      "symbol": "MOVR",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:MOVRUSDT",
+        "as_of": 1790827200000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "2.349",
+            "known_at": 1790812800000,
+            "start_time": 1788220800000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1790812800000,
+            "close_time": 1790827200000,
+            "price": "2.3941",
+            "timeframe": "240",
+            "known_at": 1790827200000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "2.349",
+        "threshold": "2.3664743577858314010",
+        "atr": "0.17474357785831401",
+        "volume_multiple": "122.2558013649658122095436709",
+        "entry_zone": [
+          "2.3664743577858314010",
+          "2.52374357785831401"
+        ],
+        "protection": "1.2280256422141685990",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "2.3315256422141685990",
+          "condition": "close_below"
+        },
+        "expires_at": 1790841600000,
+        "trigger": {
+          "open_time": 1790812800000,
+          "close_time": 1790827200000,
+          "received_at": 1790827200000,
+          "is_closed": true,
+          "open": "2.1753",
+          "high": "2.455",
+          "low": "2.1128",
+          "close": "2.3941",
+          "quote_volume": "180270452.565707",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1790827200000,
+        "event_id": "p33-fe0adfb85f3a29b3e866236e"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e73d428a92268da5e2cb6c2895d5d1f804e363a9ce0111b94cb18319f91a600f",
+        "daily": "4fcba868953414a3a21669b220f5de6405c763fdbe74eb9ef3c53e730fe0d1af"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-c9d5ebb77a32486ba07e87ad",
+      "symbol": "NOM",
+      "pattern": {
+        "strategy_id": "double_bottom",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "双底突破",
+        "market_id": "binance:perp:NOMUSDT",
+        "as_of": 1789977600000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "pivot",
+            "price": "0.001633",
+            "time": 1789776000000,
+            "known_at": 1789819200000,
+            "label": "第一低点"
+          },
+          {
+            "kind": "pivot",
+            "price": "0.001633",
+            "time": 1789891200000,
+            "known_at": 1789934400000,
+            "label": "第二低点"
+          },
+          {
+            "kind": "boundary",
+            "price": "0.001737",
+            "known_at": 1789934400000,
+            "start_time": 1789776000000,
+            "label": "颈线"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1789963200000,
+            "close_time": 1789977600000,
+            "price": "0.001776",
+            "timeframe": "240",
+            "known_at": 1789977600000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "0.001737",
+        "threshold": "0.0017410548209371647910",
+        "atr": "0.00004054820937164791",
+        "volume_multiple": "1.857261296126338619263640875",
+        "entry_zone": [
+          "0.0017410548209371647910",
+          "0.00177754820937164791"
+        ],
+        "protection": "0.0016289451790628352090",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "0.0017329451790628352090",
+          "condition": "close_below"
+        },
+        "expires_at": 1789992000000,
+        "trigger": {
+          "open_time": 1789963200000,
+          "close_time": 1789977600000,
+          "received_at": 1789977600000,
+          "is_closed": true,
+          "open": "0.001711",
+          "high": "0.00178",
+          "low": "0.001696",
+          "close": "0.001776",
+          "quote_volume": "649792.02672",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1789977600000,
+        "event_id": "p33-c9d5ebb77a32486ba07e87ad"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "ab9810b7ef303a3882834441e7bdb93a099a335d0fceed18b9a12f5505e7a585",
+        "daily": "36845d21948b4b06edd9641c75ee4324b979a3de09f0ee8a5656dfa526a06864"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-f5d4457686e097555639cc66",
+      "symbol": "NOM",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:NOMUSDT",
+        "as_of": 1790222400000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "0.002144",
+            "known_at": 1790208000000,
+            "start_time": 1787616000000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1790208000000,
+            "close_time": 1790222400000,
+            "price": "0.002415",
+            "timeframe": "240",
+            "known_at": 1790222400000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "0.002144",
+        "threshold": "0.00215308777232656630",
+        "atr": "0.000090877723265663",
+        "volume_multiple": "81.49420660300391830408266475",
+        "entry_zone": [
+          "0.00215308777232656630",
+          "0.002234877723265663"
+        ],
+        "protection": "0.00157891222767343370",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "0.00213491222767343370",
+          "condition": "close_below"
+        },
+        "expires_at": 1790236800000,
+        "trigger": {
+          "open_time": 1790208000000,
+          "close_time": 1790222400000,
+          "received_at": 1790222400000,
+          "is_closed": true,
+          "open": "0.001988",
+          "high": "0.002665",
+          "low": "0.001957",
+          "close": "0.002415",
+          "quote_volume": "42656948.516365",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1790222400000,
+        "event_id": "p33-f5d4457686e097555639cc66"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "ab9810b7ef303a3882834441e7bdb93a099a335d0fceed18b9a12f5505e7a585",
+        "daily": "36845d21948b4b06edd9641c75ee4324b979a3de09f0ee8a5656dfa526a06864"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-512c89f3fbf7e14ec5d5771c",
+      "symbol": "NOM",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:NOMUSDT",
+        "as_of": 1790841600000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "0.002818",
+            "known_at": 1790812800000,
+            "start_time": 1788220800000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1790827200000,
+            "close_time": 1790841600000,
+            "price": "0.002889",
+            "timeframe": "240",
+            "known_at": 1790841600000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "0.002818",
+        "threshold": "0.002833653695813032410",
+        "atr": "0.0001565369581303241",
+        "volume_multiple": "7.706032544820809803020368699",
+        "entry_zone": [
+          "0.002833653695813032410",
+          "0.0029745369581303241"
+        ],
+        "protection": "0.002063346304186967590",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "0.002802346304186967590",
+          "condition": "close_below"
+        },
+        "expires_at": 1790856000000,
+        "trigger": {
+          "open_time": 1790827200000,
+          "close_time": 1790841600000,
+          "received_at": 1790841600000,
+          "is_closed": true,
+          "open": "0.002363",
+          "high": "0.002941",
+          "low": "0.002316",
+          "close": "0.002889",
+          "quote_volume": "12908423.712733",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1790841600000,
+        "event_id": "p33-512c89f3fbf7e14ec5d5771c"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "ab9810b7ef303a3882834441e7bdb93a099a335d0fceed18b9a12f5505e7a585",
+        "daily": "36845d21948b4b06edd9641c75ee4324b979a3de09f0ee8a5656dfa526a06864"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-ad96b3947413bcc9c70e0c4d",
+      "symbol": "RAVE",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:RAVEUSDT",
+        "as_of": 1775822400000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "1.12928",
+            "known_at": 1775779200000,
+            "start_time": 1773187200000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1775808000000,
+            "close_time": 1775822400000,
+            "price": "1.26621",
+            "timeframe": "240",
+            "known_at": 1775822400000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "1.12928",
+        "threshold": "1.1395760253671791170",
+        "atr": "0.10296025367179117",
+        "volume_multiple": "188.9630716649992618111521417",
+        "entry_zone": [
+          "1.1395760253671791170",
+          "1.23224025367179117"
+        ],
+        "protection": "0.3458639746328208830",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "1.1189839746328208830",
+          "condition": "close_below"
+        },
+        "expires_at": 1775836800000,
+        "trigger": {
+          "open_time": 1775808000000,
+          "close_time": 1775822400000,
+          "received_at": 1775822400000,
+          "is_closed": true,
+          "open": "1.1091",
+          "high": "1.36",
+          "low": "0.94604",
+          "close": "1.26621",
+          "quote_volume": "410339432.41069",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1775822400000,
+        "event_id": "p33-ad96b3947413bcc9c70e0c4d"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "8fe3e3cdfed2ba8f927690598b5e5a65635e014af7fdc804b6e90272ce5b28d8",
+        "daily": "24ac1a51ee00580f505fcb0ef943bf4587c6e2cd08a0a205b90b24844b1df918"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-a68b2d260bd0888fabf59522",
+      "symbol": "RAVE",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:RAVEUSDT",
+        "as_of": 1775880000000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "1.69846",
+            "known_at": 1775865600000,
+            "start_time": 1773273600000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1775865600000,
+            "close_time": 1775880000000,
+            "price": "1.92891",
+            "timeframe": "240",
+            "known_at": 1775880000000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "1.69846",
+        "threshold": "1.714252103615993410",
+        "atr": "0.1579210361599341",
+        "volume_multiple": "36.69021236558533748349730547",
+        "entry_zone": [
+          "1.714252103615993410",
+          "1.8563810361599341"
+        ],
+        "protection": "0.930247896384006590",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "1.682667896384006590",
+          "condition": "close_below"
+        },
+        "expires_at": 1775894400000,
+        "trigger": {
+          "open_time": 1775865600000,
+          "close_time": 1775880000000,
+          "received_at": 1775880000000,
+          "is_closed": true,
+          "open": "1.60595",
+          "high": "2.08071",
+          "low": "1.57231",
+          "close": "1.92891",
+          "quote_volume": "364907820.2202",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1775880000000,
+        "event_id": "p33-a68b2d260bd0888fabf59522"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "8fe3e3cdfed2ba8f927690598b5e5a65635e014af7fdc804b6e90272ce5b28d8",
+        "daily": "24ac1a51ee00580f505fcb0ef943bf4587c6e2cd08a0a205b90b24844b1df918"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-0d48b55e6987a6385e7fe8f2",
+      "symbol": "RAVE",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:RAVEUSDT",
+        "as_of": 1775980800000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "2.288",
+            "known_at": 1775952000000,
+            "start_time": 1773360000000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1775966400000,
+            "close_time": 1775980800000,
+            "price": "2.84326",
+            "timeframe": "240",
+            "known_at": 1775980800000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "2.288",
+        "threshold": "2.3115019848515416320",
+        "atr": "0.23501984851541632",
+        "volume_multiple": "2.490109594111408154702345726",
+        "entry_zone": [
+          "2.3115019848515416320",
+          "2.52301984851541632"
+        ],
+        "protection": "1.5388980151484583680",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "2.2644980151484583680",
+          "condition": "close_below"
+        },
+        "expires_at": 1775995200000,
+        "trigger": {
+          "open_time": 1775966400000,
+          "close_time": 1775980800000,
+          "received_at": 1775980800000,
+          "is_closed": true,
+          "open": "2.07119",
+          "high": "3.172",
+          "low": "1.86225",
+          "close": "2.84326",
+          "quote_volume": "508895910.24182004",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1775980800000,
+        "event_id": "p33-0d48b55e6987a6385e7fe8f2"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "8fe3e3cdfed2ba8f927690598b5e5a65635e014af7fdc804b6e90272ce5b28d8",
+        "daily": "24ac1a51ee00580f505fcb0ef943bf4587c6e2cd08a0a205b90b24844b1df918"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-fb1f10a4a0699047468300bf",
+      "symbol": "RAVE",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:RAVEUSDT",
+        "as_of": 1776067200000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "6.25785",
+            "known_at": 1776038400000,
+            "start_time": 1773446400000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1776052800000,
+            "close_time": 1776067200000,
+            "price": "9.34528",
+            "timeframe": "240",
+            "known_at": 1776067200000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "6.25785",
+        "threshold": "6.318361784618372870",
+        "atr": "0.6051178461837287",
+        "volume_multiple": "2.526972065163935922357318169",
+        "entry_zone": [
+          "6.318361784618372870",
+          "6.8629678461837287"
+        ],
+        "protection": "2.373078215381627130",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "6.197338215381627130",
+          "condition": "close_below"
+        },
+        "expires_at": 1776081600000,
+        "trigger": {
+          "open_time": 1776052800000,
+          "close_time": 1776067200000,
+          "received_at": 1776067200000,
+          "is_closed": true,
+          "open": "5.84029",
+          "high": "9.55299",
+          "low": "5.80785",
+          "close": "9.34528",
+          "quote_volume": "782738279.31012",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1776067200000,
+        "event_id": "p33-fb1f10a4a0699047468300bf"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "8fe3e3cdfed2ba8f927690598b5e5a65635e014af7fdc804b6e90272ce5b28d8",
+        "daily": "24ac1a51ee00580f505fcb0ef943bf4587c6e2cd08a0a205b90b24844b1df918"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-58f69f1ccb49a337c9da4601",
+      "symbol": "RAVE",
+      "pattern": {
+        "strategy_id": "recent_high",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "近期前高突破",
+        "market_id": "binance:perp:RAVEUSDT",
+        "as_of": 1776484800000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "22.66",
+            "known_at": 1776470400000,
+            "start_time": 1773878400000,
+            "label": "30日冻结前高"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1776470400000,
+            "close_time": 1776484800000,
+            "price": "25.40586",
+            "timeframe": "240",
+            "known_at": 1776484800000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "22.66",
+        "threshold": "22.904464642276407540",
+        "atr": "2.4446464227640754",
+        "volume_multiple": "1.984979629881685511538528405",
+        "entry_zone": [
+          "22.904464642276407540",
+          "25.1046464227640754"
+        ],
+        "protection": "15.449305357723592460",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "22.415535357723592460",
+          "condition": "close_below"
+        },
+        "expires_at": 1776499200000,
+        "trigger": {
+          "open_time": 1776470400000,
+          "close_time": 1776484800000,
+          "received_at": 1776484800000,
+          "is_closed": true,
+          "open": "21.94325",
+          "high": "28.3",
+          "low": "21.83256",
+          "close": "25.40586",
+          "quote_volume": "530841756.50529",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1776484800000,
+        "event_id": "p33-58f69f1ccb49a337c9da4601"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "8fe3e3cdfed2ba8f927690598b5e5a65635e014af7fdc804b6e90272ce5b28d8",
+        "daily": "24ac1a51ee00580f505fcb0ef943bf4587c6e2cd08a0a205b90b24844b1df918"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-a00dbfd99184af6240e5f9c5",
+      "symbol": "MYX",
+      "pattern": {
+        "strategy_id": "double_bottom",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "双底突破",
+        "market_id": "binance:perp:MYXUSDT",
+        "as_of": 1758081600000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "pivot",
+            "price": "10.23",
+            "time": 1757836800000,
+            "known_at": 1757880000000,
+            "label": "第一低点"
+          },
+          {
+            "kind": "pivot",
+            "price": "9.88",
+            "time": 1757908800000,
+            "known_at": 1757952000000,
+            "label": "第二低点"
+          },
+          {
+            "kind": "boundary",
+            "price": "11.8",
+            "known_at": 1757952000000,
+            "start_time": 1757836800000,
+            "label": "颈线"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1758067200000,
+            "close_time": 1758081600000,
+            "price": "13.748",
+            "timeframe": "240",
+            "known_at": 1758081600000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "11.8",
+        "threshold": "11.925694298927702320",
+        "atr": "1.2569429892770232",
+        "volume_multiple": "1.716230988124898621899790873",
+        "entry_zone": [
+          "11.925694298927702320",
+          "13.0569429892770232"
+        ],
+        "protection": "9.754305701072297680",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "11.674305701072297680",
+          "condition": "close_below"
+        },
+        "expires_at": 1758096000000,
+        "trigger": {
+          "open_time": 1758067200000,
+          "close_time": 1758081600000,
+          "received_at": 1758081600000,
+          "is_closed": true,
+          "open": "11.483",
+          "high": "14.02",
+          "low": "11.198",
+          "close": "13.748",
+          "quote_volume": "146258873.69410002",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1758081600000,
+        "event_id": "p33-a00dbfd99184af6240e5f9c5"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e07d3a9c0146279fca21295d57eac5022cac93ef11d9ce4480912e27e2f34be0",
+        "daily": "1e28583a6fb01ac5eb3d386d17a086b8ca2b457058593c69f22f1f9c3c8d01ce"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-ad5666852baa602ac7647ac6",
+      "symbol": "SIREN",
+      "pattern": {
+        "strategy_id": "double_bottom",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "双底突破",
+        "market_id": "binance:perp:SIRENUSDT",
+        "as_of": 1775318400000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "pivot",
+            "price": "0.1623",
+            "time": 1775145600000,
+            "known_at": 1775188800000,
+            "label": "第一低点"
+          },
+          {
+            "kind": "pivot",
+            "price": "0.13089",
+            "time": 1775260800000,
+            "known_at": 1775304000000,
+            "label": "第二低点"
+          },
+          {
+            "kind": "boundary",
+            "price": "0.20253",
+            "known_at": 1775304000000,
+            "start_time": 1775145600000,
+            "label": "颈线"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1775304000000,
+            "close_time": 1775318400000,
+            "price": "0.49203",
+            "timeframe": "240",
+            "known_at": 1775318400000
+          }
+        ],
+        "required_indicators": [],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "0.20253",
+        "threshold": "0.2126843941991103950",
+        "atr": "0.10154394199110395",
+        "volume_multiple": "14.77367446858701473943825372",
+        "entry_zone": [
+          "0.2126843941991103950",
+          "0.30407394199110395"
+        ],
+        "protection": "0.1207356058008896050",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "0.1923756058008896050",
+          "condition": "close_below"
+        },
+        "expires_at": 1775332800000,
+        "trigger": {
+          "open_time": 1775304000000,
+          "close_time": 1775318400000,
+          "received_at": 1775318400000,
+          "is_closed": true,
+          "open": "0.21038",
+          "high": "0.5076",
+          "low": "0.204",
+          "close": "0.49203",
+          "quote_volume": "552629932.1647199",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1775318400000,
+        "event_id": "p33-ad5666852baa602ac7647ac6"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e280bb64ca5d4fe9117c3308f5c08cbcd7d74bcd11d7b7b32f3605b6e6daf20a",
+        "daily": "bf65fc66fc5e1f09d15b4732a0ef22414d5754a809e8cca4ca2fa75c07897a7a"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-f6d281818913812cb206f752",
+      "symbol": "SIREN",
+      "pattern": {
+        "strategy_id": "squeeze",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "收缩突破",
+        "market_id": "binance:perp:SIRENUSDT",
+        "as_of": 1775750400000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "0.64991",
+            "known_at": 1775736000000,
+            "start_time": 1775448000000,
+            "label": "整理上沿"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1775736000000,
+            "close_time": 1775750400000,
+            "price": "0.70472",
+            "timeframe": "240",
+            "known_at": 1775750400000
+          }
+        ],
+        "required_indicators": [
+          "bb"
+        ],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "0.64991",
+        "threshold": "0.657124428915418590",
+        "atr": "0.0721442891541859",
+        "volume_multiple": "2.938332587896894959914578833",
+        "entry_zone": [
+          "0.657124428915418590",
+          "0.7220542891541859"
+        ],
+        "protection": "0.417865571084581410",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "0.642695571084581410",
+          "condition": "close_below"
+        },
+        "expires_at": 1775764800000,
+        "trigger": {
+          "open_time": 1775736000000,
+          "close_time": 1775750400000,
+          "received_at": 1775750400000,
+          "is_closed": true,
+          "open": "0.60812",
+          "high": "0.7615",
+          "low": "0.5952",
+          "close": "0.70472",
+          "quote_volume": "128313187.56137",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1775750400000,
+        "event_id": "p33-f6d281818913812cb206f752"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e280bb64ca5d4fe9117c3308f5c08cbcd7d74bcd11d7b7b32f3605b6e6daf20a",
+        "daily": "bf65fc66fc5e1f09d15b4732a0ef22414d5754a809e8cca4ca2fa75c07897a7a"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-31d6370eca1779e87113ed62",
+      "symbol": "SIREN",
+      "pattern": {
+        "strategy_id": "squeeze",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "收缩突破",
+        "market_id": "binance:perp:SIRENUSDT",
+        "as_of": 1775908800000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "0.84372",
+            "known_at": 1775894400000,
+            "start_time": 1775606400000,
+            "label": "整理上沿"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1775894400000,
+            "close_time": 1775908800000,
+            "price": "0.89894",
+            "timeframe": "240",
+            "known_at": 1775908800000
+          }
+        ],
+        "required_indicators": [
+          "bb"
+        ],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "0.84372",
+        "threshold": "0.8509223605274933040",
+        "atr": "0.07202360527493304",
+        "volume_multiple": "4.216868371604901303898589177",
+        "entry_zone": [
+          "0.8509223605274933040",
+          "0.91574360527493304"
+        ],
+        "protection": "0.4178776394725066960",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "0.8365176394725066960",
+          "condition": "close_below"
+        },
+        "expires_at": 1775923200000,
+        "trigger": {
+          "open_time": 1775894400000,
+          "close_time": 1775908800000,
+          "received_at": 1775908800000,
+          "is_closed": true,
+          "open": "0.74607",
+          "high": "0.97543",
+          "low": "0.73905",
+          "close": "0.89894",
+          "quote_volume": "128934446.64655",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1775908800000,
+        "event_id": "p33-31d6370eca1779e87113ed62"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e280bb64ca5d4fe9117c3308f5c08cbcd7d74bcd11d7b7b32f3605b6e6daf20a",
+        "daily": "bf65fc66fc5e1f09d15b4732a0ef22414d5754a809e8cca4ca2fa75c07897a7a"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-e2b9833f994eedb167714cee",
+      "symbol": "SIREN",
+      "pattern": {
+        "strategy_id": "squeeze",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "收缩突破",
+        "market_id": "binance:perp:SIRENUSDT",
+        "as_of": 1776355200000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "0.8737",
+            "known_at": 1776340800000,
+            "start_time": 1776052800000,
+            "label": "整理上沿"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1776340800000,
+            "close_time": 1776355200000,
+            "price": "1.2079",
+            "timeframe": "240",
+            "known_at": 1776355200000
+          }
+        ],
+        "required_indicators": [
+          "bb"
+        ],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "0.8737",
+        "threshold": "0.8808024596892919510",
+        "atr": "0.07102459689291951",
+        "volume_multiple": "5.508229543856436109178656707",
+        "entry_zone": [
+          "0.8808024596892919510",
+          "0.94472459689291951"
+        ],
+        "protection": "0.5929775403107080490",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "0.8665975403107080490",
+          "condition": "close_below"
+        },
+        "expires_at": 1776369600000,
+        "trigger": {
+          "open_time": 1776340800000,
+          "close_time": 1776355200000,
+          "received_at": 1776355200000,
+          "is_closed": true,
+          "open": "0.8397",
+          "high": "1.2537",
+          "low": "0.8372",
+          "close": "1.2079",
+          "quote_volume": "70210180.41261001",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1776355200000,
+        "event_id": "p33-e2b9833f994eedb167714cee"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e280bb64ca5d4fe9117c3308f5c08cbcd7d74bcd11d7b7b32f3605b6e6daf20a",
+        "daily": "bf65fc66fc5e1f09d15b4732a0ef22414d5754a809e8cca4ca2fa75c07897a7a"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-dea5d2b8f5573c3e36391599",
+      "symbol": "SIREN",
+      "pattern": {
+        "strategy_id": "squeeze",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "收缩突破",
+        "market_id": "binance:perp:SIRENUSDT",
+        "as_of": 1776369600000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "1.2537",
+            "known_at": 1776355200000,
+            "start_time": 1776067200000,
+            "label": "整理上沿"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1776355200000,
+            "close_time": 1776369600000,
+            "price": "1.6614",
+            "timeframe": "240",
+            "known_at": 1776369600000
+          }
+        ],
+        "required_indicators": [
+          "bb"
+        ],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "1.2537",
+        "threshold": "1.2632701411400568120",
+        "atr": "0.09570141140056812",
+        "volume_multiple": "11.89539780178256490036468712",
+        "entry_zone": [
+          "1.2632701411400568120",
+          "1.34940141140056812"
+        ],
+        "protection": "0.5905098588599431880",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "1.2441298588599431880",
+          "condition": "close_below"
+        },
+        "expires_at": 1776384000000,
+        "trigger": {
+          "open_time": 1776355200000,
+          "close_time": 1776369600000,
+          "received_at": 1776369600000,
+          "is_closed": true,
+          "open": "1.2078",
+          "high": "1.6955",
+          "low": "1.1632",
+          "close": "1.6614",
+          "quote_volume": "157836676.1427",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1776369600000,
+        "event_id": "p33-dea5d2b8f5573c3e36391599"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e280bb64ca5d4fe9117c3308f5c08cbcd7d74bcd11d7b7b32f3605b6e6daf20a",
+        "daily": "bf65fc66fc5e1f09d15b4732a0ef22414d5754a809e8cca4ca2fa75c07897a7a"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    },
+    {
+      "id": "p33-be70884ab31cc3598c72ed1d",
+      "symbol": "SIREN",
+      "pattern": {
+        "strategy_id": "squeeze",
+        "strategy_version": "p33-price-shadow-v1",
+        "config_hash": "28243893dc8b06d7",
+        "label": "收缩突破",
+        "market_id": "binance:perp:SIRENUSDT",
+        "as_of": 1776384000000,
+        "status": "triggered",
+        "reason": "价格与成交额触发已确认",
+        "anchors": [
+          {
+            "kind": "boundary",
+            "price": "1.6955",
+            "known_at": 1776369600000,
+            "start_time": 1776081600000,
+            "label": "整理上沿"
+          },
+          {
+            "kind": "trigger_bar",
+            "open_time": 1776369600000,
+            "close_time": 1776384000000,
+            "price": "1.9752",
+            "timeframe": "240",
+            "known_at": 1776384000000
+          }
+        ],
+        "required_indicators": [
+          "bb"
+        ],
+        "trading_enabled": false,
+        "timeframe": "240",
+        "source_timeframe": "240",
+        "boundary": "1.6955",
+        "threshold": "1.708188702487195610",
+        "atr": "0.1268870248719561",
+        "volume_multiple": "7.027657849684384095402914340",
+        "entry_zone": [
+          "1.708188702487195610",
+          "1.8223870248719561"
+        ],
+        "protection": "0.587391297512804390",
+        "invalidation": {
+          "timeframe": "240",
+          "price": "1.682811297512804390",
+          "condition": "close_below"
+        },
+        "expires_at": 1776398400000,
+        "trigger": {
+          "open_time": 1776369600000,
+          "close_time": 1776384000000,
+          "received_at": 1776384000000,
+          "is_closed": true,
+          "open": "1.6614",
+          "high": "1.9848",
+          "low": "1.5563",
+          "close": "1.9752",
+          "quote_volume": "95377742.63067",
+          "base_volume": null,
+          "resolution": "240"
+        },
+        "known_at": 1776384000000,
+        "event_id": "p33-be70884ab31cc3598c72ed1d"
+      },
+      "available_at": 1790917887484,
+      "source_sha256": {
+        "4h": "e280bb64ca5d4fe9117c3308f5c08cbcd7d74bcd11d7b7b32f3605b6e6daf20a",
+        "daily": "bf65fc66fc5e1f09d15b4732a0ef22414d5754a809e8cca4ca2fa75c07897a7a"
+      },
+      "data_scope": "事后归档；收盘可知时间及tick为研究假设，不含完整1H/OI/同期市值"
+    }
+  ]
+}

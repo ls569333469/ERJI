@@ -2,7 +2,7 @@ import pd2_env
 import asyncio,json
 from engine.repository import bootstrap,save_batch
 from engine.contracts import RuntimeConfig
-from engine.adapters.expanded_markets import BinanceCashAdapter,OkxAdapter
+from engine.adapters.expanded_markets import BinanceCashAdapter
 from engine.adapters.wallet import WalletAdapter
 bootstrap()
 async def run(a):

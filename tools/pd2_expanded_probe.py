@@ -2,7 +2,7 @@ import pd2_env
 import asyncio,json
 from engine.repository import bootstrap,save_batch
 from engine.contracts import RuntimeConfig
-from engine.adapters.expanded_markets import BinanceCashAdapter,OkxAdapter
+from engine.adapters.expanded_markets import BinanceCashAdapter
 from engine.adapters.wallet import WalletAdapter
 bootstrap()
 async def run(a):
@@ -12,7 +12,7 @@ async def run(a):
  except Exception as e:return {'source':a.venue,'error':type(e).__name__,'detail':str(getattr(e,'orig',e))[:200]}
  finally:await a.close()
 async def main():
- results=await asyncio.gather(*(run(a) for a in [BinanceCashAdapter(),BinanceCashAdapter(True),OkxAdapter(),WalletAdapter()]))
+ results=await asyncio.gather(*(run(a) for a in [BinanceCashAdapter(),BinanceCashAdapter(True),WalletAdapter()]))
  from pathlib import Path
  Path("docs/pd2-expanded-probe.json").write_text(json.dumps(results,ensure_ascii=False),encoding="utf8")
  print(json.dumps(results,ensure_ascii=False),flush=True)
